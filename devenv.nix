@@ -16,6 +16,7 @@
     then pkgs.minikube
     else throw "Invalid env variable `CONTAINER_ENV` provided!";
 in {
+  dotenv.enable = true;
   packages = [
     containerPkg
     pkgs.act

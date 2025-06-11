@@ -37,3 +37,28 @@ development of the updated CA4022 computer science module at DCU.
 - Executable docs would be great as they would allow us to test the code blocks in the guide to ensure
     that the lesson plan doesn't get broken as we tweak it in the future. Should allow us to focus on
     the content and worry less about minor mistakes that could create a debugging nightmare mid-lab.
+
+# Design decisions
+
+- What container env?
+    - Though podman is seeing rapidly growing adoption and k8s is industrially preferred decided to
+    stick with docker cos it is:
+        - Simple
+        - Reliable
+        - Ubiquitous
+    - Thanks to the OCI standards, we can also test on podman and k8s to ensure we have the option
+    to switch easily in the future if needed
+- Should docker-in-docker (dind) use parent socket or be 100% isolated?
+    - Although setting up an isolated dind envs is more difficult, it also avoids reproducibility
+    issues in the future by ensuring everyone running the containers will be using the same
+    version, distro, runtimes, etc during labs. Decided tradeoff of extra time in dev was worth
+    it here to avoid headaches during labs.
+- What docker image to base on?
+    - Decided to base on OpenSUSE Leap because:
+        - It is stable
+        - Students are very likely to encounter it (or SLE) in industry, especially if they stay in
+        EU
+        - The usual standard for light containers (alpine linux) runs on MUSL and busybox, which
+        would add an extra layer of caveats to the labs that we don't need. SUSE allows us to
+        go with the usual GNU toolchains (glibc and coreutils instead of MUSL and busybox).
+
