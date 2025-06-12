@@ -1,0 +1,5 @@
+style: "/root/.config/glamour/catppuccin-mocha.json"
+local: false
+mouse: false
+pager: false
+width: 100
