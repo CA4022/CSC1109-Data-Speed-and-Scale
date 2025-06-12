@@ -22,10 +22,7 @@ RUN zypper --non-interactive install wget bat bat-bash-completion glow lsd fd fd
 # Build bash env
 RUN bash -c "$(wget https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh -O -)"
 # Copy across config files
-COPY ./root/build.sh /root/build.sh
-COPY ./root/.bashrc /root/.bashrc
-COPY ./root/.blerc /root/.blerc
-COPY ./root/.config/ /root/.config/
+COPY ./root/ /root/
 # Build bash env
 RUN chmod +x /root/build.sh
 RUN /root/build.sh
