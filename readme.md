@@ -61,4 +61,17 @@ development of the updated CA4022 computer science module at DCU.
         - The usual standard for light containers (alpine linux) runs on MUSL and busybox, which
         would add an extra layer of caveats to the labs that we don't need. SUSE allows us to
         go with the usual GNU toolchains (glibc and coreutils instead of MUSL and busybox).
-
+- Decided to add some niceties to the terminal environment
+    - Did this because raw terminal can be intimidating for some people, and we want to avoid that
+    - Stuck with bash, for obvious reason
+    - Added choice of editors:
+        - micro for the complete terminal newbies
+        - vim (cos, well, its vim. it has to be everywhere)
+        - neovim
+        - emacs
+    - Added some basic QoL setups for those editors (except vim). Nothing fancy, just the minimum
+        most users would expect.
+    - Added completions, syntax highlighting and other quality-of-life plugins for bash
+    - Added a cleaner prompt to help orient students when they land inside the container
+    - Added a bunch of modern unix tools to replace basic utilities
+    - Added some orientation splashes on startup, to get students comfortable in the lab environment
