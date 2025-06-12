@@ -1,0 +1,7 @@
+{
+    "colorscheme": "catppuccin-mocha",
+    "lsp.formatOnSave": true,
+    "lsp.tabcompletion": true,
+    "lsp.ignoreTriggerCharacters": "completion,signature",
+    "lsp.autocompleteDetails": false
+}
