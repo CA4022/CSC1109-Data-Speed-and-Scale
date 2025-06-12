@@ -55,6 +55,10 @@ RUN rm /root/.config/emacs/build.sh
 RUN mkdir /lab
 WORKDIR /lab
 
+# Add orientation files
+COPY ./root/CSS1109.md /root/CSS1109.md
+COPY ./lab/lab.md /lab/lab.md
+
 # Prepare entrypoint to initialise environment
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh

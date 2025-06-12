@@ -47,5 +47,14 @@ alias grep="rg"
 alias find="fd"
 
 # Finally, let's print some general and lesson specific orientation text.
+echo "
+  ____ ____  _ _  ___   ___
+ / ___/ ___|/ / |/ _ \ / _ \
+| |   \___ \| | | | | | (_) |
+| |___ ___) | | | |_| |\__, |
+ \____|____/|_|_|\___/   /_/
+
+"
+cat /root/CSS1109.md /lab/lab.md | glow
 
 [[ ! ${BLE_VERSION-} ]] || ble-attach
