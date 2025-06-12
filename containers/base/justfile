@@ -1,0 +1,29 @@
+CONTAINER_NAME := env("BASE_CONTAINER_NAME")
+
+CONTAINER_CMD := `[ -z "$CONTAINER_ENV" ] && echo "docker" || echo "$CONTAINER_ENV"`
+
+BASE_CONTAINER_NAME := env("BASE_CONTAINER_NAME")
+BASE_OPENSUSE_VERSION := env("BASE_OPENSUSE_VERSION")
+BASE_DOCKER_VERSION := env("BASE_DOCKER_VERSION")
+BASE_COMPOSE_VERSION := env("BASE_COMPOSE_VERSION")
+BASE_BASH_VERSION := env("BASE_BASH_VERSION")
+BASE_GIT_VERSION := env("BASE_GIT_VERSION")
+BASE_GCC_VERSION := env("BASE_GCC_VERSION")
+
+
+build:
+    {{CONTAINER_CMD}} build \
+        --build-arg BASE_CONTAINER_NAME="{{BASE_CONTAINER_NAME}}" \
+        --build-arg BASE_OPENSUSE_VERSION="{{BASE_OPENSUSE_VERSION}}" \
+        --build-arg BASE_DOCKER_VERSION="{{BASE_DOCKER_VERSION}}" \
+        --build-arg BASE_COMPOSE_VERSION="{{BASE_COMPOSE_VERSION}}" \
+        --build-arg BASE_BASH_VERSION="{{BASE_BASH_VERSION}}" \
+        --build-arg BASE_GIT_VERSION="{{BASE_GIT_VERSION}}" \
+        --build-arg BASE_GCC_VERSION="{{BASE_GCC_VERSION}}" \
+        -t {{CONTAINER_NAME}} \
+        .
+
+run:
+    {{CONTAINER_CMD}} run --privileged --rm -it {{CONTAINER_NAME}}
+
+build_and_run: build run

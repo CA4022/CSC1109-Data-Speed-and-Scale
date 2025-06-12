@@ -21,5 +21,6 @@ in {
     containerPkg
     pkgs.act
     pkgs.git
+    pkgs.just
   ];
 }
