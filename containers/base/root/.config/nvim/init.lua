@@ -298,7 +298,7 @@ plugins = {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
         opts = {
-            ensure_installed = { "bash", "java", "scala" },
+            ensure_installed = { "bash", "c", "lua", "python", "java", "scala" },
             auto_install = true,
             highlight = { enable = true },
             indent = { enable = true },
