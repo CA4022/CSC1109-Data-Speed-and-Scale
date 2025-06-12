@@ -1,9 +1,13 @@
+# Add env variables that blesh expects
+export LANG=en_US.UTF-8
+export USER=root
+
 case $- in
-  *i*) ;;
+  *i*) source /root/.local/share/blesh/ble.sh --noattach;;
     *) return;;
 esac
 
-export OSH='/root/.oh-my-bash'
+export OSH="/root/.oh-my-bash"
 OSH_THEME="axin"
 OMB_USE_SUDO=true
 
@@ -17,49 +21,31 @@ fi
 
 source "$OSH"/oh-my-bash.sh
 
-if ! [[ "$EDITOR" =~ ^(vim|emacs|micro)$ ]]; then
+# Check if EDITOR is already set to a valid choice
+if ! [[ "$EDITOR" =~ ^(nvim|vim|emacs|micro)$ ]]; then
     echo "Please select your default text editor:"
-    # Defines the list of editor choices.
-    options=("micro" "neovim" "emacs" "Skip")
+    options=("micro" "vim" "neovim" "emacs")
+    PS3="Enter a number (micro is recommended for those new to working in a CLI): "
 
-    # The 'select' command creates an interactive menu from the options.
-    select opt in "${options[@]}"
-    do
-        case $opt in
-            "micro")
-                if command -v micro &> /dev/null; then
-                    export EDITOR=micro
-                    echo "Default editor set to 'micro'."
-                else
-                    echo "Error: 'micro' is not installed. Please install it to use it as the default."
-                fi
-                break
-                ;;
-            "neovim")
-                if command -v nvim &> /dev/null; then
-                    export EDITOR=nvim
-                    echo "Default editor set to 'neovim'."
-                else
-                    echo "Error: 'neovim' is not installed. Please install it to use it as the default."
-                fi
-                break
-                ;;
-            "emacs")
-                if command -v emacs &> /dev/null; then
-                    export EDITOR=emacs
-                    echo "Default editor set to 'emacs'."
-                else
-                    echo "Error: 'emacs' is not installed. Please install it to use it as the default."
-                fi
-                break
-                ;;
-            "Skip")
-                echo "No default editor has been set for this session."
-                break
-                ;;
-            *)
-                echo "Invalid option $REPLY. Please enter the number corresponding to your choice."
-                ;;
-        esac
+    select opt in "${options[@]}"; do
+        export EDITOR="$opt"
+        echo "✒️ Default editor set to '$EDITOR'."
+        break
     done
+    unset PS3
 fi
+
+# Set terminal env variables
+export COLORTERM="truecolor"
+export MANPAGER="bat -l man -p "
+
+# Set some aliases to make the env a bit nicer to work with
+alias edit=$EDITOR
+alias cat="bat"
+alias ls="lsd"
+alias grep="rg"
+alias find="fd"
+
+# Finally, let's print some general and lesson specific orientation text.
+
+[[ ! ${BLE_VERSION-} ]] || ble-attach

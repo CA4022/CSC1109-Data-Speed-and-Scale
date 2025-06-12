@@ -1,0 +1,52 @@
+# -*- mode: sh; mode: sh-bash -*-
+
+bleopt exec_exit_mark=$'\e[32mGoodbye! 👋\e[m'
+bleopt input_encoding=UTF-8
+bleopt pager=bat
+bleopt editor=$EDITOR
+bleopt history_lazyload=1
+bleopt indent_offset=4
+bleopt indent_tabs=1
+bleopt undo_point=near
+bleopt edit_forced_textmap=1
+bleopt edit_line_type=graphical
+bleopt edit_magic_expand=history:sabbrev
+bleopt edit_magic_accept=sabbrev
+bleopt info_display=top
+bleopt history_default_point=auto
+bleopt tab_width=4
+bleopt complete_auto_history=1
+bleopt complete_auto_delay=100
+bleopt complete_auto_menu=500
+bleopt complete_limit=500
+bleopt complete_limit_auto=200
+bleopt complete_limit_auto_menu=100
+bleopt complete_timeout_auto=5000
+bleopt complete_menu_style=align-nowrap
+bleopt complete_menu_color=on
+bleopt complete_menu_color_match=on
+bleopt menu_align_min=4
+bleopt menu_align_max=20
+bleopt complete_menu_maxlines=10
+bind 'set completion-ignore-case off'
+bleopt term_index_colors=256
+bleopt filename_ls_colors="$LS_COLORS"
+bleopt highlight_syntax=1
+bleopt highlight_filename=1
+bleopt highlight_variable=1
+bleopt highlight_timeout_sync=500
+bleopt highlight_timeout_async=5000
+bleopt syntax_eval_polling_interval=50
+bleopt highlight_eval_word_limit=200
+
+function blerc/emacs-load-hook {
+    return 0
+}
+blehook/eval-after-load keymap_emacs blerc/emacs-load-hook
+
+function blerc/vim-load-hook {
+  ((_ble_bash>=40300)) && builtin bind 'set keyseq-timeout 1'
+}
+blehook/eval-after-load keymap_vi blerc/vim-load-hook
+
+bleopt import_path="${XDG_DATA_HOME:-$HOME/.local/share}/blesh/local"
