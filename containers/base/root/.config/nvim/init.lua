@@ -462,28 +462,6 @@ plugins = {
     },
     {
         "echasnovski/mini.nvim",
-        { "MunifTanjim/nui.nvim", lazy = true },
-        {
-            "folke/which-key.nvim",
-            event = "VimEnter",
-        },
-        {
-            "sudormrfbin/cheatsheet.nvim",
-            event = "VeryLazy",
-            dependencies = {
-                "nvim-telescope/telescope.nvim",
-                "nvim-lua/popup.nvim",
-                "nvim-lua/plenary.nvim",
-            },
-        },
-        {
-            "folke/snacks.nvim",
-            priority = 1000,
-            lazy = false,
-            opts = {
-                quickfile = { enabled = true },
-            },
-        },
         config = function()
             require("mini.ai").setup({ n_lines = 500 })
             require("mini.comment").setup()
@@ -492,7 +470,16 @@ plugins = {
             require("mini.pairs").setup({ mappings = { ["`"] = false } })
             require("mini.sessions").setup()
             require("mini.splitjoin").setup()
-            require("mini.starter").setup()
+            local starter = require('mini.starter')
+            require("mini.starter").setup({
+                header = "Hello, student.",
+                items = {
+                    starter.sections.recent_files(5, false, false),
+                    starter.sections.telescope(),
+                    starter.sections.builtin_actions(),
+                },
+                footer = "Don't panic! Despite the memes: exiting is as easy as typing `:q`",
+            })
             require("mini.statusline").setup()
             require("mini.surround").setup()
             require("mini.trailspace").setup()
@@ -505,6 +492,28 @@ plugins = {
                 INFO = { duration = 3000 },
             })
         end,
+    },
+    { "MunifTanjim/nui.nvim", lazy = true },
+    {
+        "folke/which-key.nvim",
+        event = "VimEnter",
+    },
+    {
+        "sudormrfbin/cheatsheet.nvim",
+        event = "VeryLazy",
+        dependencies = {
+            "nvim-telescope/telescope.nvim",
+            "nvim-lua/popup.nvim",
+            "nvim-lua/plenary.nvim",
+        },
+    },
+    {
+        "folke/snacks.nvim",
+        priority = 1000,
+        lazy = false,
+        opts = {
+            quickfile = { enabled = true },
+        },
     },
     {
         "nvim-neo-tree/neo-tree.nvim",
