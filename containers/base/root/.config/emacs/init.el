@@ -106,6 +106,17 @@
 (use-package recentf
   :init (recentf-mode 1))
 
+(use-package dashboard
+  :straight t
+  :config
+  (dashboard-setup-startup-hook)
+  (setq dashboard-center-content t)
+  (setq dashboard-banner-logo-title "Hello, student.")
+  (setq dashboard-items '((recentf   . 5)
+                         (projects  . 5)
+                         (bookmarks . 5)))
+  (setq dashboard-footer-messages '("\"Good ol' C-x M-c M-butterfly\" - XKCD 378")))
+
 (use-package editorconfig
   :straight t
   :init (editorconfig-mode 1))

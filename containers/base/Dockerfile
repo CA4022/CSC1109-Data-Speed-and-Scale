@@ -50,6 +50,7 @@ RUN rm /root/.config/nvim/build.sh
 RUN chmod +x /root/.config/emacs/build.sh
 RUN /root/.config/emacs/build.sh
 RUN rm /root/.config/emacs/build.sh
+RUN mkdir /run/user/0  # Gets rid of warning message in emacs
 
 # Set working directory
 RUN mkdir /lab
