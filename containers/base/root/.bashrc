@@ -22,6 +22,12 @@ fi
 
 source "$OSH"/oh-my-bash.sh
 
+declare -A edmap
+edmap[micro]="micro"
+edmap[vim]="vim"
+edmap[neovim]="nvim"
+edmap[emacs]="emacs"
+
 # Check if EDITOR is already set to a valid choice
 if ! [[ "$EDITOR" =~ ^(nvim|vim|emacs|micro)$ ]]; then
     echo "Please select your default text editor:"
@@ -29,7 +35,7 @@ if ! [[ "$EDITOR" =~ ^(nvim|vim|emacs|micro)$ ]]; then
     PS3="Enter a number (micro is recommended for those new to working in a CLI): "
 
     select opt in "${options[@]}"; do
-        export EDITOR="$opt"
+        export EDITOR="${edmap[$opt]}"
         echo "✒️ Default editor set to '$EDITOR'."
         break
     done
