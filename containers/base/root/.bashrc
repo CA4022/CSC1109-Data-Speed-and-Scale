@@ -7,6 +7,7 @@ case $- in
     *) return;;
 esac
 
+eval "$(fzf --bash)"
 export OSH="/root/.oh-my-bash"
 OSH_THEME="axin"
 OMB_USE_SUDO=true

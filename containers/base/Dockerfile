@@ -18,7 +18,7 @@ RUN zypper --non-interactive install bash-${BASE_BASH_VERSION} gcc-${BASE_GCC_VE
 #     to work within. As such, these don't need to be pinned and are likely to change
 #     more often than the rest of this file.
 # First, lets install some modern unix tooling and convenience elements
-RUN zypper --non-interactive install wget fzf bat bat-bash-completion glow lsd fd fd-bash-completion ripgrep ripgrep-bash-completion tealdeer tealdeer-bash-completion symbols-only-nerd-fonts vim docker-bash-completion
+RUN zypper --non-interactive install wget bat bat-bash-completion glow lsd fd fd-bash-completion ripgrep ripgrep-bash-completion tealdeer tealdeer-bash-completion symbols-only-nerd-fonts vim docker-bash-completion
 # Build bash env
 RUN bash -c "$(wget https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh -O -)"
 # Copy across config files
