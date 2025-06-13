@@ -3,6 +3,11 @@
 For now, this readme is serving as a to-do list and notes page. These will be used for planning the
 development of the updated CA4022 computer science module at DCU.
 
+# Current status
+
+Base image is set up, streamlined, automatically publishing and ready-to-go. Next, i will be
+creating images derived from this base for each lesson plan.
+
 # To Do
 
 - [ ] Implement labs
@@ -14,7 +19,7 @@ development of the updated CA4022 computer science module at DCU.
     - [ ] Spark ml (run examples from distribution) + ML pipelines (example email spam classification)
     - [ ] Recommender systems example (collaborative filtering from Spark ML)
     - [ ] STORM (just to run a simple topology)
-- [ ] Image building workflows
+- [X] Image building workflows
 - [ ] Testing workflows
     - [ ] Every OS
     - [ ] Other OCI container systems? (if time allows. focus on docker primarily though)
@@ -75,3 +80,12 @@ development of the updated CA4022 computer science module at DCU.
     - Added a cleaner prompt to help orient students when they land inside the container
     - Added a bunch of modern unix tools to replace basic utilities
     - Added some orientation splashes on startup, to get students comfortable in the lab environment
+- Made a fully automated container publishing pipeline for the base image, along with some
+    automated script commands for managing calver versioning.
+    - This provides us a hook to start building a CI/CD pipeline for course materials from.
+    - This can ensure we will always have an up-to-date and working version of the base image to
+        build lesson plans around.
+    - It will also allow us to trigger rebuilds and testing of lessons whenever the base is changed.
+        - Ensures consistent env across all lessons
+        - Ensures all lesson plans continue to work, without manual testing being needed
+        - Quickly lets us know if something does break, without having to wait until mid-labs!
