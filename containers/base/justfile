@@ -57,7 +57,7 @@ run:
     {{CONTAINER_CMD}} run --privileged --rm -it {{TAG}}
 
 test:
-    {{CONTAINER_CMD}} run --privileged --rm -it {{TAG}} /test/test.sh
+    {{CONTAINER_CMD}} run --privileged --rm {{TAG}} /test/test.sh
 
 build_and_run: build run
 build_and_test: build test
