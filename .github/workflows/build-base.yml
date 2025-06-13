@@ -58,9 +58,7 @@ jobs:
 
       - name: Test container image
         run: |
-          echo "Running tests within the container..."
-          docker run --privileged --rm ${{ env.IMAGE_TAG }} /test/test.sh
-          echo "Container tests passed successfully!"
+          just base test
 
       - name: Tag and push container image to GHCR
         if: success()
