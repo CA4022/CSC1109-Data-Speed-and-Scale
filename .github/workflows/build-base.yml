@@ -45,13 +45,6 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Define image name and tag
-        id: meta
-        run: |
-          TAG=$(just base get_tag)
-          echo "IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/${{ env.BASE_CONTAINER_NAME }}" >> $GITHUB_ENV
-          echo "IMAGE_TAG=ghcr.io/${{ github.repository_owner }}/$TAG" >> $GITHUB_ENV
-
       - name: Build container image for testing
         run: |
           just base build
@@ -60,11 +53,22 @@ jobs:
         run: |
           just base test
 
+      - name: Define image name and tag
+        id: meta
+        run: |
+          REPO_URL="ghcr.io/${{ github.repository_owner }}"
+          VERSION_TAG=$(just base get_tag)
+          LATEST_TAG="${{ env.BASE_CONTAINER_NAME }}:latest"
+          echo "VERSION_TAG_LOCAL=$VERSION_TAG" >> $GITHUB_ENV
+          echo "VERSION_TAG_REMOTE=$REPO_URL/$VERSION_TAG" >> $GITHUB_ENV
+          echo "LATEST_TAG_REMOTE=$REPO_URL/$LATEST_TAG" >> $GITHUB_ENV
+
       - name: Tag and push container image to GHCR
         if: success()
         run: |
           echo "Tagging and pushing image to ghcr.io..."
-          docker tag ${{ env.IMAGE_TAG }} ${{ env.IMAGE_NAME }}:latest
-          docker push ${{ env.IMAGE_TAG }}
-          docker push ${{ env.IMAGE_NAME }}:latest
+          docker tag ${{ env.VERSION_TAG_LOCAL }} ${{ env.VERSION_TAG_REMOTE }}
+          docker tag ${{ env.VERSION_TAG_REMOTE }} ${{ env.LATEST_TAG_REMOTE }}
+          docker push ${{ env.VERSION_TAG_REMOTE }}
+          docker push ${{ env.LATEST_TAG_REMOTE }}
           echo "Image pushed successfully."
