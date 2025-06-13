@@ -58,11 +58,12 @@ alias find="fd"
 
 # Finally, let's print some general and lesson specific orientation text.
 echo -e "
-\033[35m  ____ ____  _ _  ___   ___
- / ___/ ___|/ / |/ _ \\ / _ \\
-| |   \\___ \\| | | | | | (_) |
-| |___ ___) | | | |_| |\\__, |
- \\____|____/|_|_|\\___/   /_/\033[0m"
+\033[35m .o88b. .d8888.  .o88b.  db  db  .d88b.  .d888b.
+d8P  Y8 88'  YP d8P  Y8 o88 o88 .8P  88. 88' \`8D
+8P      \`8bo.   8P       88  88 88  d'88 \`V8o88'
+8b        \`Y8b. 8b       88  88 88 d' 88    d8'
+Y8b  d8 db   8D Y8b  d8  88  88 \`88  d8'   d8'
+ \`Y88P' \`8888Y'  \`Y88P'  VP  VP  \`Y88P'   d8'\033[0m"
 cat /root/CSS1109.md /lab/lab.md | glow
 
 [[ ! ${BLE_VERSION-} ]] || ble-attach
