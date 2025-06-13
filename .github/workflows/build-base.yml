@@ -55,14 +55,14 @@ jobs:
       - name: Test container image
         run: |
           echo "Running tests within the container..."
-          docker run --privileged --rm ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} /test/test.sh
+          docker run --privileged --rm ${{ just base get_tag }} /test/test.sh
           echo "Container tests passed successfully!"
 
       - name: Tag and push container image to GHCR
         if: success()
         run: |
           echo "Tagging and pushing image to ghcr.io..."
-          docker tag ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} ${{ env.IMAGE_NAME }}:latest
-          docker push ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+          docker tag ${{ just base get_tag }} ${{ env.IMAGE_NAME }}:latest
+          docker push ${{ just base get_tag }}
           docker push ${{ env.IMAGE_NAME }}:latest
           echo "Image pushed successfully."
