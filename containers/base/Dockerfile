@@ -13,6 +13,11 @@ RUN zypper --non-interactive addrepo "https://download.opensuse.org/repositories
 RUN zypper --non-interactive --gpg-auto-import-keys refresh
 RUN zypper --non-interactive install bash-${BASE_BASH_VERSION} gcc-${BASE_GCC_VERSION} git-${BASE_GIT_VERSION} docker-${BASE_DOCKER_VERSION} docker-compose-${BASE_COMPOSE_VERSION}
 
+# Add tests
+RUN zypper --non-interactive install hashdeep jq
+COPY ./test/ /test/
+RUN chmod -R +x /test/
+
 # Install non-essential environment elements
 # NOTE: A goal here is to provide a consistent, user friendly environment for students
 #     to work within. As such, these don't need to be pinned and are likely to change
