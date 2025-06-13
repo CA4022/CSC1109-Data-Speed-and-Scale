@@ -38,8 +38,10 @@ set splitbelow
 set undofile
 set updatetime=300
 set signcolumn=yes
-colorscheme catppuccin_mocha
-let g:airline_theme = 'catppuccin_mocha'
+if !empty(glob('~/.vim/plugged/catppuccin'))
+    colorscheme catppuccin_mocha
+    let g:airline_theme = 'catppuccin_mocha'
+endif
 let g:airline_powerline_fonts = 1
 let g:NERDTreeWinPos = "left"
 let g:NERDTreeShowHidden = 1
