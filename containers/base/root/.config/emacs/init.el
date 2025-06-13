@@ -110,11 +110,17 @@
   :straight t
   :config
   (dashboard-setup-startup-hook)
+  (setq dashboard-startupify-list '(dashboard-insert-banner
+                                  dashboard-insert-newline
+                                  dashboard-insert-banner-title
+                                  dashboard-insert-items
+                                  dashboard-insert-newline
+                                  dashboard-insert-footer))
+  (setq dashboard-startup-banner 3)
+  (setq dashboard-items '((recents   . 5)
+                        (registers . 5)))
   (setq dashboard-center-content t)
-  (setq dashboard-banner-logo-title "Hello, student.")
-  (setq dashboard-items '((recentf   . 5)
-                         (projects  . 5)
-                         (bookmarks . 5)))
+  (setq dashboard-banner-logo-title " Hello, student.")
   (setq dashboard-footer-messages '("\"Good ol' C-x M-c M-butterfly\" - XKCD 378")))
 
 (use-package editorconfig

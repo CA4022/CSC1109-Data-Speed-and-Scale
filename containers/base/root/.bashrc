@@ -23,23 +23,23 @@ fi
 source "$OSH"/oh-my-bash.sh
 
 declare -A edmap
-edmap[micro]="micro"
-edmap[vim]="vim"
-edmap[neovim]="nvim"
-edmap[emacs]="emacs"
+edmap[micro μ]="micro"
+edmap[vim ]="vim"
+edmap[neovim ]="nvim"
+edmap[emacs ]="emacs"
 
 # Check if EDITOR is already set to a valid choice
 if ! [[ "$EDITOR" =~ ^(nvim|vim|emacs|micro)$ ]]; then
     echo ""
-    echo "Please select your default text editor:"
+    echo -e "\033[90m\033[0m Please select your default text editor:"
     echo "(we recommend micro for those new to working in a CLI)"
-    options=("micro" "vim" "neovim" "emacs")
+    options=("micro μ" "vim " "nvim " "emacs ")
     PS3="Enter a number: "
 
     select opt in "${options[@]}"; do
         export EDITOR="${edmap[$opt]}"
         echo ""
-        echo "✒️ Default editor set to '$EDITOR'."
+        echo -e "\033[34m\033[0m Default editor set to '$EDITOR'."
         break
     done
     unset PS3
@@ -57,14 +57,12 @@ alias grep="rg"
 alias find="fd"
 
 # Finally, let's print some general and lesson specific orientation text.
-echo "
-  ____ ____  _ _  ___   ___
+echo -e "
+\033[35m  ____ ____  _ _  ___   ___
  / ___/ ___|/ / |/ _ \\ / _ \\
 | |   \\___ \\| | | | | | (_) |
 | |___ ___) | | | |_| |\\__, |
- \\____|____/|_|_|\\___/   /_/
-
-"
+ \\____|____/|_|_|\\___/   /_/\033[0m"
 cat /root/CSS1109.md /lab/lab.md | glow
 
 [[ ! ${BLE_VERSION-} ]] || ble-attach

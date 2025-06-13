@@ -47,7 +47,7 @@ let g:NERDTreeWinPos = "left"
 let g:NERDTreeShowHidden = 1
 let g:NERDTreeMinimalUI = 1
 let g:startify_custom_header = [
-            \ 'Hello, student.',
+            \ ' Hello, student.',
             \ 'Welcome to Vim - the only editor that is probably installed on your toaster.',
             \ ]
 let g:startify_lists = [
