@@ -54,8 +54,7 @@ RUN mkdir /lab
 WORKDIR /lab
 
 # Add orientation files
-COPY ./root/CSS1109.md /root/CSS1109.md
-COPY ./lab/lab.md /lab/lab.md
+COPY ./lab/ /lab/
 
 # Prepare entrypoint to initialise environment
 COPY entrypoint.sh /entrypoint.sh
