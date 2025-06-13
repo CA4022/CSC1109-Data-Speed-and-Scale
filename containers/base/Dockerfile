@@ -8,6 +8,9 @@ ARG BASE_GIT_VERSION
 ARG BASE_DOCKER_VERSION
 ARG BASE_COMPOSE_VERSION
 
+# Update package repository
+RUN zypper --non-interactive refresh
+
 # Install core packages
 RUN zypper --non-interactive addrepo "https://download.opensuse.org/repositories/Virtualization:containers/${BASE_OPENSUSE_VERSION}/Virtualization:containers.repo"
 RUN zypper --non-interactive --gpg-auto-import-keys refresh
