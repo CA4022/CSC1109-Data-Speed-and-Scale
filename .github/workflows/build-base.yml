@@ -24,7 +24,7 @@ jobs:
       - name: Install just
         uses: extractions/setup-just@v2
         with:
-          just-version: 1.5.0
+          just-version: 1.40.0
 
       - name: Load .env file
         uses: xom9ikk/dotenv@v2
