@@ -21,6 +21,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install just
+        uses: extractions/setup-just@v2
+        with:
+          just-version: 1.5.0
+
       - name: Load .env file
         uses: xom9ikk/dotenv@v2
         with:
@@ -39,16 +44,12 @@ jobs:
       - name: Define image name and tags
         id: meta
         run: |
-          echo "IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/base" >> $GITHUB_ENV
-          echo "IMAGE_TAG=sha-${{ github.sha }}" >> $GITHUB_ENV
+          echo "IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/${{ env.BASE_CONTAINER_NAME }}" >> $GITHUB_ENV
+          echo "IMAGE_TAG=${{ env.VERSION }}" >> $GITHUB_ENV
 
       - name: Build container image for testing
-        uses: docker/build-push-action@v5
-        with:
-          context: containers/base
-          load: true
-          push: false
-          tags: ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+        run: |
+          just base build
 
       - name: Test container image
         run: |

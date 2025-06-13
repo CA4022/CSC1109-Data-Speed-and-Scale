@@ -1,4 +1,5 @@
 CONTAINER_NAME := env("BASE_CONTAINER_NAME")
+VERSION := env("VERSION")
 
 CONTAINER_CMD := `[ -z "$CONTAINER_ENV" ] && echo "docker" || echo "$CONTAINER_ENV"`
 
@@ -20,10 +21,10 @@ build:
         --build-arg BASE_BASH_VERSION="{{BASE_BASH_VERSION}}" \
         --build-arg BASE_GIT_VERSION="{{BASE_GIT_VERSION}}" \
         --build-arg BASE_GCC_VERSION="{{BASE_GCC_VERSION}}" \
-        -t {{CONTAINER_NAME}} \
+        -t {{CONTAINER_NAME}}:{{VERSION}} \
         .
 
 run:
-    {{CONTAINER_CMD}} run --privileged --rm -it {{CONTAINER_NAME}}
+    {{CONTAINER_CMD}} run --privileged --rm -it {{CONTAINER_NAME}}:{{VERSION}}
 
 build_and_run: build run
