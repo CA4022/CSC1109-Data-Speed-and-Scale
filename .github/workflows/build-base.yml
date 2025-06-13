@@ -1,0 +1,59 @@
+name: Build and Push Base Container
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'containers/base/**'
+      - '.github/workflows/build-base.yml'
+
+jobs:
+  build-test-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Define image name and tags
+        id: meta
+        run: |
+          echo "IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/base" >> $GITHUB_ENV
+          echo "IMAGE_TAG=sha-${{ github.sha }}" >> $GITHUB_ENV
+
+      - name: Build container image for testing
+        uses: docker/build-push-action@v5
+        with:
+          context: containers/base
+          load: true
+          push: false
+          tags: ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+
+      - name: Test container image
+        run: |
+          echo "Running tests within the container..."
+          docker run --privileged --rm ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} /test/test.sh
+          echo "Container tests passed successfully!"
+
+      - name: Tag and push container image to GHCR
+        if: success()
+        run: |
+          echo "Tagging and pushing image to ghcr.io..."
+          docker tag ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} ${{ env.IMAGE_NAME }}:latest
+          docker push ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+          docker push ${{ env.IMAGE_NAME }}:latest
+          echo "Image pushed successfully."
