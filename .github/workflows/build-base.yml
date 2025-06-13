@@ -35,24 +35,6 @@ jobs:
         run: |
           echo "CONTAINER_ENV=docker" >> $GITHUB_ENV
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build container image for testing
-        run: |
-          just base build
-
-      - name: Test container image
-        run: |
-          just base test
-
       - name: Define image name and tag
         id: meta
         run: |
@@ -63,8 +45,41 @@ jobs:
           echo "VERSION_TAG_REMOTE=$REPO_URL/$VERSION_TAG" >> $GITHUB_ENV
           echo "LATEST_TAG_REMOTE=$REPO_URL/$LATEST_TAG" >> $GITHUB_ENV
 
+      - name: Check if remote tag exists
+        id: check_tag
+        run: |
+          if docker pull ${{ env.VERSION_TAG_REMOTE }}; then
+            echo "Tag ${{ env.VERSION_TAG_REMOTE }} already exists."
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "Tag ${{ env.VERSION_TAG_REMOTE }} does not exist. Proceeding to push."
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Set up Docker Buildx
+        if: steps.check_tag.outputs.exists == 'false'
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        if: steps.check_tag.outputs.exists == 'false'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build container image for testing
+        if: steps.check_tag.outputs.exists == 'false'
+        run: |
+          just base build
+
+      - name: Test container image
+        if: steps.check_tag.outputs.exists == 'false'
+        run: |
+          just base test
+
       - name: Tag and push container image to GHCR
-        if: success()
+        if: (steps.check_tag.outputs.exists == 'false') && success()
         run: |
           echo "Tagging and pushing image to ghcr.io..."
           docker tag ${{ env.VERSION_TAG_LOCAL }} ${{ env.VERSION_TAG_REMOTE }}
