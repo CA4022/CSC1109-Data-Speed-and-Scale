@@ -1,5 +1,6 @@
 CONTAINER_NAME := env("BASE_CONTAINER_NAME")
-VERSION := env("VERSION")
+VERSION := `cat ./VERSION`
+TAG := BASE_CONTAINER_NAME + ":" + VERSION
 
 CONTAINER_CMD := `[ -z "$CONTAINER_ENV" ] && echo "docker" || echo "$CONTAINER_ENV"`
 
@@ -12,6 +13,34 @@ BASE_GIT_VERSION := env("BASE_GIT_VERSION")
 BASE_GCC_VERSION := env("BASE_GCC_VERSION")
 
 
+get_version:
+    @echo {{VERSION}}
+
+bump_version:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    current_version=$(cat ./VERSION)
+    today_date=$(date +"%Y.%m.%d")
+    new_version=""
+    if [[ "${current_version:0:10}" == "$today_date" ]]; then
+        echo "CalVer: Same day, incrementing revision."
+        if [[ "$current_version" == "$today_date" ]]; then
+            new_version="${today_date}.1"
+        else
+            revision_num=${current_version##*.}
+            new_revision=$((revision_num + 1))
+            new_version="${today_date}.${new_revision}"
+        fi
+    else
+        echo "CalVer: New day, resetting version."
+        new_version="$today_date"
+    fi
+    echo "Setting new version to: $new_version"
+    echo "$new_version" > ./VERSION
+
+get_tag:
+    @echo {{TAG}}
+
 build:
     {{CONTAINER_CMD}} build \
         --build-arg BASE_CONTAINER_NAME="{{BASE_CONTAINER_NAME}}" \
@@ -21,10 +50,10 @@ build:
         --build-arg BASE_BASH_VERSION="{{BASE_BASH_VERSION}}" \
         --build-arg BASE_GIT_VERSION="{{BASE_GIT_VERSION}}" \
         --build-arg BASE_GCC_VERSION="{{BASE_GCC_VERSION}}" \
-        -t {{CONTAINER_NAME}}:{{VERSION}} \
+        -t {{TAG}} \
         .
 
 run:
-    {{CONTAINER_CMD}} run --privileged --rm -it {{CONTAINER_NAME}}:{{VERSION}}
+    {{CONTAINER_CMD}} run --privileged --rm -it {{TAG}}
 
 build_and_run: build run
