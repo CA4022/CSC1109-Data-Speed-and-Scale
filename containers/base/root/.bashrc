@@ -33,7 +33,7 @@ if ! [[ "$EDITOR" =~ ^(nvim|vim|emacs|micro)$ ]]; then
     echo ""
     echo -e "\033[90m\033[0m Please select your default text editor:"
     echo "(we recommend micro for those new to working in a CLI)"
-    options=("micro μ" "vim " "nvim " "emacs ")
+    options=("micro μ" "vim " "neovim " "emacs ")
     PS3="Enter a number: "
 
     select opt in "${options[@]}"; do
