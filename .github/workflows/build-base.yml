@@ -44,8 +44,8 @@ jobs:
       - name: Define runner, image name, and tags
         id: meta
         run: |
-          TAG=$(just base get_tag)
           echo "CONTAINER_ENV=docker" >> $GITHUB_ENV
+          TAG=$(just base get_tag)
           echo "IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/${{ env.BASE_CONTAINER_NAME }}" >> $GITHUB_ENV
           echo "IMAGE_TAG=ghcr.io/${{ github.repository_owner }}/$TAG" >> $GITHUB_ENV
 
