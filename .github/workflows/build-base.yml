@@ -41,9 +41,10 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Define image name and tags
+      - name: Define runner, image name, and tags
         id: meta
         run: |
+          echo "CONTAINER_ENV=docker" >> $GITHUB_ENV
           echo "IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/${{ env.BASE_CONTAINER_NAME }}" >> $GITHUB_ENV
           echo "IMAGE_TAG=${{ env.VERSION }}" >> $GITHUB_ENV
 
