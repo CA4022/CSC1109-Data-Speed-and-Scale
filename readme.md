@@ -68,7 +68,11 @@ creating images derived from this base for each lesson plan.
         go with the usual GNU toolchains (glibc and coreutils instead of MUSL and busybox).
 - Decided to add some niceties to the terminal environment
     - Did this because raw terminal can be intimidating for some people, and we want to avoid that
-    - Stuck with bash, for obvious reason
+    - Added choice of terminal environments:
+        - fish for terminal newbies
+        - bash because it's everywhere
+        - zsh for students comfortable with macs
+        - nu (probably mostly just for me?)
     - Added choice of editors:
         - micro for the complete terminal newbies
         - vim (cos, well, its vim. it has to be everywhere)
