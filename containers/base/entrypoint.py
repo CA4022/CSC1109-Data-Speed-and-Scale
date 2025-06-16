@@ -116,7 +116,7 @@ class EnvSelector(Selector):
         self.env_var = env_var
 
     def start(self):
-        os.environ[self.env_var] = self.choice
+        os.environ[self.env_var] = self.commands[self.choice]
 
 
 class ShellSelector(Selector):
@@ -151,7 +151,7 @@ class ShellSelector(Selector):
         for s in self.selectors:
             s.start()
         try:
-            os.execvp(self.choice, [self.choice])
+            os.execvp(self.commands[self.choice], [self.commands[self.choice]])
         except FileNotFoundError as e:
             msg = (
                 f"Error: The shell '{self.choice}' could not be found on your system.",
