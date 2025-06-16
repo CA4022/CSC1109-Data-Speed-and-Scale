@@ -1,5 +1,5 @@
-ARG BASE_OPENSUSE_VERSION
-FROM docker.io/opensuse/leap:${BASE_OPENSUSE_VERSION}
+ARG BASE_OPENSUSE_VERSION=15.5
+FROM docker.io/opensuse/leap:${BASE_OPENSUSE_VERSION} AS base
 
 ARG BASE_OPENSUSE_VERSION
 ARG BASE_GCC_VERSION
@@ -8,64 +8,76 @@ ARG BASE_GIT_VERSION
 ARG BASE_DOCKER_VERSION
 ARG BASE_COMPOSE_VERSION
 
-# Update package repository
 RUN zypper --non-interactive refresh
 
-# Install core packages
-RUN zypper --non-interactive addrepo "https://download.opensuse.org/repositories/Virtualization:containers/${BASE_OPENSUSE_VERSION}/Virtualization:containers.repo"
-RUN zypper --non-interactive --gpg-auto-import-keys refresh
-RUN zypper --non-interactive install bash-${BASE_BASH_VERSION} gcc-${BASE_GCC_VERSION} git-${BASE_GIT_VERSION} docker-${BASE_DOCKER_VERSION} docker-compose-${BASE_COMPOSE_VERSION} python312
+# These are the core packages for the environment. They are installed in their own stage
+# as they are expected to change infrequently.
+FROM base AS core-dependencies
 
-# Add tests
-RUN zypper --non-interactive install hashdeep jq
+# Bring ARGs into this stage to use them.
+ARG BASE_OPENSUSE_VERSION
+ARG BASE_GCC_VERSION
+ARG BASE_BASH_VERSION
+ARG BASE_GIT_VERSION
+ARG BASE_DOCKER_VERSION
+ARG BASE_COMPOSE_VERSION
+
+RUN zypper --non-interactive addrepo "https://download.opensuse.org/repositories/Virtualization:containers/${BASE_OPENSUSE_VERSION}/Virtualization:containers.repo" && \
+    zypper --non-interactive --gpg-auto-import-keys refresh && \
+    zypper --non-interactive install \
+        bash-${BASE_BASH_VERSION} \
+        gcc-${BASE_GCC_VERSION} \
+        git-${BASE_GIT_VERSION} \
+        docker-${BASE_DOCKER_VERSION} \
+        docker-compose-${BASE_COMPOSE_VERSION} \
+        python312 && \
+    zypper clean --all
+
+# Add the non-essential user-friendly tools and configurations for students.
+# Separated from core because these components are more likely to change.
+FROM core-dependencies AS student-environment
+
+RUN zypper --non-interactive install \
+        wget \
+        bat bat-bash-completion \
+        glow \
+        lsd \
+        fd fd-bash-completion \
+        ripgrep ripgrep-bash-completion \
+        tealdeer tealdeer-bash-completion \
+        symbols-only-nerd-fonts \
+        vim \
+        docker-bash-completion && \
+    zypper clean --all
+
+COPY --from=ghcr.io/nushell/nushell:0.105.1-bookworm /bin/nu /bin/nu_plugin* /usr/local/bin/
+RUN bash -c "$(wget https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh -O -)" "" --unattended
+
+COPY ./root/ /root/
+RUN chmod +x /root/build.sh && /root/build.sh && rm /root/build.sh && \
+    chmod +x /root/.config/bat/build.sh && /root/.config/bat/build.sh && rm /root/.config/bat/build.sh && \
+    chmod +x /root/.config/glamour/build.sh && /root/.config/glamour/build.sh && rm /root/.config/glamour/build.sh && \
+    chmod +x /root/.config/micro/build.sh && /root/.config/micro/build.sh && rm /root/.config/micro/build.sh && \
+    chmod +x /root/.config/nvim/build.sh && /root/.config/nvim/build.sh && rm /root/.config/nvim/build.sh && \
+    chmod +x /root/.config/emacs/build.sh && /root/.config/emacs/build.sh && rm /root/.config/emacs/build.sh
+
+# Assembly stage: copy over application-specific code, tests, and entrypoint.
+# These files are expected to change most frequently.
+FROM student-environment AS final
+
+# Install test-specific dependencies.
+RUN zypper --non-interactive install hashdeep jq && zypper clean --all
+
+# Copy test files and set permissions.
 COPY ./test/ /test/
 RUN chmod -R +x /test/
 
-# Install non-essential environment elements
-# NOTE: A goal here is to provide a consistent, user friendly environment for students
-#     to work within. As such, these don't need to be pinned and are likely to change
-#     more often than the rest of this file.
-# First, lets install some modern unix tooling and convenience elements
-RUN zypper --non-interactive install wget bat bat-bash-completion glow lsd fd fd-bash-completion ripgrep ripgrep-bash-completion tealdeer tealdeer-bash-completion symbols-only-nerd-fonts vim docker-bash-completion
-# Build shell env
-COPY --from=ghcr.io/nushell/nushell:0.105.1-bookworm /bin/nu /bin/nu_plugin* /usr/local/bin/
-RUN bash -c "$(wget https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh -O -)"
-# Copy across config files
-COPY ./root/ /root/
-# Build bash env
-RUN chmod +x /root/build.sh
-RUN /root/build.sh
-RUN rm /root/build.sh
-# Build bat env
-RUN chmod +x /root/.config/bat/build.sh
-RUN /root/.config/bat/build.sh
-RUN rm /root/.config/bat/build.sh
-# Build glamour theming env
-RUN chmod +x /root/.config/glamour/build.sh
-RUN /root/.config/glamour/build.sh
-RUN rm /root/.config/glamour/build.sh
-# Build micro env
-RUN chmod +x /root/.config/micro/build.sh
-RUN /root/.config/micro/build.sh
-RUN rm /root/.config/micro/build.sh
-# Build neovim env
-RUN chmod +x /root/.config/nvim/build.sh
-RUN /root/.config/nvim/build.sh
-RUN rm /root/.config/nvim/build.sh
-# Build emacs env
-RUN chmod +x /root/.config/emacs/build.sh
-RUN /root/.config/emacs/build.sh
-RUN rm /root/.config/emacs/build.sh
-RUN mkdir /run/user/0  # Gets rid of warning message in emacs
-
-# Set working directory
-RUN mkdir /lab
+# Create working directory and a directory needed to suppress emacs warnings.
+RUN mkdir /lab && mkdir -p /run/user/0
 WORKDIR /lab
 
-# Add orientation files
+# Copy lab specific files and set entrypoint running
 COPY ./lab/ /lab/
-
-# Prepare entrypoint to initialise environment
 COPY entrypoint.py /entrypoint.py
 RUN chmod +x /entrypoint.py
 CMD ["/entrypoint.py"]
