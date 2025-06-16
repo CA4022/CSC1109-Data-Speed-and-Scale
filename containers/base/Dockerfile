@@ -14,7 +14,7 @@ RUN zypper --non-interactive refresh
 # Install core packages
 RUN zypper --non-interactive addrepo "https://download.opensuse.org/repositories/Virtualization:containers/${BASE_OPENSUSE_VERSION}/Virtualization:containers.repo"
 RUN zypper --non-interactive --gpg-auto-import-keys refresh
-RUN zypper --non-interactive install bash-${BASE_BASH_VERSION} gcc-${BASE_GCC_VERSION} git-${BASE_GIT_VERSION} docker-${BASE_DOCKER_VERSION} docker-compose-${BASE_COMPOSE_VERSION}
+RUN zypper --non-interactive install bash-${BASE_BASH_VERSION} gcc-${BASE_GCC_VERSION} git-${BASE_GIT_VERSION} docker-${BASE_DOCKER_VERSION} docker-compose-${BASE_COMPOSE_VERSION} python312
 
 # Add tests
 RUN zypper --non-interactive install hashdeep jq
@@ -27,7 +27,8 @@ RUN chmod -R +x /test/
 #     more often than the rest of this file.
 # First, lets install some modern unix tooling and convenience elements
 RUN zypper --non-interactive install wget bat bat-bash-completion glow lsd fd fd-bash-completion ripgrep ripgrep-bash-completion tealdeer tealdeer-bash-completion symbols-only-nerd-fonts vim docker-bash-completion
-# Build bash env
+# Build shell env
+COPY --from=ghcr.io/nushell/nushell:0.105.1-bookworm /bin/nu /bin/nu_plugin* /usr/local/bin/
 RUN bash -c "$(wget https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh -O -)"
 # Copy across config files
 COPY ./root/ /root/
@@ -67,7 +68,4 @@ COPY ./lab/ /lab/
 # Prepare entrypoint to initialise environment
 COPY entrypoint.py /entrypoint.py
 RUN chmod +x /entrypoint.py
-ENTRYPOINT ["/entrypoint.py"]
-
-# Run interactive shell
-CMD ["bash"]
+CMD ["/entrypoint.py"]
