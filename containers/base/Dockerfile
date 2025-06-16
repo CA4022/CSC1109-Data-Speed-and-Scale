@@ -65,9 +65,9 @@ WORKDIR /lab
 COPY ./lab/ /lab/
 
 # Prepare entrypoint to initialise environment
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
+COPY entrypoint.py /entrypoint.py
+RUN chmod +x /entrypoint.py
+ENTRYPOINT ["/entrypoint.py"]
 
 # Run interactive shell
 CMD ["bash"]

@@ -9,7 +9,6 @@ esac
 
 eval "$(fzf --bash)"
 export OSH="/root/.oh-my-bash"
-OSH_THEME="axin"
 OMB_USE_SUDO=true
 
 completions=(git docker docker-compose ssh)
@@ -67,3 +66,4 @@ Y8b  d8 db   8D Y8b  d8  88  88 \`88  d8'   d8'
 cat /root/CSS1109.md /lab/lab.md | glow
 
 [[ ! ${BLE_VERSION-} ]] || ble-attach
+eval "$(starship init bash)"
