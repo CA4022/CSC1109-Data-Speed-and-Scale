@@ -59,7 +59,7 @@ RUN chmod +x /root/build.sh && /root/build.sh && rm /root/build.sh && \
     chmod +x /root/.config/glamour/build.sh && /root/.config/glamour/build.sh && rm /root/.config/glamour/build.sh && \
     chmod +x /root/.config/micro/build.sh && /root/.config/micro/build.sh && rm /root/.config/micro/build.sh && \
     chmod +x /root/.config/nvim/build.sh && /root/.config/nvim/build.sh && rm /root/.config/nvim/build.sh && \
-    chmod +x /root/.config/emacs/build.sh && /root/.config/emacs/build.sh && rm /root/.config/emacs/build.sh
+    mkdir -p /run/user/0 && chmod +x /root/.config/emacs/build.sh && /root/.config/emacs/build.sh && rm /root/.config/emacs/build.sh
 
 # Assembly stage: copy over application-specific code, tests, and entrypoint.
 # These files are expected to change most frequently.
@@ -73,7 +73,7 @@ COPY ./test/ /test/
 RUN chmod -R +x /test/
 
 # Create working directory and a directory needed to suppress emacs warnings.
-RUN mkdir /lab && mkdir -p /run/user/0
+RUN mkdir /lab
 WORKDIR /lab
 
 # Copy lab specific files and set entrypoint running

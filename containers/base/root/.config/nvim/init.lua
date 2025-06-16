@@ -48,6 +48,7 @@ vim.diagnostic.config({
     severity_sort = false,
 })
 -- Install lazy
+vim.go.loadplugins = true
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
     vim.fn.system({
