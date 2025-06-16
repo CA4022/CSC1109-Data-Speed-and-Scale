@@ -2,8 +2,11 @@ set -x LANG en_US.UTF-8
 set -x USER root
 set -x COLORTERM "truecolor"
 set -x MANPAGER "bat -l man -p"
+set -x STARSHIP_CONFIG "/root/.config/starship/fish.toml"
 
 fzf --fish | source
+
+trap 'echo -e "\e[32mGoodbye! 👋\e[m\n"' EXIT
 
 if set -q EDITOR
     function edit --description "Alias for launching \$EDITOR with arguments"
@@ -14,9 +17,9 @@ else
 end
 
 # Simple aliases for common commands.
-alias cat "bat" # Use bat as a cat replacement
-alias ls "lsd"                   # Use lsd for listings
-alias grep "rg"                  # Use ripgrep for searching
-alias find "fd"                  # Use fd for finding files
+alias cat "bat"
+alias ls "lsd"
+alias grep "rg"
+alias find "fd"
 
 starship init fish | source

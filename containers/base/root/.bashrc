@@ -1,6 +1,7 @@
 # Add env variables that blesh expects
 export LANG=en_US.UTF-8
 export USER=root
+export STARSHIP_CONFIG="/root/.config/starship/bash.toml"
 
 case $- in
   *i*) source /root/.local/share/blesh/ble.sh --noattach;;
@@ -9,7 +10,6 @@ esac
 
 eval "$(fzf --bash)"
 export OSH="/root/.oh-my-bash"
-OMB_USE_SUDO=true
 
 completions=(git docker docker-compose maven ssh)
 aliases=(general docker ls)
@@ -28,5 +28,6 @@ alias ls="lsd"
 alias grep="rg"
 alias find="fd"
 
-[[ ! ${BLE_VERSION-} ]] || ble-attach
 eval "$(starship init bash)"
+
+[[ ! ${BLE_VERSION-} ]] || ble-attach

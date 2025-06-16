@@ -1,3 +1,4 @@
+$env.config.show_banner = false
 $env.config.color_config = {
     separator: white
     leading_trailing_space_bg: { attr: n }
@@ -68,3 +69,9 @@ $env.LANG = "en_US.UTF-8"
 $env.USER = "root"
 $env.COLORTERM = "truecolor"
 $env.MANPAGER = "bat -l man -p"
+
+if not ("EDITOR" in $env) {
+    $env.EDITOR = "vim"
+}
+$env.config.buffer_editor = $env.EDITOR
+$env.STARSHIP_CONFIG = "/root/.config/starship/nu.toml"
