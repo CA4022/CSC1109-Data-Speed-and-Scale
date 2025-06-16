@@ -6,7 +6,10 @@ set -x STARSHIP_CONFIG "/root/.config/starship/fish.toml"
 
 fzf --fish | source
 
-trap 'echo -e "\e[32mGoodbye! 👋\e[m\n"' EXIT
+function fish_greeting
+end
+
+trap 'echo -e "\e[32mGoodbye! 👋\e[m"' EXIT
 
 if set -q EDITOR
     function edit --description "Alias for launching \$EDITOR with arguments"
