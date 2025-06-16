@@ -23,5 +23,4 @@ git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/
 git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
 mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc # Undo oh-my-zsh overwrite of .zshrc
 # Pre-install vim plugins
-# vim -E +PlugInstall +qa
 vim +'PlugInstall --sync' +qa
