@@ -10,6 +10,7 @@ rm -r /nvim
 # Install neovim plugins at container build time
 # First: bootstrap lazy.nvim using luarocks
 zypper --non-interactive install lua53 lua53-devel unzip
+zypper clean --all # cleanup
 wget https://luarocks.org/releases/luarocks-3.12.0.tar.gz
 tar zxpf luarocks-3.12.0.tar.gz
 cd luarocks-3.12.0
