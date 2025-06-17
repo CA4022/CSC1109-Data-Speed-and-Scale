@@ -1,0 +1,136 @@
+name: Build Dispatcher
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'containers/**'
+
+jobs:
+  determine-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      base-root-config-bat: ${{ steps.filter.outputs.base-root-config-bat }}
+      base-root-config-glamour: ${{ steps.filter.outputs.base-root-config-glamour }}
+      base-root-config-micro: ${{ steps.filter.outputs.base-root-config-micro }}
+      base-root-config-emacs: ${{ steps.filter.outputs.base-root-config-emacs }}
+      base-root-config-nvim: ${{ steps.filter.outputs.base-root-config-nvim }}
+      base-root: ${{ steps.filter.outputs.base-root }}
+      base: ${{ steps.filter.outputs.base }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Use paths-filter action
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            base-root-config-bat:
+              - 'containers/base/root/.config/bat/**'
+            base-root-config-glamour:
+              - 'containers/base/root/.config/glamour/**'
+            base-root-config-micro:
+              - 'containers/base/root/.config/micro/**'
+            base-root-config-emacs:
+              - 'containers/base/root/.config/emacs/**'
+            base-root-config-nvim:
+              - 'containers/base/root/.config/nvim/**'
+            base-root:
+              - 'containers/base/root/**'
+            base:
+              - 'containers/base/**'
+
+  build-base-root-config-bat:
+    needs: determine-changes
+    if: needs.determine-changes.outputs.base-root-config-bat == 'true'
+    name: 'Build base-root-config-bat container'
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/build.yml
+    with:
+      path: containers/base/root/.config/bat
+    secrets: inherit
+
+  build-base-root-config-glamour:
+    needs: determine-changes
+    if: needs.determine-changes.outputs.base-root-config-glamour == 'true'
+    name: 'Build base-root-config-glamour container'
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/build.yml
+    with:
+      path: containers/base/root/.config/glamour
+    secrets: inherit
+
+  build-base-root-config-micro:
+    needs: determine-changes
+    if: needs.determine-changes.outputs.base-root-config-micro == 'true'
+    name: 'Build base-root-config-micro container'
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/build.yml
+    with:
+      path: containers/base/root/.config/micro
+    secrets: inherit
+
+  build-base-root-config-emacs:
+    needs: determine-changes
+    if: needs.determine-changes.outputs.base-root-config-emacs == 'true'
+    name: 'Build base-root-config-emacs container'
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/build.yml
+    with:
+      path: containers/base/root/.config/emacs
+    secrets: inherit
+
+  build-base-root-config-nvim:
+    needs: determine-changes
+    if: needs.determine-changes.outputs.base-root-config-nvim == 'true'
+    name: 'Build base-root-config-nvim container'
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/build.yml
+    with:
+      path: containers/base/root/.config/nvim
+    secrets: inherit
+
+  build-base-root:
+    needs:
+      - determine-changes
+      - build-base-root-config-bat
+      - build-base-root-config-glamour
+      - build-base-root-config-micro
+      - build-base-root-config-emacs
+      - build-base-root-config-nvim
+    if: needs.determine-changes.outputs.base-root == 'true'
+    name: 'Build base-root container'
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/build.yml
+    with:
+      path: containers/base/root/
+    secrets: inherit
+
+  build-base:
+    needs:
+      - determine-changes
+      - build-base-root
+    if: needs.determine-changes.outputs.base == 'true'
+    name: 'Build base container'
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/build.yml
+    with:
+      path: containers/base/
+    secrets: inherit

@@ -1,13 +1,14 @@
-name: Build and Push Base Container
+name: Reusable Container Build
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'containers/base/**'
-      - '.github/workflows/build-base.yml'
-      - '.env'
+  workflow_call:
+    inputs:
+      path:
+        required: true
+        type: string
+    secrets:
+      GITHUB_TOKEN:
+        required: true
 
 jobs:
   build-test-and-push:
@@ -22,36 +23,35 @@ jobs:
 
       - name: Install just
         uses: extractions/setup-just@v2
-        with:
-          just-version: 1.40.0
 
       - name: Load .env file
+        id: dotenv
         uses: xom9ikk/dotenv@v2
         with:
           path: ./
 
       - name: Set container environment
-        run: |
-          echo "CONTAINER_ENV=docker" >> $GITHUB_ENV
+        run: echo "CONTAINER_ENV=docker" >> $GITHUB_ENV
 
       - name: Define image name and tag
         id: meta
         run: |
           REPO_URL="ghcr.io/${{ github.repository_owner }}"
-          VERSION_TAG=$(just base get_tag)
-          LATEST_TAG="${{ env.BASE_CONTAINER_NAME }}:latest"
+          VERSION_TAG=$(just get_tag ${{ inputs.path }})
+          LATEST_TAG="$(just get_image_name ${{ inputs.path }}):latest"
           echo "VERSION_TAG_LOCAL=$VERSION_TAG" >> $GITHUB_ENV
           echo "VERSION_TAG_REMOTE=$REPO_URL/$VERSION_TAG" >> $GITHUB_ENV
           echo "LATEST_TAG_REMOTE=$REPO_URL/$LATEST_TAG" >> $GITHUB_ENV
 
       - name: Check if remote tag exists
         id: check_tag
+        continue-on-error: true
         run: |
-          if docker pull ${{ env.VERSION_TAG_REMOTE }}; then
+          if docker manifest inspect ${{ env.VERSION_TAG_REMOTE }} > /dev/null; then
             echo "Tag ${{ env.VERSION_TAG_REMOTE }} already exists."
             echo "exists=true" >> $GITHUB_OUTPUT
           else
-            echo "Tag ${{ env.VERSION_TAG_REMOTE }} does not exist. Proceeding to push."
+            echo "Tag ${{ env.VERSION_TAG_REMOTE }} does not exist. Proceeding to build."
             echo "exists=false" >> $GITHUB_OUTPUT
           fi
 
@@ -70,12 +70,12 @@ jobs:
       - name: Build container image for testing
         if: steps.check_tag.outputs.exists == 'false'
         run: |
-          just base build
+          just build ${{ inputs.path }}
 
       - name: Test container image
         if: steps.check_tag.outputs.exists == 'false'
         run: |
-          just base test
+          just test ${{ inputs.path }}
 
       - name: Tag and push container image to GHCR
         if: (steps.check_tag.outputs.exists == 'false') && success()
