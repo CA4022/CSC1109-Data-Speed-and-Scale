@@ -1,8 +1,113 @@
+# Variables loaded from the environment for build arguments
+BASE_NAME := env("BASE_NAME")
+CONTAINER_CMD := env("CONTAINER_ENV")
+
+BASE_OPENSUSE_VERSION := env("BASE_OPENSUSE_VERSION")
+BASE_DOCKER_VERSION := env("BASE_DOCKER_VERSION")
+BASE_COMPOSE_VERSION := env("BASE_COMPOSE_VERSION")
+BASE_BASH_VERSION := env("BASE_BASH_VERSION")
+BASE_GIT_VERSION := env("BASE_GIT_VERSION")
+BASE_GCC_VERSION := env("BASE_GCC_VERSION")
+
 # Lists available just commands
 default:
     @just --list
 
-# Commands below delegate to justfiles in subfolders
-# Base image commands
-base command *args:
-    cd ./containers/base/ && just {{command}} {{args}}
+# Get the image name from a target directory
+get_image_name target_dir='.':
+    #!/usr/bin/env bash
+    # Generate container name from the target directory path.
+    # Note: Can't speak for how reliable this will be. Nobody in their right mind willingly writes
+    #   sed/awk code by hand. As dubious as the practice can be: this line is 90% vibe coded.
+    PATH_COMPONENT=$(echo "{{target_dir}}" | sed -e 's|^\(./\)\?containers/||' | tr '/' '\n' | sed -e 's/^\.//' -e 's/\.$//' | awk 'NF' | paste -sd-)
+    echo "$BASE_NAME-$PATH_COMPONENT"
+
+# Get the version string from a target directory
+get_version target_dir='.':
+    #!/usr/bin/env bash
+    VERSION_FILE="{{target_dir}}/VERSION"
+    if [ ! -f "$VERSION_FILE" ]; then
+        echo "Error: '{{target_dir}}/VERSION' not found." >&2
+        exit 1
+    fi
+    cat {{target_dir}}/VERSION
+
+# Helper recipe to get the tag for a given directory.
+get_tag target_dir:
+    #!/usr/bin/env bash
+    echo "$(just get_image_name {{target_dir}}):$(just get_version {{target_dir}})"
+
+# Bump the CalVer version in a target directory's VERSION file
+bump_version target_dir='.':
+    #!/usr/bin/env bash
+    set -euo pipefail
+    VERSION_FILE="{{target_dir}}/VERSION"
+
+    if [ ! -f "$VERSION_FILE" ]; then
+        echo "Error: '$VERSION_FILE' not found. Cannot bump version." >&2
+        exit 1
+    fi
+
+    current_version=$(cat "$VERSION_FILE")
+    today_date=$(date +"%Y.%m.%d")
+    new_version=""
+
+    if [[ "${current_version:0:10}" == "$today_date" ]]; then
+        echo "CalVer: Same day, incrementing revision."
+        if [[ "$current_version" == "$today_date" ]]; then
+            new_version="${today_date}.1"
+        else
+            revision_num=${current_version##*.}
+            new_revision=$((revision_num + 1))
+            new_version="${today_date}.${new_revision}"
+        fi
+    else
+        echo "CalVer: New day, resetting version."
+        new_version="$today_date"
+    fi
+
+    echo "Setting new version to: $new_version"
+    echo "$new_version" > "$VERSION_FILE"
+
+# Build a container image from a target directory
+build target_dir='.':
+    #!/usr/bin/env bash
+    set -euo pipefail
+    TAG=$(just --justfile {{justfile()}} get_tag '{{target_dir}}')
+    echo "Building image with tag: ${TAG}"
+
+    {{CONTAINER_CMD}} build \
+        --build-arg BASE_OPENSUSE_VERSION="{{BASE_OPENSUSE_VERSION}}" \
+        --build-arg BASE_DOCKER_VERSION="{{BASE_DOCKER_VERSION}}" \
+        --build-arg BASE_COMPOSE_VERSION="{{BASE_COMPOSE_VERSION}}" \
+        --build-arg BASE_BASH_VERSION="{{BASE_BASH_VERSION}}" \
+        --build-arg BASE_GIT_VERSION="{{BASE_GIT_VERSION}}" \
+        --build-arg BASE_GCC_VERSION="{{BASE_GCC_VERSION}}" \
+        -t "${TAG}" \
+        {{target_dir}}
+
+# Run a container from a target directory's build
+run target_dir='.':
+    #!/usr/bin/env bash
+    set -euo pipefail
+    TAG=$(just --justfile {{justfile()}} get_tag '{{target_dir}}')
+    echo "Running image: ${TAG}"
+    {{CONTAINER_CMD}} run --privileged --rm -it "${TAG}"
+
+# Test a container from a target directory's build
+test target_dir='.':
+    #!/usr/bin/env bash
+    set -euo pipefail
+    TAG=$(just --justfile {{justfile()}} get_tag '{{target_dir}}')
+    echo "Testing image: ${TAG}"
+    {{CONTAINER_CMD}} run --privileged --rm "${TAG}" /test/test.sh
+
+# Build and then run the container
+build_and_run target_dir='.':
+    @just --justfile {{justfile()}} build '{{target_dir}}'
+    @just --justfile {{justfile()}} run '{{target_dir}}'
+
+# Build and then test the container
+build_and_test target_dir='.':
+    @just --justfile {{justfile()}} build '{{target_dir}}'
+    @just --justfile {{justfile()}} test '{{target_dir}}'
