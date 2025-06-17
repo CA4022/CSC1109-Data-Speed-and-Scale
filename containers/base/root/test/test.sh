@@ -11,4 +11,4 @@ cd /test/base/
 echo "Computing system hash..."
 ./system_hash.sh $1
 echo "Testing editor configurations..."
-./test_editors.sh &> $1
+./editor_tests.sh &> $1
