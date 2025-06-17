@@ -77,9 +77,4 @@ jobs:
       - name: Tag and push container image to GHCR
         if: (steps.check_tag.outputs.exists == 'false') && success()
         run: |
-          echo "Tagging and pushing image to ghcr.io..."
-          docker tag ${{ env.VERSION_TAG_LOCAL }} ${{ env.VERSION_TAG_REMOTE }}
-          docker tag ${{ env.VERSION_TAG_REMOTE }} ${{ env.LATEST_TAG_REMOTE }}
-          docker push ${{ env.VERSION_TAG_REMOTE }}
-          docker push ${{ env.LATEST_TAG_REMOTE }}
-          echo "Image pushed successfully."
+          just publish ${{ inputs.path }}

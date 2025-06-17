@@ -32,10 +32,16 @@ get_version target_dir='.':
     fi
     cat {{target_dir}}/VERSION
 
-# Helper recipe to get the tag for a given directory.
-get_tag target_dir:
+# Get the tag for a given directory.
+get_tag target_dir='.':
     #!/usr/bin/env bash
     echo "$(just get_image_name {{target_dir}}):$(just get_version {{target_dir}})"
+
+
+# Get the latest tag for a given directory.
+get_latest_tag target_dir='.':
+    #!/usr/bin/env bash
+    echo "$(just get_image_name {{target_dir}}):latest"
 
 # Bump the CalVer version in a target directory's VERSION file
 bump_version target_dir='.':
@@ -76,7 +82,7 @@ build target_dir='.':
     TAG=$(just --justfile {{justfile()}} get_tag '{{target_dir}}')
     echo "Building image with tag: ${TAG}"
 
-    {{CONTAINER_CMD}} build \
+    {{ CONTAINER_CMD }} build \
         --build-arg BASE_OPENSUSE_VERSION="{{BASE_OPENSUSE_VERSION}}" \
         --build-arg BASE_DOCKER_VERSION="{{BASE_DOCKER_VERSION}}" \
         --build-arg BASE_COMPOSE_VERSION="{{BASE_COMPOSE_VERSION}}" \
@@ -92,7 +98,7 @@ run target_dir='.':
     set -euo pipefail
     TAG=$(just --justfile {{justfile()}} get_tag '{{target_dir}}')
     echo "Running image: ${TAG}"
-    {{CONTAINER_CMD}} run --privileged --rm -it "${TAG}"
+    {{ CONTAINER_CMD }} run --privileged --rm -it "${TAG}"
 
 # Test a container from a target directory's build
 test target_dir='.':
@@ -100,7 +106,7 @@ test target_dir='.':
     set -euo pipefail
     TAG=$(just --justfile {{justfile()}} get_tag '{{target_dir}}')
     echo "Testing image: ${TAG}"
-    {{CONTAINER_CMD}} run --privileged --rm "${TAG}" /test/test.sh
+    {{ CONTAINER_CMD }} run --privileged --rm "${TAG}" /test/test.sh
 
 # Build and then run the container
 build_and_run target_dir='.':
@@ -111,3 +117,18 @@ build_and_run target_dir='.':
 build_and_test target_dir='.':
     @just --justfile {{justfile()}} build '{{target_dir}}'
     @just --justfile {{justfile()}} test '{{target_dir}}'
+
+publish repo_url target_dir='.':
+    #!/usr/bin/env bash
+    echo "Tagging and pushing image to {{repo_url}}..."
+
+    VERSION_TAG_LOCAL=$(get_tag {{ target_dir }})
+    LATEST_TAG_LOCAL=$(just get_latest_tag {{ target_dir }})
+    VERSION_TAG_REMOTE="{{repo_url}}/$VERSION_TAG_LOCAL"
+    LATEST_TAG_REMOTE="{{repo_url}}/$LATEST_TAG_LOCAL"
+
+    {{ CONTAINER_CMD }} tag $VERSION_TAG_LOCAL $VERSION_TAG_REMOTE
+    {{ CONTAINER_CMD }} tag $VERSION_TAG_REMOTE $LATEST_TAG_REMOTE
+    {{ CONTAINER_CMD }} push $VERSION_TAG_REMOTE
+    {{ CONTAINER_CMD }} push $LATEST_TAG_REMOTE
+    echo "Image pushed successfully."
