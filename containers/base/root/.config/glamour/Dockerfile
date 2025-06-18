@@ -13,4 +13,4 @@ RUN git clone https://github.com/catppuccin/glamour build && \
     cp build/themes/* ./ && \
     rm -r build && \
     mkdir /touch && \
-    touch /test/test.sh # Create a dummy test script
+    echo "echo 'No tests needed!' >> /test/test.sh" # Create a dummy test script
