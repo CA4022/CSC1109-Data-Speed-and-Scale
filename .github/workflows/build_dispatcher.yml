@@ -60,7 +60,9 @@ jobs:
           base_root_output = str_to_bool("${{ steps.filter.outputs.base-root }}")
           base_root = str_to_bool("${{ steps.filter.outputs.base }}")
 
-          github_output["build_base_root"] = any([*base_config_outputs, base_root_output])
+          build_base_root = any([*base_config_outputs, base_root_output])
+
+          github_output["build_base_root"] = build_base_root
           github_output["build_base"] = build_base_root or base_root
 
           with open(os.environ["GITHUB_OUTPUTS"], "a") as output_file:
