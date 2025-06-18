@@ -1,6 +1,5 @@
 FROM ghcr.io/amileo/csc1109-base-root:latest AS student-environment
 
-ARG BASE_OPENSUSE_VERSION
 ARG BASE_GCC_VERSION
 ARG BASE_BASH_VERSION
 ARG BASE_GIT_VERSION
@@ -8,8 +7,6 @@ ARG BASE_DOCKER_VERSION
 ARG BASE_COMPOSE_VERSION
 
 RUN zypper --non-interactive refresh && \
-    zypper --non-interactive addrepo "https://download.opensuse.org/repositories/Virtualization:containers/${BASE_OPENSUSE_VERSION}/Virtualization:containers.repo" && \
-    zypper --non-interactive --gpg-auto-import-keys refresh && \
     zypper --non-interactive install \
         bash-${BASE_BASH_VERSION} \
         gcc-${BASE_GCC_VERSION} \
@@ -31,7 +28,7 @@ WORKDIR /lab
 # Collect container tests
 RUN mv /test/ /test-base/
 COPY ./test/ /test/
-RUN mv /test-base/ /test/base/
+RUN mv /test-base/ /test/base/ && chmod -R +x /test/
 
 # Copy lab specific files and set entrypoint running
 COPY ./lab/ /lab/
