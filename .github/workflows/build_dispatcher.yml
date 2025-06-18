@@ -141,6 +141,9 @@ jobs:
       needs.build-base-root-config-emacs.result != 'failure' &&
       needs.build-base-root-config-nvim.result != 'failure'
     name: 'Build base-root container'
+    permissions:
+      contents: read
+      packages: write
     uses: ./.github/workflows/build.yml
     with:
       path: containers/base/root/
@@ -154,6 +157,9 @@ jobs:
       needs.determine-changes.outputs.build-base == 'true' &&
       needs.build-base-root.result != 'failure'
     name: 'Build base container'
+    permissions:
+      contents: read
+      packages: write
     uses: ./.github/workflows/build.yml
     with:
       path: containers/base/
