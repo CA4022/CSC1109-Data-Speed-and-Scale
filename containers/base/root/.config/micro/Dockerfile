@@ -5,7 +5,7 @@ ARG BASE_OPENSUSE_VERSION
 
 RUN zypper --non-interactive refresh
 
-FROM base as micro-build
+FROM base AS micro-build
 
 ARG BASE_OPENSUSE_VERSION
 
@@ -28,4 +28,5 @@ RUN rm -r catppuccin && \
 
 COPY ./test.sh /test/test.sh
 RUN chmod -R +x /test/
-COPY --exclude=Dockerfile,VERSION,test.sh . .
+COPY ./settings.json /root/.config/micro/settings.json
+COPY ./bindings.json /root/.config/micro/bindings.json

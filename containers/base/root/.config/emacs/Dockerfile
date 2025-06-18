@@ -3,7 +3,7 @@ FROM docker.io/opensuse/leap:${BASE_OPENSUSE_VERSION} AS base
 
 RUN zypper --non-interactive refresh
 
-FROM base as emacs-build
+FROM base AS emacs-build
 
 RUN zypper --non-interactive install emacs git && \
     zypper clean --all && \
@@ -13,5 +13,6 @@ WORKDIR /root/.config/emacs
 
 COPY ./test.sh /test/test.sh
 RUN chmod -R +x /test/
-COPY --exclude=Dockerfile,VERSION,test.sh . .
+COPY ./early-init.el /root/.config/emacs/early-init.el
+COPY ./init.el /root/.config/emacs/init.el
 RUN emacs --batch -l ./init.el

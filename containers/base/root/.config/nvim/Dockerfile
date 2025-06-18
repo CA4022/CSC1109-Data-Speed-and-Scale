@@ -3,7 +3,7 @@ FROM docker.io/opensuse/leap:${BASE_OPENSUSE_VERSION} AS base
 
 RUN zypper --non-interactive refresh
 
-FROM base as nvim-build
+FROM base AS nvim-build
 
 RUN zypper --non-interactive install gcc git gzip lua53 lua53-devel make unzip tar wget && \
     zypper clean --all
@@ -34,4 +34,4 @@ RUN curl -s https://raw.githubusercontent.com/folke/lazy.nvim/main/bootstrap.lua
 
 COPY ./test.sh /test/test.sh
 RUN chmod -R +x /test/
-COPY --exclude=Dockerfile,VERSION,test.sh . .
+COPY ./init.lua /root/.config/nvim/init.lua

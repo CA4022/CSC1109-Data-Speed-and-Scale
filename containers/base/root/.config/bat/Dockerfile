@@ -3,7 +3,7 @@ FROM docker.io/opensuse/leap:${BASE_OPENSUSE_VERSION} AS base
 
 RUN zypper --non-interactive refresh
 
-FROM base as bat-build
+FROM base AS bat-build
 
 RUN zypper --non-interactive install bat wget && \
     zypper clean --all && \
@@ -20,4 +20,4 @@ RUN wget https://github.com/catppuccin/bat/raw/main/themes/Catppuccin%20Latte.tm
 WORKDIR /root/.config/bat
 
 RUN touch /test/test.sh # Create a dummy test script
-COPY --exclude=Dockerfile,VERSION . .
+COPY ./config /root/.config/bat/config

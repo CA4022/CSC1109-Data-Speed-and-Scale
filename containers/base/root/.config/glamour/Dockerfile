@@ -3,7 +3,7 @@ FROM docker.io/opensuse/leap:${BASE_OPENSUSE_VERSION} AS base
 
 RUN zypper --non-interactive refresh
 
-FROM base as glamour-build
+FROM base AS glamour-build
 
 RUN zypper --non-interactive install git && \
     zypper clean --all && \
@@ -14,4 +14,3 @@ RUN git clone https://github.com/catppuccin/glamour build && \
     rm -r build
 
 RUN touch /test/test.sh # Create a dummy test script
-COPY --exclude=Dockerfile,VERSION . .
