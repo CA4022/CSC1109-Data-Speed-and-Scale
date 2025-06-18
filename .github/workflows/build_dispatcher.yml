@@ -49,8 +49,8 @@ jobs:
         run: |
           import os
 
-          github_output = dict()
-          str_to_bool = lambda x: x == "true"
+          str_to_bool = {"true": True, "false": False}.get
+          bool_to_str = {True: "true", False: "false"}.get
 
           base_config_outputs = list(map(str_to_bool, (
             "${{ steps.filter.outputs.base-root-config-bat }}",
@@ -69,7 +69,7 @@ jobs:
 
           with open(os.environ["GITHUB_OUTPUT"], "a") as output_file:
               for k, v in github_output.items():
-                  output_file.write(f"{k}={v}\n")
+                  output_file.write(f"{k}={bool_to_str(v)}\n")
 
   build-base-root-config-bat:
     needs: determine-changes
