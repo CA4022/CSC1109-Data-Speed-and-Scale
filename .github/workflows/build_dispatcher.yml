@@ -173,7 +173,7 @@ jobs:
 
   build-base-root:
     needs: base-root-config
-    if: needs.base-root-config.outputs.build-base-root == 'true'
+    if: always() && needs.base-root-config.outputs.build-base-root == 'true'
     name: 'Build base-root container'
     permissions:
       contents: read
@@ -188,6 +188,7 @@ jobs:
       - determine-changes
       - build-base-root
     if: >-
+      always() &&
       needs.determine-changes.outputs.base-changed == 'true' &&
       needs.build-base-root.result != 'failure'
     name: 'Build base container'
