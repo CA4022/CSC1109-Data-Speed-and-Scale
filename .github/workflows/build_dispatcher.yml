@@ -67,7 +67,7 @@ jobs:
           github_output["build_base_root"] = build_base_root
           github_output["build_base"] = build_base_root or base_root
 
-          with open(os.environ["GITHUB_OUTPUTS"], "a") as output_file:
+          with open(os.environ["GITHUB_OUTPUT"], "a") as output_file:
               for k, v in github_output.items():
                   output_file.write(f"{k}={v}\n")
 
