@@ -75,6 +75,12 @@ bump_version target_dir='.':
     echo "Setting new version to: $new_version"
     echo "$new_version" > "$VERSION_FILE"
 
+bump_all_versions:
+    #!/usr/bin/env bash
+    fd --full-path -H0 -t f VERSION | while IFS= read -r -d '' target_dir; do
+        just --justfile {{justfile()}} bump_version "$(dirname $target_dir)"
+    done
+
 # Build a container image from a target directory
 build target_dir='.':
     #!/usr/bin/env bash
