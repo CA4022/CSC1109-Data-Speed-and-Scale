@@ -1,5 +1,6 @@
 FROM ghcr.io/amileo/csc1109-base-root:latest AS student-environment
 
+ARG BASE_OPENSUSE_VERSION
 ARG BASE_GCC_VERSION
 ARG BASE_BASH_VERSION
 ARG BASE_GIT_VERSION
