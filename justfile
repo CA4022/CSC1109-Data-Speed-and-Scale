@@ -128,7 +128,7 @@ publish repo_url target_dir='.':
     #!/usr/bin/env bash
     echo "Tagging and pushing image to {{repo_url}}..."
 
-    VERSION_TAG_LOCAL=$(get_tag {{ target_dir }})
+    VERSION_TAG_LOCAL=$(just get_tag {{ target_dir }})
     LATEST_TAG_LOCAL=$(just get_latest_tag {{ target_dir }})
     VERSION_TAG_REMOTE="{{repo_url}}/$VERSION_TAG_LOCAL"
     LATEST_TAG_REMOTE="{{repo_url}}/$LATEST_TAG_LOCAL"
