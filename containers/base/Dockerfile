@@ -1,7 +1,5 @@
-ARG BASE_NAME
-FROM ghcr.io/amileo/${BASE_NAME}-base-root:latest AS student-environment
+FROM ghcr.io/amileo/csc1109-base-root:latest AS student-environment
 
-ARG BASE_NAME
 ARG BASE_GCC_VERSION
 ARG BASE_BASH_VERSION
 ARG BASE_GIT_VERSION

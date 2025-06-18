@@ -1,7 +1,6 @@
 ARG BASE_OPENSUSE_VERSION=15.5
 FROM docker.io/opensuse/leap:${BASE_OPENSUSE_VERSION} AS base
 
-ARG BASE_NAME
 ARG BASE_OPENSUSE_VERSION
 ARG BASE_GCC_VERSION
 ARG BASE_BASH_VERSION
@@ -78,22 +77,22 @@ COPY .config/nushell .config/nushell
 
 COPY --from=ghcr.io/nushell/nushell:0.105.1-bookworm /bin/nu /bin/nu_plugin* /usr/local/bin/
 
-COPY --from=ghcr.io/amileo/${BASE_NAME}-base-root-config-bat:latest /usr/bin/bat /usr/bin/bat
-COPY --from=ghcr.io/amileo/${BASE_NAME}-base-root-config-bat:latest /usr/share/man/man1/bat.1.gz /usr/share/man/man1/bat.1.gz
-COPY --from=ghcr.io/amileo/${BASE_NAME}-base-root-config-micro:latest /usr/bin/micro /usr/bin/micro
-COPY --from=ghcr.io/amileo/${BASE_NAME}-base-root-config-emacs:latest /usr/bin/emacs /usr/bin/emacs
-COPY --from=ghcr.io/amileo/${BASE_NAME}-base-root-config-emacs:latest /usr/lib/emacs /usr/lib/emacs
-COPY --from=ghcr.io/amileo/${BASE_NAME}-base-root-config-emacs:latest /usr/share/emacs /usr/share/emacs
-COPY --from=ghcr.io/amileo/${BASE_NAME}-base-root-config-emacs:latest /usr/share/man/man1/emacs.1.gz /usr/share/man/man1/emacs.1.gz
-COPY --from=ghcr.io/amileo/${BASE_NAME}-base-root-config-emacs:latest /usr/share/info/emacs.info.gz /usr/share/info/emacs.info.gz
-COPY --from=ghcr.io/amileo/${BASE_NAME}-base-root-config-nvim:latest /bin/nvim /bin/nvim
-COPY --from=ghcr.io/amileo/${BASE_NAME}-base-root-config-nvim:latest /lib/nvim /lib/nvim
-COPY --from=ghcr.io/amileo/${BASE_NAME}-base-root-config-nvim:latest /usr/local/share/nvim/ /usr/local/share/nvim/
+COPY --from=ghcr.io/amileo/csc1109-base-root-config-bat:latest /usr/bin/bat /usr/bin/bat
+COPY --from=ghcr.io/amileo/csc1109-base-root-config-bat:latest /usr/share/man/man1/bat.1.gz /usr/share/man/man1/bat.1.gz
+COPY --from=ghcr.io/amileo/csc1109-base-root-config-micro:latest /usr/bin/micro /usr/bin/micro
+COPY --from=ghcr.io/amileo/csc1109-base-root-config-emacs:latest /usr/bin/emacs /usr/bin/emacs
+COPY --from=ghcr.io/amileo/csc1109-base-root-config-emacs:latest /usr/lib/emacs /usr/lib/emacs
+COPY --from=ghcr.io/amileo/csc1109-base-root-config-emacs:latest /usr/share/emacs /usr/share/emacs
+COPY --from=ghcr.io/amileo/csc1109-base-root-config-emacs:latest /usr/share/man/man1/emacs.1.gz /usr/share/man/man1/emacs.1.gz
+COPY --from=ghcr.io/amileo/csc1109-base-root-config-emacs:latest /usr/share/info/emacs.info.gz /usr/share/info/emacs.info.gz
+COPY --from=ghcr.io/amileo/csc1109-base-root-config-nvim:latest /bin/nvim /bin/nvim
+COPY --from=ghcr.io/amileo/csc1109-base-root-config-nvim:latest /lib/nvim /lib/nvim
+COPY --from=ghcr.io/amileo/csc1109-base-root-config-nvim:latest /usr/local/share/nvim/ /usr/local/share/nvim/
 
-COPY --from=ghcr.io/amileo/${BASE_NAME}-base-root-config-glamour:latest /root/ /root/
-COPY --from=ghcr.io/amileo/${BASE_NAME}-base-root-config-bat:latest /root/ /root/
-COPY --from=ghcr.io/amileo/${BASE_NAME}-base-root-config-micro:latest /root/ /root/
-COPY --from=ghcr.io/amileo/${BASE_NAME}-base-root-config-emacs:latest /root/ /root/
-COPY --from=ghcr.io/amileo/${BASE_NAME}-base-root-config-nvim:latest /root/ /root/
+COPY --from=ghcr.io/amileo/csc1109-base-root-config-glamour:latest /root/ /root/
+COPY --from=ghcr.io/amileo/csc1109-base-root-config-bat:latest /root/ /root/
+COPY --from=ghcr.io/amileo/csc1109-base-root-config-micro:latest /root/ /root/
+COPY --from=ghcr.io/amileo/csc1109-base-root-config-emacs:latest /root/ /root/
+COPY --from=ghcr.io/amileo/csc1109-base-root-config-nvim:latest /root/ /root/
 
 COPY ./CSS1109.md /root/CSS1109.md
