@@ -16,16 +16,16 @@ jobs:
       base-root-config-micro: ${{ steps.filter.outputs.base-root-config-micro }}
       base-root-config-emacs: ${{ steps.filter.outputs.base-root-config-emacs }}
       base-root-config-nvim: ${{ steps.filter.outputs.base-root-config-nvim }}
-      base-root: ${{ steps.filter.outputs.base-root }}
-      base: ${{ steps.filter.outputs.base }}
+      build-base-root: ${{ steps.consolidate.outputs.build_base_root }}
+      build-base: ${{ steps.consolidate.outputs.build_base }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Use paths-filter action
-        uses: dorny/paths-filter@v3
         id: filter
+        uses: dorny/paths-filter@v3
         with:
           filters: |
             base-root-config-bat:
@@ -42,6 +42,34 @@ jobs:
               - 'containers/base/root/**'
             base:
               - 'containers/base/**'
+
+      # This step precomputes logic chains that determine whether cotnainers with dependencies build
+      - name: Consolidate change logic
+        id: consolidate
+        run: |
+          # Determine if any "leaf" file (i.e: configs) changed
+          base_root_config_changed='false'
+          if [[ "${{ steps.filter.outputs.base-root-config-bat }}" == 'true' || \
+                "${{ steps.filter.outputs.base-root-config-glamour }}" == 'true' || \
+                "${{ steps.filter.outputs.base-root-config-micro }}" == 'true' || \
+                "${{ steps.filter.outputs.base-root-config-emacs }}" == 'true' || \
+                "${{ steps.filter.outputs.base-root-config-nvim }}" == 'true' ]]; then
+            base_root_config_changed='true'
+          fi
+
+          # Determine if the 'base-root' container should be built
+          build_base_root='false'
+          if [[ "${{ steps.filter.outputs.base-root }}" == 'true' || "$base_root_config_changed" == 'true' ]]; then
+            build_base_root='true'
+          fi
+          echo "build_base_root=$build_base_root" >> $GITHUB_OUTPUT
+
+          # Determine if the 'base' container should be built
+          build_base='false'
+          if [[ "${{ steps.filter.outputs.base }}" == 'true' || "$build_base_root" == 'true' ]]; then
+            build_base='true'
+          fi
+          echo "build_base=$build_base" >> $GITHUB_OUTPUT
 
   build-base-root-config-bat:
     needs: determine-changes
@@ -111,7 +139,7 @@ jobs:
       - build-base-root-config-micro
       - build-base-root-config-emacs
       - build-base-root-config-nvim
-    if: needs.determine-changes.outputs.base-root == 'true'
+    if: needs.determine-changes.outputs.build-base-root == 'true'
     name: 'Build base-root container'
     permissions:
       contents: read
@@ -125,7 +153,7 @@ jobs:
     needs:
       - determine-changes
       - build-base-root
-    if: needs.determine-changes.outputs.base == 'true'
+    if: needs.determine-changes.outputs.build-base == 'true'
     name: 'Build base container'
     permissions:
       contents: read
