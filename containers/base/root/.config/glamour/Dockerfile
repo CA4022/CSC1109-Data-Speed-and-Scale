@@ -11,6 +11,6 @@ RUN zypper --non-interactive install git && \
 WORKDIR /root/.config/glamour
 RUN git clone https://github.com/catppuccin/glamour build && \
     cp build/themes/* ./ && \
-    rm -r build
-
-RUN touch /test/test.sh # Create a dummy test script
+    rm -r build && \
+    mkdir /touch && \
+    touch /test/test.sh # Create a dummy test script

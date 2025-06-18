@@ -19,5 +19,5 @@ RUN wget https://github.com/catppuccin/bat/raw/main/themes/Catppuccin%20Latte.tm
 
 WORKDIR /root/.config/bat
 
-RUN touch /test/test.sh # Create a dummy test script
+RUN mkdir /touch && touch /test/test.sh # Create a dummy test script
 COPY ./config /root/.config/bat/config
