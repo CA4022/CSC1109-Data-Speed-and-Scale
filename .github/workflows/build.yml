@@ -21,11 +21,6 @@ jobs:
       - name: Install just
         uses: extractions/setup-just@v2
 
-      - name: Update docker
-        run: |
-          curl -fsSL https://get.docker.com -o get-docker.sh
-          sudo sh get-docker.sh
-
       - name: Load .env file
         id: dotenv
         uses: xom9ikk/dotenv@v2
