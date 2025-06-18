@@ -139,7 +139,13 @@ jobs:
       - build-base-root-config-micro
       - build-base-root-config-emacs
       - build-base-root-config-nvim
-    if: needs.determine-changes.outputs.build-base-root == 'true'
+    if: >-
+      needs.determine-changes.outputs.build-base-root == 'true' &&
+      !contains(fromJSON('["${{ needs.build-base-root-config-bat.result }}",
+                            "${{ needs.build-base-root-config-glamour.result }}",
+                            "${{ needs.build-base-root-config-micro.result }}",
+                            "${{ needs.build-base-root-config-emacs.result }}",
+                            "${{ needs.build-base-root-config-nvim.result }}"]'), 'failure')
     name: 'Build base-root container'
     permissions:
       contents: read
@@ -153,7 +159,9 @@ jobs:
     needs:
       - determine-changes
       - build-base-root
-    if: needs.determine-changes.outputs.build-base == 'true'
+    if: >-
+      needs.determine-changes.outputs.build-base == 'true' &&
+      needs.build-base-root.result != 'failure'
     name: 'Build base container'
     permissions:
       contents: read
