@@ -34,6 +34,7 @@ jobs:
         id: meta
         run: |
           REPO_URL="ghcr.io/${{ github.repository_owner }}"
+          echo "REPO_URL=$REPO_URL" >> $GITHUB_ENV
           VERSION_TAG=$(just get_tag ${{ inputs.path }})
           LATEST_TAG="$(just get_image_name ${{ inputs.path }}):latest"
           echo "VERSION_TAG_LOCAL=$VERSION_TAG" >> $GITHUB_ENV
@@ -77,4 +78,4 @@ jobs:
       - name: Tag and push container image to GHCR
         if: (steps.check_tag.outputs.exists == 'false') && success()
         run: |
-          just publish ${{ inputs.path }}
+          just publish ${{ env.REPO_URL }} ${{ inputs.path }}
