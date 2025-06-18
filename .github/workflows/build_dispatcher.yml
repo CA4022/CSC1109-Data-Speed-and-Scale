@@ -72,6 +72,9 @@ jobs:
     if: needs.determine-changes.outputs.base-root-config == 'true'
     name: Build Config Containers
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
     - name: build-base-root-config-bat
       if: needs.determine-changes.outputs.base-root-config-bat == 'true'
