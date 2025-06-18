@@ -3,7 +3,13 @@
 set -e
 set -o pipefail
 
-echo "Testing Neovim configuration..."
-nvim --headless -u /root/.config/nvim/init.lua +q
+if [ -z "$1" ]; then
+  echo "Error: No output file specified."
+  echo "Usage: test.sh <output_file>"
+  exit 1
+fi
 
-echo "Neovim configuration is valid!"
+echo "Testing Neovim configuration..." >> $1
+nvim --headless -u /root/.config/nvim/init.lua +q >> $1
+
+echo "Neovim configuration is valid!" >> $1

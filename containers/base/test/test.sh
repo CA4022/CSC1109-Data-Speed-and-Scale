@@ -1,15 +1,21 @@
 #! /usr/bin/env bash
 
-cd /test/
+if [ -z "$1" ]; then
+  echo "Error: No output file specified."
+  echo "Usage: ./base/test.sh <output_file>"
+  exit 1
+fi
 
-echo "Testing all container configuration layers..."
+cd "$(dirname "$0")"
+
+echo "Testing all container configuration layers..." >> $1
 
 for test_script in ./*/test.sh; do
   if [ -f "$test_script" ]; then
-    echo "Running $test_script..."
-    "$test_script" /tmp/test_results.txt
+    echo "Running $test_script..." >> $1
+    $test_script >> $1
   fi
 done
 
-echo "All tests complete."
+echo "All tests complete." >> $1
 

@@ -17,4 +17,4 @@ hashdeep -r /root > /tmp/system_hash/root.txt
 hashdeep -r /test > /tmp/system_hash/test.txt
 hashdeep /entrypoint.sh > /tmp/system_hash/entrypoint.txt
 
-cat /tmp/system_hash/* > "$1"
+cat /tmp/system_hash/* > $1

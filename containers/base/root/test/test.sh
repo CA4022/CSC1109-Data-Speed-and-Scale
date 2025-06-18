@@ -2,13 +2,11 @@
 
 if [ -z "$1" ]; then
   echo "Error: No output file specified."
-  echo "Usage: ./base/test.sh <output_file>"
+  echo "Usage: test.sh <output_file>"
   exit 1
 fi
 
-cd /test/base/
+cd "$(dirname "$0")"
 
-echo "Computing system hash..."
-./system_hash.sh $1
 echo "Testing editor configurations..."
-./editor_tests.sh &> $1
+./editor_tests.sh $1

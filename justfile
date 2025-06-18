@@ -107,12 +107,12 @@ run target_dir='.':
     {{ CONTAINER_CMD }} run --privileged --rm -it "${TAG}"
 
 # Test a container from a target directory's build
-test target_dir='.':
+test target_dir='.' log_file='/tmp/build_test_log.txt':
     #!/usr/bin/env bash
     set -euo pipefail
     TAG=$(just --justfile {{justfile()}} get_tag '{{target_dir}}')
     echo "Testing image: ${TAG}"
-    {{ CONTAINER_CMD }} run --privileged --rm "${TAG}" /test/test.sh
+    {{ CONTAINER_CMD }} run --privileged --rm "${TAG}" /test/test.sh {{log_file}}
 
 # Build and then run the container
 build_and_run target_dir='.':
@@ -120,9 +120,9 @@ build_and_run target_dir='.':
     @just --justfile {{justfile()}} run '{{target_dir}}'
 
 # Build and then test the container
-build_and_test target_dir='.':
+build_and_test target_dir='.' log_file='/tmp/build_test_log.txt':
     @just --justfile {{justfile()}} build '{{target_dir}}'
-    @just --justfile {{justfile()}} test '{{target_dir}}'
+    @just --justfile {{justfile()}} test '{{target_dir}}' '{{log_file}}'
 
 publish repo_url target_dir='.':
     #!/usr/bin/env bash
