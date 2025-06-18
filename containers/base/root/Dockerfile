@@ -87,7 +87,6 @@ COPY --from=ghcr.io/amileo/csc1109-base-root-config-emacs:latest /usr/share/man/
 COPY --from=ghcr.io/amileo/csc1109-base-root-config-emacs:latest /usr/share/info/emacs.info.gz /usr/share/info/emacs.info.gz
 COPY --from=ghcr.io/amileo/csc1109-base-root-config-nvim:latest /bin/nvim /bin/nvim
 COPY --from=ghcr.io/amileo/csc1109-base-root-config-nvim:latest /lib/nvim /lib/nvim
-COPY --from=ghcr.io/amileo/csc1109-base-root-config-nvim:latest /usr/local/share/nvim/ /usr/local/share/nvim/
 
 COPY --from=ghcr.io/amileo/csc1109-base-root-config-glamour:latest /root/ /root/
 COPY --from=ghcr.io/amileo/csc1109-base-root-config-bat:latest /root/ /root/
