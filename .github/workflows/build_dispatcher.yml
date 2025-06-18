@@ -49,6 +49,7 @@ jobs:
         run: |
           import os
 
+          github_output = {}
           str_to_bool = {"true": True, "false": False}.get
           bool_to_str = {True: "true", False: "false"}.get
 
