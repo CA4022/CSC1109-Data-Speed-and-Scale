@@ -16,8 +16,8 @@ jobs:
       base-root-config-micro: ${{ steps.filter.outputs.base-root-config-micro }}
       base-root-config-emacs: ${{ steps.filter.outputs.base-root-config-emacs }}
       base-root-config-nvim: ${{ steps.filter.outputs.base-root-config-nvim }}
-      build-base-root: ${{ steps.consolidate.outputs.build_base_root }}
-      build-base: ${{ steps.consolidate.outputs.build_base }}
+      base-root-changed: ${{ steps.consolidate.outputs.base-root-changed }}
+      base-changed: ${{ steps.consolidate.outputs.base-changed }}
 
     steps:
       - name: Checkout repository
@@ -61,12 +61,12 @@ jobs:
             "${{ steps.filter.outputs.base-root-config-nvim }}",
           )))
           base_root_output = str_to_bool("${{ steps.filter.outputs.base-root }}")
-          base_root = str_to_bool("${{ steps.filter.outputs.base }}")
+          base_changed = str_to_bool("${{ steps.filter.outputs.base }}")
 
-          build_base_root = any([*base_config_outputs, base_root_output])
+          base_root_changed = any([*base_config_outputs, base_root_output])
 
-          github_output["build-base-root"] = build_base_root
-          github_output["build-base"] = build_base_root or base_root
+          github_output["base-root-changed"] = base_root_changed
+          github_output["base-changed"] = base_root_changed or base_changed
 
           with open(os.environ["GITHUB_OUTPUT"], "a") as output_file:
               for k, v in github_output.items():
@@ -132,7 +132,8 @@ jobs:
       path: containers/base/root/.config/nvim
     secrets: inherit
 
-  build-base-root:
+  base-root-config:
+    runs-on: ubuntu-latest
     needs:
       - determine-changes
       - build-base-root-config-bat
@@ -140,8 +141,39 @@ jobs:
       - build-base-root-config-micro
       - build-base-root-config-emacs
       - build-base-root-config-nvim
-    if: >-
-      needs.determine-changes.outputs.build-base-root == 'true'
+    if: always()
+    outputs:
+      build-base-root: ${{ steps.consolidate-base-root-config.outputs.build-base-root }}
+    steps:
+    - name: Consolidate Root Config Build Statuses
+      id: consolidate-base-root-config
+      shell: python
+      run: |
+        import os
+
+        github_output = {}
+        str_to_bool = {"true": True, "false": False}.get
+        bool_to_str = {True: "true", False: "false"}.get
+        status_to_bool = ("success", "skipped").__contains__
+
+        conditions = [
+            str_to_bool("${{ needs.determine-changes.outputs.base-root-changed }}"), # base_root_changed
+            status_to_bool("${{ needs.build-base-root-config-bat.result }}"), # config_bat_result
+            status_to_bool("${{ needs.build-base-root-config-glamour.result }}"), # config_glamour_result
+            status_to_bool("${{ needs.build-base-root-config-micro.result }}"), # config_micro_result
+            status_to_bool("${{ needs.build-base-root-config-emacs.result }}"), # config_emacs_result
+            status_to_bool("${{ needs.build-base-root-config-nvim.result }}"), # config_nvim_result
+        ]
+
+        github_output["build-base-root"] = all(conditions)
+
+        with open(os.environ["GITHUB_OUTPUT"], "a") as output_file:
+            for k, v in github_output.items():
+                output_file.write(f"{k}={bool_to_str(v)}\n")
+
+  build-base-root:
+    needs: base-root-config
+    if: needs.base-root-config.outputs.build-base-root == 'true'
     name: 'Build base-root container'
     permissions:
       contents: read
@@ -156,7 +188,8 @@ jobs:
       - determine-changes
       - build-base-root
     if: >-
-      needs.determine-changes.outputs.build-base == 'true'
+      needs.determine-changes.outputs.base-changed == 'true' &&
+      needs.build-base-root.result != 'failure'
     name: 'Build base container'
     permissions:
       contents: read
