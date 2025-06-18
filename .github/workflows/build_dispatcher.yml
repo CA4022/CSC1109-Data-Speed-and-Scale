@@ -140,12 +140,7 @@ jobs:
       - build-base-root-config-emacs
       - build-base-root-config-nvim
     if: >-
-      needs.determine-changes.outputs.build-base-root == 'true' &&
-      needs.build-base-root-config-bat.result != 'failure' &&
-      needs.build-base-root-config-glamour.result != 'failure' &&
-      needs.build-base-root-config-micro.result != 'failure' &&
-      needs.build-base-root-config-emacs.result != 'failure' &&
-      needs.build-base-root-config-nvim.result != 'failure'
+      needs.determine-changes.outputs.build-base-root == 'true'
     name: 'Build base-root container'
     permissions:
       contents: read
@@ -160,8 +155,7 @@ jobs:
       - determine-changes
       - build-base-root
     if: >-
-      needs.determine-changes.outputs.build-base == 'true' &&
-      needs.build-base-root.result != 'failure'
+      needs.determine-changes.outputs.build-base == 'true'
     name: 'Build base container'
     permissions:
       contents: read
