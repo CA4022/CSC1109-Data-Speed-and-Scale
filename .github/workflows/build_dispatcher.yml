@@ -114,6 +114,9 @@ jobs:
       needs.determine-changes.outputs.build-base-root == 'true' &&
       needs.build-configs.result != 'failure'
     name: 'Build base-root container'
+    permissions:
+      contents: read
+      packages: write
     uses: ./.github/workflows/build.yml
     with:
       path: containers/base/root/
@@ -127,6 +130,9 @@ jobs:
       needs.determine-changes.outputs.build-base == 'true' &&
       needs.build-base-root.result != 'failure'
     name: 'Build base container'
+    permissions:
+      contents: read
+      packages: write
     uses: ./.github/workflows/build.yml
     with:
       path: containers/base/
