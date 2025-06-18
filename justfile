@@ -126,6 +126,7 @@ build_and_test target_dir='.':
 
 publish repo_url target_dir='.':
     #!/usr/bin/env bash
+    set -e
     echo "Tagging and pushing image to {{repo_url}}..."
 
     VERSION_TAG_LOCAL=$(just get_tag {{ target_dir }})
