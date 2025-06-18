@@ -125,29 +125,6 @@ jobs:
       path: containers/base/root/.config/nvim
     secrets: inherit
 
-  debug-info:
-    runs-on: ubuntu-latest
-    needs:
-      - determine-changes
-      - build-base-root-config-bat
-      - build-base-root-config-glamour
-      - build-base-root-config-micro
-      - build-base-root-config-emacs
-      - build-base-root-config-nvim
-    if: always()
-    name: ⚙️ Debug Info
-    steps:
-      - name: Print outputs and results
-        run: |
-          echo "--- determine-changes outputs ---"
-          echo '${{ toJSON(needs.determine-changes.outputs) }}'
-          echo "--- Dependency Results ---"
-          echo "build-base-root-config-bat: ${{ needs.build-base-root-config-bat.result }}"
-          echo "build-base-root-config-glamour: ${{ needs.build-base-root-config-glamour.result }}"
-          echo "build-base-root-config-micro: ${{ needs.build-base-root-config-micro.result }}"
-          echo "build-base-root-config-emacs: ${{ needs.build-base-root-config-emacs.result }}"
-          echo "build-base-root-config-nvim: ${{ needs.build-base-root-config-nvim.result }}"
-
   build-base-root:
     needs:
       - determine-changes
