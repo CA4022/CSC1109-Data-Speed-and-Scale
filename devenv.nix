@@ -20,6 +20,7 @@ in {
   packages = [
     containerPkg
     pkgs.act
+    pkgs.actionlint
     pkgs.git
     pkgs.just
   ];
