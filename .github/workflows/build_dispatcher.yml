@@ -43,11 +43,9 @@ jobs:
             base:
               - 'containers/base/**'
 
-      # This step precomputes logic chains that determine whether cotnainers with dependencies build
       - name: Consolidate change logic
         id: consolidate
         run: |
-          # Determine if any "leaf" file (i.e: configs) changed
           base_root_config_changed='false'
           if [[ "${{ steps.filter.outputs.base-root-config-bat }}" == 'true' || \
                 "${{ steps.filter.outputs.base-root-config-glamour }}" == 'true' || \
@@ -56,15 +54,11 @@ jobs:
                 "${{ steps.filter.outputs.base-root-config-nvim }}" == 'true' ]]; then
             base_root_config_changed='true'
           fi
-
-          # Determine if the 'base-root' container should be built
           build_base_root='false'
           if [[ "${{ steps.filter.outputs.base-root }}" == 'true' || "$base_root_config_changed" == 'true' ]]; then
             build_base_root='true'
           fi
           echo "build_base_root=$build_base_root" >> $GITHUB_OUTPUT
-
-          # Determine if the 'base' container should be built
           build_base='false'
           if [[ "${{ steps.filter.outputs.base }}" == 'true' || "$build_base_root" == 'true' ]]; then
             build_base='true'
@@ -131,6 +125,29 @@ jobs:
       path: containers/base/root/.config/nvim
     secrets: inherit
 
+  debug-info:
+    runs-on: ubuntu-latest
+    needs:
+      - determine-changes
+      - build-base-root-config-bat
+      - build-base-root-config-glamour
+      - build-base-root-config-micro
+      - build-base-root-config-emacs
+      - build-base-root-config-nvim
+    if: always()
+    name: ⚙️ Debug Info
+    steps:
+      - name: Print outputs and results
+        run: |
+          echo "--- determine-changes outputs ---"
+          echo '${{ toJSON(needs.determine-changes.outputs) }}'
+          echo "--- Dependency Results ---"
+          echo "build-base-root-config-bat: ${{ needs.build-base-root-config-bat.result }}"
+          echo "build-base-root-config-glamour: ${{ needs.build-base-root-config-glamour.result }}"
+          echo "build-base-root-config-micro: ${{ needs.build-base-root-config-micro.result }}"
+          echo "build-base-root-config-emacs: ${{ needs.build-base-root-config-emacs.result }}"
+          echo "build-base-root-config-nvim: ${{ needs.build-base-root-config-nvim.result }}"
+
   build-base-root:
     needs:
       - determine-changes
@@ -141,15 +158,12 @@ jobs:
       - build-base-root-config-nvim
     if: >-
       needs.determine-changes.outputs.build-base-root == 'true' &&
-      !contains(fromJSON('["${{ needs.build-base-root-config-bat.result }}",
-                            "${{ needs.build-base-root-config-glamour.result }}",
-                            "${{ needs.build-base-root-config-micro.result }}",
-                            "${{ needs.build-base-root-config-emacs.result }}",
-                            "${{ needs.build-base-root-config-nvim.result }}"]'), 'failure')
+      needs.build-base-root-config-bat.result != 'failure' &&
+      needs.build-base-root-config-glamour.result != 'failure' &&
+      needs.build-base-root-config-micro.result != 'failure' &&
+      needs.build-base-root-config-emacs.result != 'failure' &&
+      needs.build-base-root-config-nvim.result != 'failure'
     name: 'Build base-root container'
-    permissions:
-      contents: read
-      packages: write
     uses: ./.github/workflows/build.yml
     with:
       path: containers/base/root/
@@ -163,9 +177,6 @@ jobs:
       needs.determine-changes.outputs.build-base == 'true' &&
       needs.build-base-root.result != 'failure'
     name: 'Build base container'
-    permissions:
-      contents: read
-      packages: write
     uses: ./.github/workflows/build.yml
     with:
       path: containers/base/
