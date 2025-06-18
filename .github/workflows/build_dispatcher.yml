@@ -47,6 +47,8 @@ jobs:
         id: consolidate
         shell: python
         run: |
+          import os
+
           github_output = dict()
           str_to_bool = lambda x: x == "true"
 
