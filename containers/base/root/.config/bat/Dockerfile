@@ -19,5 +19,6 @@ RUN wget https://github.com/catppuccin/bat/raw/main/themes/Catppuccin%20Latte.tm
 
 WORKDIR /root/.config/bat
 
-RUN mkdir /touch && echo "echo 'No tests needed!' >> /test/test.sh" # Create a dummy test script
+COPY ./test.sh /test/test.sh
+RUN chmod +x /test/test.sh
 COPY ./config /root/.config/bat/config
