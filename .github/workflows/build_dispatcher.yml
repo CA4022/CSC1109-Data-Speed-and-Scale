@@ -18,6 +18,7 @@ jobs:
       base-root-config-nvim: ${{ steps.filter.outputs.base-root-config-nvim }}
       base-root-changed: ${{ steps.consolidate.outputs.base-root-changed }}
       base-changed: ${{ steps.consolidate.outputs.base-changed }}
+      lab1-changed: ${{ steps.consolidate.outputs.lab1-changed }}
 
     steps:
       - name: Checkout repository
@@ -42,6 +43,8 @@ jobs:
               - 'containers/base/root/**'
             base:
               - 'containers/base/**'
+            lab1:
+              - 'containers/lab1/**'
 
       - name: Consolidate change logic
         id: consolidate
@@ -198,4 +201,21 @@ jobs:
     uses: ./.github/workflows/build.yml
     with:
       path: containers/base/
+    secrets: inherit
+
+  build-lab1:
+    needs:
+      - determine-changes
+      - build-base
+    if: >-
+      always() &&
+      needs.determine-changes.outputs.lab1-changed == 'true' &&
+      needs.build-base.result != 'failure'
+    name: 'Build lab1 container'
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/build.yml
+    with:
+      path: containers/lab1/
     secrets: inherit

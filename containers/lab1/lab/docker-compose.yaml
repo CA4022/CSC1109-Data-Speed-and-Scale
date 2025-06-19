@@ -1,0 +1,37 @@
+version: "3.8"
+
+x-common-config:
+  &common-config
+  image: ${HADOOP_RUNNER_IMAGE}:${HADOOP_RUNNER_VERSION}
+  volumes:
+    - ./hadoop:${HADOOP_HOME}
+    - ./src:${HADOOP_CLASSPATH}
+  env_file:
+    - ./hadoop.env
+  environment:
+    - HADOOP_CLASSPATH=${HADOOP_CLASSPATH}
+
+services:
+  namenode:
+    <<: *common-config
+    hostname: namenode
+    command: ["hdfs", "namenode"]
+    ports:
+      - 9870:9870
+    environment:
+      ENSURE_NAMENODE_DIR: "/tmp/hadoop-root/dfs/name"
+
+  datanode:
+    <<: *common-config
+    command: ["hdfs", "datanode"]
+
+  resourcemanager:
+    <<: *common-config
+    hostname: resourcemanager
+    command: ["yarn", "resourcemanager"]
+    ports:
+      - 8088:8088
+
+  nodemanager:
+    <<: *common-config
+    command: ["yarn", "nodemanager"]
