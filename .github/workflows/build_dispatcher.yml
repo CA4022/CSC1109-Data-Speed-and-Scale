@@ -56,6 +56,7 @@ jobs:
           str_to_bool = {"true": True, "false": False}.get
           bool_to_str = {True: "true", False: "false"}.get
 
+          # Consolidate base image logic
           base_config_outputs = list(map(str_to_bool, (
             "${{ steps.filter.outputs.base-root-config-bat }}",
             "${{ steps.filter.outputs.base-root-config-glamour }}",
@@ -70,6 +71,15 @@ jobs:
 
           github_output["base-root-changed"] = base_root_changed
           github_output["base-changed"] = base_root_changed or base_changed
+
+          # Consolidate lab change logic
+          lab_changes = {
+            k: v or base_changed for v in
+            {
+              "lab1_changed": str_to_bool("${{ steps.filter.outputs.lab1 }}"),
+            }.items()
+          }
+          github_output.update(lab_changes)
 
           with open(os.environ["GITHUB_OUTPUT"], "a") as output_file:
               for k, v in github_output.items():
