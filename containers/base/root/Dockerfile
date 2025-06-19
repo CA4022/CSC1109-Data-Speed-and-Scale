@@ -24,7 +24,7 @@ ARG BASE_COMPOSE_VERSION
 # as they are expected to change infrequently.
 RUN zypper --non-interactive addrepo "https://download.opensuse.org/repositories/Virtualization:containers/${BASE_OPENSUSE_VERSION}/Virtualization:containers.repo" && \
     zypper --non-interactive --gpg-auto-import-keys refresh && \
-    zypper --non-interactive install git-${BASE_GIT_VERSION} gzip emacs libgpm2 nvim tar wget && \
+    zypper --non-interactive install git-${BASE_GIT_VERSION} gzip emacs libgpm2 tar wget && \
     zypper clean --all
 
 # Add the non-essential user-friendly tools and configurations for students.
