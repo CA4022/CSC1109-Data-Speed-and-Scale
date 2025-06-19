@@ -31,4 +31,4 @@ RUN mv /test-base/ /test/base/ && chmod -R +x /test/
 COPY ./lab/ /lab/
 COPY entrypoint.py /entrypoint.py
 RUN chmod +x /entrypoint.py
-CMD ["/entrypoint.py"]
+CMD ["dotenv", "/entrypoint.py"]

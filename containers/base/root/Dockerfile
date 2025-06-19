@@ -42,8 +42,9 @@ RUN wget https://github.com/junegunn/fzf/releases/download/v0.62.0/fzf-0.62.0-li
     mv fzf /usr/bin/fzf && \
     zypper --non-interactive install zsh fish hashdeep jq starship gawk make wget glow lsd fd \
         fd-bash-completion ripgrep ripgrep-bash-completion tealdeer tealdeer-bash-completion \
-        symbols-only-nerd-fonts vim docker-bash-completion && \
-    zypper clean --all
+        symbols-only-nerd-fonts vim docker-bash-completion python312-pipx && \
+    zypper clean --all && \
+    pipx install dotenv-cli
 
 # Set up blesh for bash shell
 WORKDIR /root
