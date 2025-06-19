@@ -8,6 +8,7 @@ BASE_COMPOSE_VERSION := env("BASE_COMPOSE_VERSION")
 BASE_BASH_VERSION := env("BASE_BASH_VERSION")
 BASE_GIT_VERSION := env("BASE_GIT_VERSION")
 BASE_GCC_VERSION := env("BASE_GCC_VERSION")
+HADOOP_RUNNER_VERSION := env("HADOOP_RUNNER_VERSION")
 
 # Lists available just commands
 default:
@@ -95,6 +96,7 @@ build target_dir='.':
         --build-arg BASE_BASH_VERSION="{{BASE_BASH_VERSION}}" \
         --build-arg BASE_GIT_VERSION="{{BASE_GIT_VERSION}}" \
         --build-arg BASE_GCC_VERSION="{{BASE_GCC_VERSION}}" \
+        --build-arg HADOOP_RUNNER_VERSION="{{HADOOP_RUNNER_VERSION}}" \
         -t "${TAG}" \
         {{target_dir}}
 
