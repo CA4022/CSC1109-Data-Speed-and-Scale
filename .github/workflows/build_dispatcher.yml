@@ -74,7 +74,7 @@ jobs:
 
           # Consolidate lab change logic
           lab_changes = {
-            k: v or base_changed for v in
+            k: v or base_changed for k, v in
             {
               "lab1_changed": str_to_bool("${{ steps.filter.outputs.lab1 }}"),
             }.items()
