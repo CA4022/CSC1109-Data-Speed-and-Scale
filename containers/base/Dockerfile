@@ -8,9 +8,6 @@ ARG BASE_COMPOSE_VERSION
 
 RUN zypper --non-interactive refresh && \
     zypper --non-interactive install \
-        bash-${BASE_BASH_VERSION} \
-        gcc-${BASE_GCC_VERSION} \
-        git-${BASE_GIT_VERSION} \
         docker-${BASE_DOCKER_VERSION} \
         docker-compose-${BASE_COMPOSE_VERSION} \
         python312 \
