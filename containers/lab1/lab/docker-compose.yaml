@@ -4,12 +4,12 @@ x-common-config:
   &common-config
   image: ${HADOOP_RUNNER_IMAGE}:${HADOOP_RUNNER_VERSION}
   volumes:
-    - ./hadoop:${HADOOP_HOME}
-    - ./src:${HADOOP_CLASSPATH}
+    - /opt/hadoop/:${HADOOP_HOME}
+    - .:/lab/
   env_file:
     - ./hadoop.env
   environment:
-    - HADOOP_CLASSPATH=${HADOOP_CLASSPATH}
+    - HADOOP_HOME=${HADOOP_HOME}
 
 services:
   namenode:
