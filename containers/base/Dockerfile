@@ -11,7 +11,10 @@ RUN zypper --non-interactive refresh && \
         docker-${BASE_DOCKER_VERSION} \
         docker-compose-${BASE_COMPOSE_VERSION} \
         python312 \
-        wget && \
+        wget \
+        maven \
+        java-11-openjdk \
+        scala && \
     zypper clean --all
 
 COPY --from=ghcr.io/astral-sh/uv:0.7.13 /uv /uvx /bin/
