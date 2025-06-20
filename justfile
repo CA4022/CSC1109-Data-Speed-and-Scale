@@ -43,6 +43,9 @@ get_latest_tag target_dir='.':
     #!/usr/bin/env bash
     echo "$(just get_image_name {{target_dir}}):latest"
 
+update_project_version:
+    @uv run ./utils/version.py
+
 # Bump the CalVer version in a target directory's VERSION file
 bump_version target_dir='.':
     #!/usr/bin/env bash
@@ -74,6 +77,7 @@ bump_version target_dir='.':
 
     echo "Setting new version to: $new_version"
     echo "$new_version" > "$VERSION_FILE"
+    just --justfile {{justfile()}} update_project_version
 
 bump_all_versions:
     #!/usr/bin/env bash
