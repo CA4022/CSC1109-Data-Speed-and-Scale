@@ -14,6 +14,8 @@ RUN zypper --non-interactive refresh && \
         wget && \
     zypper clean --all
 
+COPY --from=ghcr.io/astral-sh/uv:0.7.13 /uv /uvx /bin/
+
 # Assembly stage: copy over application-specific code, tests, and entrypoint.
 # These files are expected to change most frequently.
 FROM student-environment AS final

@@ -17,6 +17,10 @@
     else throw "Invalid env variable `CONTAINER_ENV` provided!";
 in {
   dotenv.enable = true;
+  languages.python = {
+    enable = true;
+    uv.enable = true;
+  };
   packages = [
     containerPkg
     pkgs.act
