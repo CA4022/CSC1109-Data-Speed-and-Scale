@@ -11,7 +11,7 @@ creating images derived from this base for each lesson plan.
 # To Do
 
 - [ ] Implement labs
-    - [ ] Use hadoop filesystem + run compiled mapreduce jar
+    - [X] Use hadoop filesystem + run compiled mapreduce jar
     - [ ] Hadoop + hive for structured data
     - [ ] Hadoop + pig for structured/semistructured data
     - [ ] Hive and Pig on Movielens (guided example)
