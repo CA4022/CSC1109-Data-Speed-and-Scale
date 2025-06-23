@@ -50,7 +50,9 @@ class CalVer:
 def get_version(path: Path = Path().cwd()) -> CalVer:
     v = CalVer("0.0.0.0")
     for p in path.iterdir():
-        if p.is_dir():
+        if p.name.startswith("."):
+            continue
+        elif p.is_dir():
             cur_v = get_version(p)
         elif p.name == "VERSION":
             with p.open("rt") as vfile:
