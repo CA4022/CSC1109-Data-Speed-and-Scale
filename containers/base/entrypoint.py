@@ -3,6 +3,7 @@
 import asyncio
 import os
 import subprocess
+import sys
 
 
 SPLASH = """\033[35m
@@ -160,6 +161,17 @@ class ShellSelector(Selector):
 
 
 async def main():
+    test_mode_shell = None
+    if len(sys.argv) > 1 and sys.argv[1] == "--test-shell":
+        if len(sys.argv) > 2:
+            test_mode_shell = sys.argv[2]
+        else:
+            print(
+                "Error: --test-shell requires a shell name (e.g., bash, fish).",
+                file=sys.stderr,
+            )
+            sys.exit(1)
+
     daemon_startup = asyncio.create_task(
         start_daemon("dockerd", "docker info", "/var/log/dockerd.log")
     )
@@ -189,11 +201,23 @@ async def main():
     )
 
     try:
-        await selector.select()
-        print(SPLASH)
-        display_markdown(["/root/CSS1109.md", "/lab/lab.md"])
+        if test_mode_shell:
+            if test_mode_shell in selector.options:
+                selector.choice = test_mode_shell
+                for s in selector.selectors:
+                    if isinstance(s, EnvSelector) and s.name == "Editor":
+                        s.choice = "micro"
+                        s.start()
+        else:
+            await selector.select()
+            print(SPLASH)
+            display_markdown(["/root/CSS1109.md", "/lab/lab.md"])
         await daemon_startup
-        selector.start()
+
+        if not test_mode_shell:
+            selector.start()
+        if test_mode_shell:
+            await asyncio.Future()
 
     except (RuntimeError, asyncio.TimeoutError, EnvironmentError) as e:
         if not daemon_startup.done():
