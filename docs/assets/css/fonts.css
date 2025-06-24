@@ -1,0 +1,27 @@
+@font-face {
+    font-family: "Inconsolata Nerd Font Mono";
+    src: url("../fonts/InconsolataNerdFontMono-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Inconsolata Nerd Font Mono Bold";
+    src: url("../fonts/InconsolataNerdFontMono-Bold.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Inconsolata Nerd Font";
+    src: url("../fonts/InconsolataNerdFont-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Inconsolata Nerd Bold";
+    src: url("../fonts/InconsolataNerdFont-Bold.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
