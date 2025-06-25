@@ -98,7 +98,7 @@ Its job is to manage the resources of that single machine.
 When the ResourceManager allocates a container on a machine, it is the NodeManager on that
 machine that physically launches the container and monitors its resource usage (CPU/RAM). The
 NodeManager takes its direct orders on what code to run inside the container from the application
-s ApplicationMaster. It does not analyze jobs or delegate tasks itself; it is an executor that
+s ApplicationMaster. It does not analyse jobs or delegate tasks itself; it is an executor that
 simply manages containers on its local machine.
 
 ### Summary ###
