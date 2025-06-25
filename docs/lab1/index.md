@@ -118,7 +118,7 @@ that performs a simple wordcount, with the workload on a cluster.
 
 ```java title="WordCount.java"
 
---8<-- "./lab1/src/WordCount.java"
+--8<-- "lab1/src/WordCount.java"
 
 ```
 
