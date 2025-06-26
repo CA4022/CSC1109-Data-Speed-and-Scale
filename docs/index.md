@@ -55,9 +55,9 @@ installation, run the following command in your terminal:
 docker run hello-world
 ```
 
->? NOTE: Depending on your operating system and configuration, you might need to run Docker commands
-> with `sudo`. On Linux, you can avoid this by adding your user to the `docker` group. See the Linux
-> installation notes below for more details.
+>? DANGER: Depending on your operating system and configuration, you might need to run Docker
+> commands with `sudo`. On Linux, you can avoid this by adding your user to the `docker` group. See
+> the Linux installation notes below for more details.
 
 If the command runs successfully, you will see a confirmation message from Docker, and you can
 proceed. If not, please follow the installation instructions for your operating system below.
