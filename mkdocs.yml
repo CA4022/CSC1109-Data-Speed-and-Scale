@@ -49,6 +49,9 @@ plugins:
       validate_external_urls: true
   - spellcheck:
       known_words: dictionary.txt
+  - gen-files:
+      scripts:
+        - ./utils/test_code_blocks.py
 
 nav:
   - Home: index.md

@@ -143,3 +143,6 @@ publish repo_url target_dir='.':
     {{ CONTAINER_CMD }} push $VERSION_TAG_REMOTE
     {{ CONTAINER_CMD }} push $LATEST_TAG_REMOTE
     echo "Image pushed successfully."
+
+test_docs:
+    sudo uv run ./utils/test_code_blocks.py

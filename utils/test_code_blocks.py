@@ -2,6 +2,7 @@ import docker
 from docker.errors import ImageNotFound, ContainerError, APIError
 import time
 import shlex
+import os
 from pathlib import Path
 import re
 import yaml
@@ -423,4 +424,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    if os.environ.get("MKDOCS_DEV_MODE") != "1":
+        main()
