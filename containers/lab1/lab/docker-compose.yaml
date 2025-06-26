@@ -24,6 +24,9 @@ services:
   datanode:
     <<: *common-config
     command: ["hdfs", "datanode"]
+    deploy:
+      mode: replicated
+      replicas: 4
 
   resourcemanager:
     <<: *common-config
@@ -35,3 +38,13 @@ services:
   nodemanager:
     <<: *common-config
     command: ["yarn", "nodemanager"]
+
+  client:
+    <<: *common-config
+    hostname: client
+    depends_on:
+      - namenode
+      - resourcemanager
+    command: sleep infinity
+    stdin_open: true
+    tty: true
