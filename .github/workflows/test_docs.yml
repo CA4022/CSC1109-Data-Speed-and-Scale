@@ -1,0 +1,31 @@
+name: Test Documentation
+
+on:
+  workflow_run:
+    workflows: ["Build Dispatcher"]
+    branches: [main]
+    types:
+      - completed
+
+jobs:
+  test-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Set up Python
+        run: uv python install
+
+      - name: Set up just
+        uses: extractions/setup-just@v2
+
+      - name: Set container environment
+        run: echo "CONTAINER_ENV=docker" >> $GITHUB_ENV
+
+      - name: Run doc tests
+        run: uv run ./utils/test_code_blocks.py
