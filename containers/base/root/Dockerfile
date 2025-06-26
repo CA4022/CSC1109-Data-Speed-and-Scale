@@ -110,4 +110,4 @@ COPY --from=ghcr.io/amileo/csc1109-base-root-config-micro:latest /root/ /root/
 COPY --from=ghcr.io/amileo/csc1109-base-root-config-emacs:latest /root/ /root/
 COPY --from=ghcr.io/amileo/csc1109-base-root-config-nvim:latest /root/ /root/
 
-COPY ./CSS1109.md /root/CSS1109.md
+COPY ./CSC1109.md /root/CSC1109.md

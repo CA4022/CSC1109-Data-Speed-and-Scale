@@ -191,7 +191,7 @@ async def main():
     try:
         await selector.select()
         print(SPLASH)
-        display_markdown(["/root/CSS1109.md", "/lab/lab.md"])
+        display_markdown(["/root/CSC1109.md", "/lab/lab.md"])
         await daemon_startup
         selector.start()
 
