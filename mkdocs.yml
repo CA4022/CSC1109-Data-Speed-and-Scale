@@ -56,6 +56,7 @@ plugins:
 nav:
   - Home: index.md
   - Lab1: lab1/index.md
+  - Bonus Lab 1: bonus1.md
 
 markdown_extensions:
   - pymdownx.highlight:

@@ -3,13 +3,15 @@ config
 coreutils
 customisable
 datanode
+dataproc
 datasets
 env
-filetree
 filesystem
+filetree
 fs
 hadoop
 hdfs
+labsheet
 lockfile
 md
 namenode
@@ -17,6 +19,7 @@ neovim
 nodemanager
 nushell
 pyproject
+qwik
 resourcemanager
 subcommand
 subcommands
