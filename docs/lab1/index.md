@@ -44,13 +44,21 @@ docker compose up -d
 IMPORTANT: The `-d` flag tells `docker compose` to start the stack as a daemon. Otherwise, you will
 be trapped in a non-interactive shell. If this happens, interrupt `docker compose` using `ctrl+c`
 
+CAUTION: In this example we use the large, all-purpose `apache/hadoop-runner` docker image for
+teaching convenience. In a production environment, it is **strongly** recommended to use minimal,
+custom container images for your HPC clusters for efficiency and security.
+
 Once your docker compose stack finishes deploying, you can view the deployed containers by running
-`docker ps`. This should show you 4 active hadoop nodes in your locally deployed cluster.
+`docker ps`. This should show you 8 active hadoop nodes in your locally deployed cluster.
 
 - lab-namenode-1
 - lab-datanode-1
+- lab-datanode-2
+- lab-datanode-3
+- lab-datanode-3
 - lab-resourcemanager-1
 - lab-nodemanager-1
+- lab-client-1
 
 ### NameNode ###
 
@@ -79,6 +87,10 @@ file's contents directly from the DataNodes. The DataNodes do not send data back
 NameNode. This direct access is key to HDFS's high throughput. DataNodes are also responsible for
 replicating their data blocks to other DataNodes to ensure fault tolerance.
 
+In this lab, our demonstrator cluster includes 4 DataNodes, all of which are running locally.
+However, in an actual HPC setting we would generally have many DataNodes running on many different
+machines.
+
 ### ResourceManager ###
 
 The ResourceManager is the master node of the YARN framework, which manages the cluster's
@@ -101,6 +113,12 @@ NodeManager takes its direct orders on what code to run inside the container fro
 s ApplicationMaster. It does not analyse jobs or delegate tasks itself; it is an executor that
 simply manages containers on its local machine.
 
+### Client ###
+
+The client node is the node through which we will be interacting with the cluster. it includes all
+the tools required to act as a Hadoop client, but does not run an actual Hadoop node. Throughout
+this lab we will be connecting to this node to orchestrate what happens on our cluster.
+
 ### Summary ###
 
 In this lab, our example cluster is a minimal one consisting of only one of each required node,
@@ -110,53 +128,201 @@ this kind of HDFS/YARN cluster to operate on many computers in concert, efficien
 massive computations on gigantic datasets. For this reason, this kind of HDFS/YARN setup is often
 deployed on supercomputers and high performance compute clusters.
 
-## Running Java code on a Hadoop cluster via HDFS FS ##
+## Adding a file to the HDFS Cluster
+
+To begin running computations on our cluster, we must first begin my adding files to its HDFS
+filesystem. To do this, we must first begin by connecting to our client node. To do this, we run
+the following code:
+
+```sh { .test-block #ghcr.io/amileo/csc1109-lab1:latest }
+docker compose exec -w /lab/ client bash
+```
+
+Once we are connected to the client, we can check the status if our hadoop cluster by running:
+
+```bash { .test-block #ghcr.io/amileo/csc1109-lab1:latest wrapper='docker compose exec -w /lab/ client bash -c "{command}"' }
+hdfs fsck /
+```
+
+NOTE: You can connect to a WebUI for your cluster at any time by opening your browser and
+navigating to the URL [http://localhost:9870](http://localhost:9870). This is another way to check
+your cluster status.
+
+Once we have confirmed that the cluster is healthy, we can create a directory and put our example
+file that we will use to test our code there:
+
+```bash { .test-block #ghcr.io/amileo/csc1109-lab1:latest wrapper='docker compose exec -w /lab/ client bash -c "{command}"' }
+hdfs dfs -mkdir -p /lab/data/
+hdfs dfs -put /lab/data/Word_count.txt hdfs://namenode/lab/data/Word_count.txt
+```
+
+Now, if we run the following command we should see that the file is present in this folder in our
+HDFS filesystem:
+
+```bash { .test-block #ghcr.io/amileo/csc1109-lab1:latest wrapper='docker compose exec -w /lab/ client bash -c "{command}"' }
+hdfs dfs -ls hdfs://namenode/lab/data/
+```
+
+Although this file has been added to our cluster. However, if we run the command `hdfs fsck
+/lab/data/Word_count.txt -files -blocks -locations` we can see that the file currently exists on
+only a single node. To spread the data across all 4 nodes, we can run the following command and
+check the block locations again:
+
+```bash { .test-block #ghcr.io/amileo/csc1109-lab1:latest wrapper='docker compose exec -w /lab/ client bash -c "{command}"' }
+hdfs dfs -setrep 4 /lab/data/Word_count.txt
+hdfs fsck /lab/data/Word_count.txt -files -blocks -locations
+```
+
+Now, you should be able to see that the average block replication for the file is 4.0, illustrating
+that the file has been replicated 4 times across the entire cluster. With the data spread across the
+cluster, we can next move on to performing computations on that data through our cluster. Run
+`exit` to disconnect from the client node and return to your host lab environment.
+
+NOTE: In this case, we have replicated the complete file to each datanode manually. This is just
+for demonstration purposes. In a real HPC setting, we would likely spread the file's blocks across
+many nodes with a replication of greater than 1.0 but not as many replications as there are
+DataNodes. The NameNode can be configured to automatically spread and balance data to facilitate
+this process.
+
+## Running Java code on a Hadoop cluster via HDFS and YARN ##
 
 In order to perform an analysis, we will first need to write some java code that interacts with the
 Hadoop server. For example, the following java source code describes a Hadoop MapReduce function
-that performs a simple wordcount, with the workload on a cluster.
+that performs a simple wordcount, on our Hadoop cluster. Create a file named `WordCount.java`
+containing this source code.
+
+TIP: Run `edit WordCount.java` to create a new empty source code file you can edit.
 
 ```java title="WordCount.java"
-
 --8<-- "lab1/src/WordCount.java"
-
 ```
 
-```sh
-docker compose exec resourcemanager bash
-```
+With this java source file created, the next step is to connect to the `client` node again. Once
+you inside the client node you can compile `WordCount.java` on the hadoop cluster using javac and
+the `jar` bytecode packager by running:
 
-```sh { .test-block #ghcr.io/amileo/csc1109-lab1:latest wrapper='docker compose exec -w /lab/ resourcemanager bash -c "{command}"' }
-cd /lab/
+```bash { .test-block #ghcr.io/amileo/csc1109-lab1:latest wrapper='docker compose exec -w /lab/ client bash -c "{command}"' }
 hadoop com.sun.tools.javac.Main WordCount.java
 jar cf wordcount.jar WordCount*.class
-hdfs dfs -mkdir -p /lab/data/
-hdfs dfs -put /lab/data/Word_count.txt hdfs://namenode/lab/data/Word_count.txt
-hdfs dfs -ls hdfs://namenode/lab/data/
+```
+
+By running `ls`, you should now see the file `wordcount.jar` present in the working directory. This
+file contains the `ApplicationMaster` object that the YARN framework will run on our cluster. To
+start this computation, you can run the following command:
+
+```bash { .test-block #ghcr.io/amileo/csc1109-lab1:latest wrapper='docker compose exec -w /lab/ client bash -c "{command}"' }
 hadoop jar wordcount.jar WordCount hdfs://namenode/lab/data/Word_count.txt hdfs://namenode/lab/data/output
+```
+
+Once the Hadoop cluster has finished running the `wordcount.jar` object on the cluster it will
+have placed an output folder at the `./output/` directory on the HDFS cluster. To retrieve
+this folder from `hdfs://namenode/lab/data/output` run the following command.
+
+```bash { .test-block #ghcr.io/amileo/csc1109-lab1:latest wrapper='docker compose exec -w /lab/ client bash -c "{command}"' }
 hdfs dfs -get hdfs://namenode/lab/data/output
 ```
 
-at this point: ./output should contain the file "_SUCCESS" if the operation was successful
+At this point, you can `exit` the client node. You should now be able to see a folder called
+`./output` in your working directory. Inside that directory should be a file called `_SUCCESS` if
+the operation was successful, along with a file called `part-r-000000`. You can view this file by
+running:
 
-```sh
+```sh { .test-block #ghcr.io/amileo/csc1109-lab1:latest }
 cat output/part-r-00000
 ```
 
+This should show a count of the occurences of every unique word in the test file. If you can see
+this, you have just performed your first comptation on a Hadoop cluster! This is a key milestone on
+any computer scientist's journey towards mastering high performance computing.
+
 ## Running code on hadoop via MRJob ##
+
+While running cluster computations on Hadoop using java is interesting, most modern data science is
+done not in java, but in python. Generally, python is the favoured language of data scientist
+because it is an excellent language for writing glue code. This allows data scientists using python
+to use many highly optimised libraries written in many languages to perform their computations, all
+orchestrated from a higher level, more abstracted language. Hadoop is no exception to this, and
+many python libraries exist that allow data scientists to leverage the HPC power of HDFS/YARN
+Hadoop clusters in their python code. The library we will be using to do that in this lab will be
+the `mrjob` library.
+
+To install `mrjob`, the user can install the package using their python package manager of their
+choice (often `pip` or `conda`). For reproducibility and speed, we will be using a package manager
+called `uv`, and a `pyproject.toml` file describing the python environment we want to work within.
+
+>? TIP: It is generally considered bad practice to install python packages directly to your machine
+> via `pip`, as it can create dependency conflicts with system utilities.P ackage managers like
+> `uv` can allow you to share your python environments without creating these dependency conflicts
+> while also preventing the notorious "it works on my machine" problem.
+
+To start, let us look at a basic example of a word count program in python. The code below is an
+example of a straightforward, well sctructured wordcount program in python using a regex:
+
+```python title="count.py"
+--8<-- "lab1/src/count.py"
+```
+
+Once you have created this program, you can execute it by running:
 
 ```sh { .test-block #ghcr.io/amileo/csc1109-lab1:latest }
 uv run count.py ./data/Word_count.txt
-uv run mrcount.py ./data/Word_count.txt
+```
+
+As can be seen, this clearly worked. However, for large files it will not be particularly
+performant. As a python program, it is bottlenecked by the fact that the program must be
+interpreted and the program is only able to run in a single thread.
+
+>? NOTE: For those interested: more info on the performance limitations of native python code by
+> researching its "Global Interpreter Lock" (GIL) feature, why it was introduced (it was originally
+> a performance optimisation), and why this has become a bottleneck on python performance in our
+> current HPC landscape. The ongoing "GIL-ectomy" project in the python community serves as a great
+> case study in how design decisions that were once optimisations can become performance hindrances
+> over time, a valuable lesson for anyone interested in High Performance Computing!
+
+As previously mentioned, it is possible to run this same computation on a hadoop cluster from
+a python script using the `mrjob` library. This allows us ot leverage the HPC capabilities of
+Hadoop without needing to write all of our code in java. An equivalent python program that allows
+us to run this word count via our Hadoop cluster would be the following:
+
+```python title="mrcount.py"
+--8<-- "lab1/src/mrcount.py"
+```
+
+>? TIP: This python code makes heavy use of "type hinting". Unlike in static languages like java,
+> these type hints do not create hard, statically checked boundaries on which types a function can
+> accept. They are, however, considered good practice in modern high performance python code as
+> they allow for: LSP usage, self documenting code, ahead of time static analysis, optimisations
+> (in certain cases, e.g: when using JIT libraries such as `numba`).
+
+Once this file has been created, we can test the `mrcount.py` script by running it on a local file:
+
+```sh { .test-block #ghcr.io/amileo/csc1109-lab1:latest }
 uv run mrcount.py -r local ./data/Word_count.txt
 ```
 
+Once we are confident it works, we can then reconnect to the client and run the script on the
+Hadoop cluster.
+
 ```sh
-docker compose exec resourcemanager bash
+docker compose exec -w /lab/ client bash
 ```
 
-```sh { .test-block #ghcr.io/amileo/csc1109-lab1:latest wrapper='docker compose exec -w /lab/ resourcemanager bash -c "{command}"' }
-cd /lab/
+```bash { .test-block #ghcr.io/amileo/csc1109-lab1:latest wrapper='docker compose exec -w /lab/ client bash -c "{command}"' }
 sudo pip install mrjob
 python mrcount.py -r hadoop hdfs://namenode/lab/data/Word_count.txt --output-dir hdfs://namenode/lab/data/output_mrjob
 ```
+
+If we then retrieve the `output_mrjob` directory similar to how we retrieved the outputs in the
+previous section we can check our results and verify that this has run successfully.
+
+NOTE: In addition to running on files already on the HDFS cluster, it is also possible to run
+python MapReduce jobs by streaming the data being processed. For anyone who wants to challenge
+themselves to try this, Michael Noll has shared a great tutorial on the topic
+[here](https://www.michael-noll.com/tutorials/writing-an-hadoop-mapreduce-program-in-python/)
+
+## Bonus: run on a Cloud Platrofm (AWS EMR or Google DataProc) ##
+
+We will come back to this after the Lecture on Amazon EC2 and Elastic MapReduce (EMR).
+[Bonus Lab 1: Big Data Cloud](bonus1.md)
+
+NOTE: To run this on Elastic Mapreduce you'll need API keys from your AWS Console.

@@ -1,12 +1,7 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""A wordcount script that runs in python using regexes."""
-
 from collections import Counter
 from pathlib import Path
 import sys
 import re
-
 
 WORD_REGEX = re.compile(r"[\w']+")
 
