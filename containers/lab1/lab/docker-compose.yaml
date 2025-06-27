@@ -1,50 +1,59 @@
 version: "3.8"
 
-x-common-config:
-  &common-config
+x-hadoop-common-config:
+  &hadoop-common-config
   image: ${HADOOP_RUNNER_IMAGE}:${HADOOP_RUNNER_VERSION}
   volumes:
-    - /opt/hadoop/:${HADOOP_HOME}
     - .:/lab/
+    - /opt/hadoop/:${HADOOP_HOME}
+    - ./config/hadoop:${HADOOP_HOME}/etc/hadoop
   env_file:
     - ./hadoop.env
-  environment:
-    - HADOOP_HOME=${HADOOP_HOME}
 
 services:
   namenode:
-    <<: *common-config
+    <<: *hadoop-common-config
     hostname: namenode
     command: ["hdfs", "namenode"]
     ports:
       - 9870:9870
     environment:
-      ENSURE_NAMENODE_DIR: "/tmp/hadoop-root/dfs/name"
+      - HADOOP_HOME=${HADOOP_HOME}
+      - ENSURE_NAMENODE_DIR=/tmp/hadoop-root/dfs/name
 
   datanode:
-    <<: *common-config
+    <<: *hadoop-common-config
     command: ["hdfs", "datanode"]
+    environment:
+      - HADOOP_HOME=${HADOOP_HOME}
     deploy:
       mode: replicated
       replicas: 4
 
   resourcemanager:
-    <<: *common-config
+    <<: *hadoop-common-config
     hostname: resourcemanager
     command: ["yarn", "resourcemanager"]
     ports:
       - 8088:8088
+    environment:
+      - HADOOP_HOME=${HADOOP_HOME}
 
   nodemanager:
-    <<: *common-config
+    <<: *hadoop-common-config
     command: ["yarn", "nodemanager"]
+    environment:
+      - HADOOP_HOME=${HADOOP_HOME}
 
   client:
-    <<: *common-config
+    <<: *hadoop-common-config
     hostname: client
     depends_on:
       - namenode
       - resourcemanager
     command: sleep infinity
+    working_dir: /lab/
+    environment:
+      - HADOOP_HOME=${HADOOP_HOME}
     stdin_open: true
     tty: true

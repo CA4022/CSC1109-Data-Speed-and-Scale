@@ -63,6 +63,7 @@ markdown_extensions:
       anchor_linenums: true
       line_spans: __span
       pygments_lang_class: true
+  - pymdownx.details
   - pymdownx.inlinehilite
   - pymdownx.keys
   - pymdownx.snippets:
@@ -70,7 +71,10 @@ markdown_extensions:
   - pymdownx.superfences
   - pymdownx.tabbed:
       alternate_style: true
+  - admonition
+  - attr_list
   - callouts
+  - md_in_html
 
 extra_css:
   - assets/css/fonts.css

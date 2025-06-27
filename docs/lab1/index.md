@@ -26,12 +26,28 @@ docker run -p 9870:9870 -it {{ page.meta.docker_test_image }}
 Once inside the test environment, you will be in the "/lab/" directory, which contains the
 following files:
 
-- &nbsp; data - A folder containing test data files
-- &nbsp; docker-compose.yaml - The docker compose file configuring the hadoop stack
+<div class="annotate" markdown>
+- &nbsp; config - A folder that will contain the cluster configuration XML files (1)
+- &nbsp; data - A folder containing test data files (2)
+- &nbsp; docker-compose.yaml - The docker compose file configuring the hadoop stack (3)
 - &nbsp; hadoop.env - An env file with the hadoop env variables for the config
 - &nbsp; lab.md - A brief overview of this lab
-- &nbsp; pyproject.toml - The python project config for this lab
-- &nbsp; uv.lock - A lockfile for the python project config
+- &nbsp; pyproject.toml - The python project config for this lab (4)
+- &nbsp; uv.lock - A lockfile for the python project config (5)
+</div>
+
+1. Currently, the only file in this directory is `hadoop/core-site.xml`. This defines the config
+for the current cluster, and in this lab it primarily serves as a shared attribute telling the
+various nodes where they can find the NameNode.
+2. The pre-packaged data file for this lab is a plaintext version of the wikipedia article for
+"Word count".
+3. Docker compose files allow the developer to declaratively create a collection of interconnected
+containerised docker services. This allows us to quickly deploy our hadoop cluster stack in this
+lab.
+4. The `pyproject.toml` file is the modern, standardised way to define python project metadata in a
+single file, as specified in [PEP 621](https://peps.python.org/pep-0621/)
+5. Lockfiles are common in modern projects managed by package managers. They pin every package in
+the project to a specific version, ensuring reproducibility.
 
 To deploy the Hadoop cluster defined in the `docker-compose.yaml` file simply run the following
 command:
