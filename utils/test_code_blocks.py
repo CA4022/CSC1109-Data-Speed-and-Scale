@@ -1,19 +1,26 @@
-import docker
-from docker.errors import ImageNotFound, ContainerError, APIError
-import time
-import shlex
-import os
-from pathlib import Path
-import re
-import yaml
 import datetime
-import mkdocs_gen_files
+import os
+import re
+import shlex
+import time
+from pathlib import Path
 
-try:
-    client = docker.from_env()
-except Exception as e:
-    print(f"ERROR: Could not connect to Docker daemon. Is Docker running? {e}")
-    client = None
+import docker
+import mkdocs_gen_files
+import yaml
+from docker.errors import APIError, ContainerError, ImageNotFound
+from mkdocs.plugins import get_plugin_logger
+
+logger = get_plugin_logger("test_code_blocks")
+MKDOCS_DEV_MODE = os.environ.get("MKDOCS_DEV_MODE") == "1"
+
+
+if not MKDOCS_DEV_MODE:
+    try:
+        client = docker.from_env()
+    except Exception as e:
+        logger.error(f"Could not connect to Docker daemon. Is Docker running? {e}")
+        client = None
 
 
 def run_docker_test(
@@ -34,7 +41,7 @@ def run_docker_test(
     if not client:
         return False, "Docker client not initialized. Cannot run tests."
 
-    print(f"Testing {page_path} with image {docker_image} and shell {shell}...")
+    logger.info(f"Testing {page_path} with image {docker_image} and shell {shell}...")
     container = None
     success = True
     output_log = []
@@ -48,8 +55,8 @@ def run_docker_test(
 
             docker_volumes_dict[str(host_path)] = {"bind": container_path, "mode": mode}
     else:
-        print(
-            f"INFO: No 'test_volumes' specified in frontmatter for {page_path}. Running without custom volumes."
+        logger.info(
+            f"No 'test_volumes' specified in frontmatter for {page_path}. Running without custom volumes."
         )
 
     try:
@@ -334,17 +341,15 @@ def main():
                 volumes_for_page = fm.get("test_volumes")
                 init_commands_for_page = fm.get("init_commands")
             except yaml.YAMLError as e:
-                print(f"Warning: Could not parse frontmatter in {path}: {e}")
+                logger.warning(f"Could not parse frontmatter in {path}: {e}")
 
-        # NEW LOGIC: Iterate through all blocks and group them by image
         for match in code_block_regex.finditer(content):
-            # Determine the image for this specific block
             block_docker_id = match.group("docker_id")
             image_for_block = block_docker_id or default_docker_image
 
             if not image_for_block:
-                print(
-                    f"WARNING: Skipping a test block in {path.name} because it has no image ID (#image) "
+                logger.warning(
+                    f"Skipping a test block in {path.name} because it has no image ID (#image) "
                     f"and no default 'docker_test_image' is set in the frontmatter."
                 )
                 continue
@@ -353,15 +358,13 @@ def main():
             code = match.group("code")
             command_wrapper = match.group("wrapper")
 
-            # Add the block to the correct list within the dictionary
-            # .setdefault() creates the list if the image key is new
             tests_by_image.setdefault(image_for_block, []).append(
                 (lang, code, command_wrapper)
             )
 
         if tests_by_image:
             for docker_image, code_blocks in tests_by_image.items():
-                print(
+                logger.info(
                     f"Found {len(code_blocks)} blocks for image '{docker_image}' in {path.name}"
                 )
 
@@ -386,8 +389,8 @@ def main():
 
                     if not success:
                         overall_success = False
-                        print(
-                            f"ERROR: Tests failed for '{docker_image}' in {path.name} with {shell}. See final output file."
+                        logger.error(
+                            f"Tests failed for '{docker_image}' in {path.name} with {shell}. See final output file."
                         )
                         break
 
@@ -424,5 +427,7 @@ def main():
 
 
 if __name__ == "__main__":
-    if os.environ.get("MKDOCS_DEV_MODE") != "1":
+    if MKDOCS_DEV_MODE:
         main()
+    else:
+        logger.warning("Dev mode: skipping code block tests!")
