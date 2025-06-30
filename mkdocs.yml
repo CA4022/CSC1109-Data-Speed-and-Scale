@@ -18,6 +18,7 @@ theme:
     - content.code.copy
     - content.code.select
     - content.code.annotate
+    - content.tooltips
   palette:
     # Palette toggle for light mode
     - scheme: default
@@ -68,10 +69,13 @@ markdown_extensions:
   - pymdownx.keys
   - pymdownx.snippets:
       base_path: docs
+      auto_append:
+        - includes/abbreviations.md
   - pymdownx.superfences
   - pymdownx.tabbed:
       alternate_style: true
   - admonition
+  - abbr
   - attr_list
   - callouts
   - md_in_html
