@@ -51,7 +51,7 @@ You can run MR jobs on Google DataProc in
 [different ways](https://cloud.google.com/dataproc/docs/quickstarts).
 We will focus on the use of the console in the steps below.
 
-### Run a simple SPARK job on Google DataProc ###
+### Run a simple Spark job on Google DataProc ###
 
 In your GCP console, you will see already that a project named "My First Project" is created. The
 following steps are accessible by the menu list at the top left corner of your console window.

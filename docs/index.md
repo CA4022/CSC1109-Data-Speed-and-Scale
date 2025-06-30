@@ -65,7 +65,7 @@ proceed. If not, please follow the installation instructions for your operating 
 <!-- pyml disable MD046 -->
 === "&nbsp; Windows and &nbsp; MacOS"
 
-    For Windows and macOS, you will need to install **Docker Desktop**. Follow the official
+    For Windows and MacOS, you will need to install **Docker Desktop**. Follow the official
     installation instructions for your operating system:
 
     - [Windows ](https://docs.docker.com/desktop/install/windows-install/)
