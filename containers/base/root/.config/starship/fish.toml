@@ -3,7 +3,7 @@
 format = """
 [](red)\
 $os\
-$username\
+$username$hostname\
 [](bg:peach fg:red)\
 $directory\
 [](bg:yellow fg:peach)\
@@ -79,7 +79,14 @@ openSUSE = ""
 show_always = true
 style_user = "bg:red fg:crust"
 style_root = "bg:red fg:crust"
-format = '[ $user]($style)'
+format = '[$user]($style)'
+
+[hostname]
+ssh_only = false
+disabled = false
+style = "bg:red fg:crust"
+format = '[@$hostname ]($style)'
+ssh_symbol = " "
 
 [directory]
 style = "bg:peach fg:crust"
@@ -196,9 +203,6 @@ symbol = " "
 
 [hg_branch]
 symbol = " "
-
-[hostname]
-ssh_symbol = " "
 
 [julia]
 symbol = " "
