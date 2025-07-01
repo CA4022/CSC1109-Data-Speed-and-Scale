@@ -30,15 +30,14 @@ following files:
 - &nbsp; config - A folder that will contain the cluster configuration XML files (1)
 - &nbsp; data - A folder containing test data files (2)
 - &nbsp; docker-compose.yaml - The docker compose file configuring the hadoop stack (3)
-- &nbsp; hadoop.env - An env file with the hadoop env variables for the config
 - &nbsp; lab.md - A brief overview of this lab
 - &nbsp; pyproject.toml - The python project config for this lab (4)
 - &nbsp; uv.lock - A lockfile for the python project config (5)
 </div>
 
-1. Currently, the only file in this directory is `hadoop/core-site.xml`. This defines the config
-for the current cluster, and in this lab it primarily serves as a shared attribute telling the
-various nodes where they can find the NameNode.
+1. Currently, the only folder in this directory is `hadoop/`. This contains the XML config files
+for the current cluster. These files contain all the configurations for each subcomponent of the
+HDFS stack.
 2. The pre-packaged data file for this lab is a plaintext version of the wikipedia article for
 "Word count".
 3. Docker compose files allow the developer to declaratively create a collection of interconnected
@@ -212,8 +211,8 @@ cluster, we can next move on to performing computations on that data through our
 NOTE: In this case, we have replicated the complete file to each datanode manually. This is just
 for demonstration purposes. In a real HPC setting, we would likely spread the file's blocks across
 many nodes with a replication of greater than 1.0 but not as many replications as there are
-DataNodes. The NameNode can be configured to automatically spread and balance data to facilitate
-this process.
+DataNodes. The default replication for the cluster is set by the `dfs.replication` attribute in the
+`hdfs-site.xml` file.
 
 ## Running Java code on a Hadoop cluster via HDFS and YARN ##
 

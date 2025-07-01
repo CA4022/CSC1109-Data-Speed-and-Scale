@@ -7,8 +7,6 @@ x-hadoop-common-config:
     - .:/lab/
     - /opt/hadoop/:${HADOOP_HOME}
     - ./config/hadoop:${HADOOP_HOME}/etc/hadoop
-  env_file:
-    - ./hadoop.env
 
 services:
   namenode:
