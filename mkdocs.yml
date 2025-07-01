@@ -5,6 +5,11 @@ edit_uri: edit/main/docs/
 docs_dir: docs
 site_dir: site
 
+nav:
+  - Home: index.md
+  - Lab 1: lab1/index.md
+  - Bonus Lab 1: bonus1.md
+
 theme:
   name: material
   logo: assets/logo.webp
@@ -53,11 +58,6 @@ plugins:
   - gen-files:
       scripts:
         - ./utils/test_code_blocks.py
-
-nav:
-  - Home: index.md
-  - Lab 1: lab1/index.md
-  - Bonus Lab 1: bonus1.md
 
 markdown_extensions:
   - pymdownx.highlight:
