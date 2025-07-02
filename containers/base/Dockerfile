@@ -32,6 +32,9 @@ RUN mv /test/ /test-base/
 COPY ./test/ /test/
 RUN mv /test-base/ /test/base/ && chmod -R +x /test/
 
+# Set env variables
+ENV JAVA_HOME=/usr/lib64/jvm/java-11-openjdk-11
+
 # Copy lab specific files and set entrypoint running
 COPY ./lab/ /lab/
 COPY entrypoint.py /entrypoint.py
