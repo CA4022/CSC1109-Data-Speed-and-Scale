@@ -19,9 +19,18 @@ jobs:
       base-root-config-nvim: ${{ steps.filter.outputs.base-root-config-nvim }}
       base-root-changed: ${{ steps.consolidate.outputs.base-root-changed }}
       base-changed: ${{ steps.consolidate.outputs.base-changed }}
+      lab1-client-changed: ${{ steps.consolidate.outputs.lab1-client-changed }}
       lab1-changed: ${{ steps.consolidate.outputs.lab1-changed }}
+      lab2-client-changed: ${{ steps.consolidate.outputs.lab2-client-changed }}
+      lab2-changed: ${{ steps.consolidate.outputs.lab2-changed }}
       lab3-client-changed: ${{ steps.consolidate.outputs.lab3-client-changed }}
       lab3-changed: ${{ steps.consolidate.outputs.lab3-changed }}
+      lab4-client-changed: ${{ steps.consolidate.outputs.lab4-client-changed }}
+      lab4-changed: ${{ steps.consolidate.outputs.lab4-changed }}
+      lab5-client-changed: ${{ steps.consolidate.outputs.lab5-client-changed }}
+      lab5-changed: ${{ steps.consolidate.outputs.lab5-changed }}
+      lab6-client-changed: ${{ steps.consolidate.outputs.lab6-client-changed }}
+      lab6-changed: ${{ steps.consolidate.outputs.lab6-changed }}
 
     steps:
       - name: Checkout repository
@@ -46,12 +55,30 @@ jobs:
               - 'containers/base/root/**'
             base:
               - 'containers/base/**'
+            lab1-client:
+              - 'containers/lab1/client/**'
             lab1:
               - 'containers/lab1/**'
-            lab3:
-              - 'containers/lab3/**'
+            lab2-client:
+              - 'containers/lab2/client/**'
+            lab2:
+              - 'containers/lab2/**'
             lab3-client:
               - 'containers/lab3/client/**'
+            lab3:
+              - 'containers/lab3/**'
+            lab4-client:
+              - 'containers/lab4/client/**'
+            lab4:
+              - 'containers/lab4/**'
+            lab5-client:
+              - 'containers/lab5/client/**'
+            lab5:
+              - 'containers/lab5/**'
+            lab6-client:
+              - 'containers/lab6/client/**'
+            lab6:
+              - 'containers/lab6/**'
 
       - name: Consolidate change logic
         id: consolidate
@@ -83,9 +110,18 @@ jobs:
           lab_changes = {
             k: v or base_changed for k, v in
             {
+              "lab1-client-changed": str_to_bool("${{ steps.filter.outputs.lab1-client }}"),
               "lab1-changed": str_to_bool("${{ steps.filter.outputs.lab1 }}"),
-              "lab3-client-changed": str_to_bool("${{ steps.filter.outputs.lab3 }}"),
+              "lab2-client-changed": str_to_bool("${{ steps.filter.outputs.lab2-client }}"),
+              "lab2-changed": str_to_bool("${{ steps.filter.outputs.lab2 }}"),
+              "lab3-client-changed": str_to_bool("${{ steps.filter.outputs.lab3-client }}"),
               "lab3-changed": str_to_bool("${{ steps.filter.outputs.lab3 }}"),
+              "lab4-client-changed": str_to_bool("${{ steps.filter.outputs.lab4-client }}"),
+              "lab4-changed": str_to_bool("${{ steps.filter.outputs.lab4 }}"),
+              "lab5-client-changed": str_to_bool("${{ steps.filter.outputs.lab5-client }}"),
+              "lab5-changed": str_to_bool("${{ steps.filter.outputs.lab5 }}"),
+              "lab6-client-changed": str_to_bool("${{ steps.filter.outputs.lab6-client }}"),
+              "lab6-changed": str_to_bool("${{ steps.filter.outputs.lab6 }}"),
             }.items()
           }
           github_output.update(lab_changes)
