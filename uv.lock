@@ -128,7 +128,7 @@ wheels = [
 
 [[package]]
 name = "csc1109-data-speed-and-scale"
-version = "2025.6.26"
+version = "2025.7.1"
 source = { virtual = "." }
 dependencies = [
     { name = "docker" },
