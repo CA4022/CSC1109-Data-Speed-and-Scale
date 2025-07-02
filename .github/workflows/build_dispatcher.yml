@@ -20,6 +20,8 @@ jobs:
       base-root-changed: ${{ steps.consolidate.outputs.base-root-changed }}
       base-changed: ${{ steps.consolidate.outputs.base-changed }}
       lab1-changed: ${{ steps.consolidate.outputs.lab1-changed }}
+      lab3-client-changed: ${{ steps.consolidate.outputs.lab3-client-changed }}
+      lab3-changed: ${{ steps.consolidate.outputs.lab3-changed }}
 
     steps:
       - name: Checkout repository
