@@ -1,0 +1,56 @@
+version: "3.8"
+
+x-hadoop-common-config:
+  &hadoop-common-config
+  image: ${HADOOP_RUNNER_IMAGE}:${HADOOP_RUNNER_VERSION}
+  volumes:
+    - .:/lab/
+    - /opt/hadoop/:${HADOOP_HOME}
+    - ./config/hadoop:${HADOOP_HOME}/etc/hadoop
+
+services:
+  namenode:
+    <<: *hadoop-common-config
+    hostname: namenode
+    command: ["hdfs", "namenode"]
+    ports:
+      - 9870:9870
+    environment:
+      - HADOOP_HOME=${HADOOP_HOME}
+      - ENSURE_NAMENODE_DIR=/tmp/hadoop-root/dfs/name
+
+  datanode:
+    <<: *hadoop-common-config
+    command: ["hdfs", "datanode"]
+    environment:
+      - HADOOP_HOME=${HADOOP_HOME}
+    deploy:
+      mode: replicated
+      replicas: 4
+
+  resourcemanager:
+    <<: *hadoop-common-config
+    hostname: resourcemanager
+    command: ["yarn", "resourcemanager"]
+    ports:
+      - 8088:8088
+    environment:
+      - HADOOP_HOME=${HADOOP_HOME}
+
+  nodemanager:
+    <<: *hadoop-common-config
+    command: ["yarn", "nodemanager"]
+    environment:
+      - HADOOP_HOME=${HADOOP_HOME}
+
+  client:
+    image: ghcr.io/amileo/csc1109-lab3-client
+    hostname: client
+    volumes:
+      - .:/lab/
+      - ./config/hadoop:${HADOOP_HOME}/etc/hadoop
+    depends_on:
+      - namenode
+      - resourcemanager
+    stdin_open: true
+    tty: true
