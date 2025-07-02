@@ -145,6 +145,7 @@ class ShellSelector(Selector):
 
     def start(self):
         assert hasattr(self, "choice")
+        os.environ["SHELL"] = self.commands[self.choice]
         print("Launching shell with:")
         self.print_choice(indent=1)
         print()
