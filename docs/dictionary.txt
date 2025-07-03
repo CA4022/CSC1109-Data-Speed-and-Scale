@@ -10,6 +10,8 @@ datanode
 dataproc
 dataset
 datasets
+declarative
+declaratively
 env
 filesystem
 filetree
@@ -21,6 +23,7 @@ javac
 labsheet
 localhost
 lockfile
+lockfiles
 mapreduce
 md
 mrcount
@@ -30,14 +33,19 @@ nodemanager
 noll
 nushell
 performant
+plaintext
+pre
 py
 pyproject
 qwik
 resourcemanager
 subcommand
 subcommands
+subcomponent
+subcomponents
 sudo
 toml
+userspace
 uv
 wordcount
 yaml
