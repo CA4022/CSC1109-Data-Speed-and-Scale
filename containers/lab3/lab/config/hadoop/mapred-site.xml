@@ -15,4 +15,12 @@
         <name>mapreduce.reduce.env</name>
         <value>HADOOP_MAPRED_HOME=$HADOOP_HOME</value>
     </property>
+    <property>
+        <name>mapreduce.jobhistory.address</name>
+        <value>historyserver:10020</value>
+    </property>
+    <property>
+        <name>mapreduce.jobhistory.webapp.address</name>
+        <value>historyserver:19888</value>
+    </property>
 </configuration>

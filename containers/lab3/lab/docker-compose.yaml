@@ -17,6 +17,7 @@ services:
       - 9870:9870
     environment:
       - HADOOP_HOME=${HADOOP_HOME}
+      - HADOOP_USER_NAME=${HADOOP_USER_NAME}
       - ENSURE_NAMENODE_DIR=/tmp/hadoop-root/dfs/name
 
   datanode:
@@ -24,6 +25,7 @@ services:
     command: ["hdfs", "datanode"]
     environment:
       - HADOOP_HOME=${HADOOP_HOME}
+      - HADOOP_USER_NAME=${HADOOP_USER_NAME}
     deploy:
       mode: replicated
       replicas: 4
@@ -36,12 +38,25 @@ services:
       - 8088:8088
     environment:
       - HADOOP_HOME=${HADOOP_HOME}
+      - HADOOP_USER_NAME=${HADOOP_USER_NAME}
 
   nodemanager:
     <<: *hadoop-common-config
     command: ["yarn", "nodemanager"]
     environment:
       - HADOOP_HOME=${HADOOP_HOME}
+      - HADOOP_USER_NAME=${HADOOP_USER_NAME}
+
+  historyserver:
+    <<: *hadoop-common-config
+    hostname: historyserver
+    command: ["mapred", "historyserver"]
+    ports:
+      - "19888:19888"
+      - "10020:10020"
+    environment:
+      - HADOOP_HOME=${HADOOP_HOME}
+      - HADOOP_USER_NAME=${HADOOP_USER_NAME}
 
   client:
     image: ghcr.io/amileo/csc1109-lab3-client
@@ -49,6 +64,10 @@ services:
     volumes:
       - .:/lab/
       - ./config/hadoop:${HADOOP_HOME}/etc/hadoop
+    environment:
+      - SHELL=${SHELL}
+      - HADOOP_HOME=${HADOOP_HOME}
+      - HADOOP_USER_NAME=${HADOOP_USER_NAME}
     depends_on:
       - namenode
       - resourcemanager
