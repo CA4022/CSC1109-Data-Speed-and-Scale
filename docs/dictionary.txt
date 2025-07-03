@@ -8,6 +8,7 @@ ctrl
 customisable
 datanode
 dataproc
+dataset
 datasets
 env
 filesystem
@@ -20,6 +21,7 @@ javac
 labsheet
 localhost
 lockfile
+mapreduce
 md
 mrcount
 namenode
