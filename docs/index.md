@@ -135,7 +135,7 @@ to test the lab CSC1109 environment without any lab-specific tools or data being
 you can do so by running the following command:
 
 ```sh
-docker run --privileged -it ghcr.io/amileo/csc1109-base:latest
+docker run --privileged --hostname csc1109-base -it ghcr.io/amileo/csc1109-base:latest
 ```
 
 ### Operating System ###
