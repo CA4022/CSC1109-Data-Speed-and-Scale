@@ -37,6 +37,7 @@ ENV JAVA_HOME=/usr/lib64/jvm/java-11-openjdk-11
 
 # Copy lab specific files and set entrypoint running
 COPY ./lab/ /lab/
+COPY ./bin/ /bin/
 COPY entrypoint.py /entrypoint.py
 RUN chmod +x /entrypoint.py
 CMD ["dotenv", "/entrypoint.py"]
