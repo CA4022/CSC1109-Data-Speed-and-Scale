@@ -149,7 +149,7 @@ filesystem. To do this, we must first begin by connecting to our client node. To
 the following code:
 
 ```sh { .test-block #ghcr.io/amileo/csc1109-lab1:latest }
-docker compose exec -w /lab/ client bash
+docker compose exec client default_shell
 ```
 
 Once we are connected to the client, we can check the status if our hadoop cluster by running:
@@ -157,21 +157,6 @@ Once we are connected to the client, we can check the status if our hadoop clust
 ```sh { .test-block #ghcr.io/amileo/csc1109-lab1:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
 hdfs fsck /
 ```
-
->? TIP: The `$` symbol in this code block is a CLI prompt token. In CLI documentation it is very
-> important to pay attention to prompt tokens as they tell us what environment a command will be
-> executed within. In this example, we are running using `bash` in userspace inside the `client`
-> container. Common prompt token shorthands include:
->
-> - `#`: Root shell of any kind
->
-> - `$`: Bash user shell
->
-> - `%`: Zsh user shell
->
-> - `>`: Fish user shell
->
-> - `❯`: Nushell user shell
 
 INFO: You can connect to a WebUI for your cluster at any time by opening your browser and
 navigating to the URL [http://localhost:9870](http://localhost:9870). This is another way to check

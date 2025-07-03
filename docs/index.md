@@ -36,6 +36,12 @@ practice these skills to get the most out of this lab. These skills include:
 - &nbsp; Basic java programming
 - &nbsp; Basic python programming
 
+SUCCESS: HPC computing is dominated by tools, remote nodes, and distributed systems that can only
+really be used in a CLI. We understand that many programmers prefer GUI tools and are not very
+comfortable working in the CLI. For those programmers: don't be intimidated! The environment
+provided for this module has been pre-configured to create a user friendly, efficient, and modern
+CLI environment.
+
 ## Getting Set Up ##
 
 For these labs, the host computer must have a working docker engine installed and configured.
@@ -160,6 +166,25 @@ those who are unsure we offer the following recommendations:
     as it is the OS X default shell
 - ❯&nbsp; Nushell: good for advanced users, especially those already familiar with data processing paradigms
 
+>? TIP: Each of these shells will look the same, but will give a visual indicator of which shell
+> you are currently using in the form of a "prompt token". For example, if you chose `bash` as your
+> shell you will see a `$` prompt token next to your cursor. In CLI documentation it is very
+> important to pay attention to prompt tokens as they often tell us what environment a command is
+> expected be executed within. Common prompt token shorthands include:
+>
+> - `#`: Root shell of any kind
+>
+> - `$`: Bash user shell
+>
+> - `%`: Zsh user shell
+>
+> - `>`: Fish user shell
+>
+> - `❯`: Nushell user shell
+>
+> These prompt token shorthands are not standardised by anyone, but are generally observed as
+> convention among programmers.
+
 As this lab will take place primarily in a command line environment, the editor options offered
 include only a selection of CLI editors. These options include some of the most popular CLI editors
 in current use, and we have included a selection that should be comfortable for users from complete
@@ -174,6 +199,11 @@ for those who are unsure are:
 
 Whichever of these editors are chosen, they will all include some basic quality-of-life plugins
 such as LSP support and filetree navigation so that users can use them efficiently.
+
+>? NOTE: For those who are relatively new to these CLI tools, we encourage you to take some time to
+> try the various options and decide what you prefer. All of these tools are available in the lab
+> environment regardless of which defaults you choose, so you can swap between them and experiment
+> as much as you like until you find your favourites.
 
 ### Command Line Tools ###
 
