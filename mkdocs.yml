@@ -8,6 +8,7 @@ site_dir: site
 nav:
   - Home: index.md
   - Lab 1: lab1/index.md
+  - Lab 2: lab2/index.md
   - Lab 3: lab3/index.md
   - Bonus Lab 1: bonus1.md
 

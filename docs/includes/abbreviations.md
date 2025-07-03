@@ -13,4 +13,5 @@
 *[MR]: MapReduce
 *[SLES]: SUSE Linux Enterprise Server
 *[SUSE]: Software und System Entwicklung
+*[XML]: eXtensible Markup Language
 *[YARN]: Yet Another Resource Negotiator
