@@ -11,16 +11,23 @@ import yaml
 from docker.errors import APIError, ContainerError, ImageNotFound
 from mkdocs.plugins import get_plugin_logger
 
-logger = get_plugin_logger("test_code_blocks")
+DIRECT_LOGGING = os.environ.get("DIRECT_LOGGING") == "1"
+
+if DIRECT_LOGGING:
+    from loguru import logger
+else:
+    logger = get_plugin_logger("test_code_blocks")
 MKDOCS_DEV_MODE = os.environ.get("MKDOCS_DEV_MODE") == "1"
 
+
+client = None
 
 if not MKDOCS_DEV_MODE:
     try:
         client = docker.from_env()
     except Exception as e:
         logger.error(f"Could not connect to Docker daemon. Is Docker running? {e}")
-        client = None
+        breakpoint()
 
 
 def run_docker_test(
@@ -209,7 +216,9 @@ def run_docker_test(
                         continue
                     if command_wrapper:
                         commands_to_execute.append(
-                            command_wrapper.replace("{command}", line)
+                            command_wrapper.replace("{command}", line).replace(
+                                "{shell}", shell
+                            )
                         )
                     else:
                         commands_to_execute.append(line)
@@ -428,6 +437,6 @@ def main():
 
 if __name__ == "__main__":
     if MKDOCS_DEV_MODE:
-        main()
-    else:
         logger.warning("Dev mode: skipping code block tests!")
+    else:
+        main()

@@ -52,7 +52,6 @@ To deploy the Hadoop cluster defined in the `docker-compose.yaml` file simply ru
 command:
 
 ```sh { .test-block #ghcr.io/amileo/csc1109-lab1:latest }
-ls
 docker compose up -d
 ```
 
@@ -155,8 +154,8 @@ docker compose exec -w /lab/ client bash
 
 Once we are connected to the client, we can check the status if our hadoop cluster by running:
 
-```sh { .test-block #ghcr.io/amileo/csc1109-lab1:latest wrapper='docker compose exec -w /lab/ client bash -c "{command}"' }
-$ hdfs fsck /
+```sh { .test-block #ghcr.io/amileo/csc1109-lab1:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
+hdfs fsck /
 ```
 
 >? TIP: The `$` symbol in this code block is a CLI prompt token. In CLI documentation it is very
@@ -181,16 +180,16 @@ your cluster status.
 Once we have confirmed that the cluster is healthy, we can create a directory and put our example
 file that we will use to test our code there:
 
-```sh { .test-block #ghcr.io/amileo/csc1109-lab1:latest wrapper='docker compose exec -w /lab/ client bash -c "{command}"' }
-$ hdfs dfs -mkdir -p /lab/data/
-$ hdfs dfs -put /lab/data/Word_count.txt hdfs://namenode/lab/data/Word_count.txt
+```sh { .test-block #ghcr.io/amileo/csc1109-lab1:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
+hdfs dfs -mkdir -p /lab/data/
+hdfs dfs -put /lab/data/Word_count.txt hdfs://namenode/lab/data/Word_count.txt
 ```
 
 Now, if we run the following command we should see that the file is present in this folder in our
 HDFS filesystem:
 
-```sh { .test-block #ghcr.io/amileo/csc1109-lab1:latest wrapper='docker compose exec -w /lab/ client bash -c "{command}"' }
-$ hdfs dfs -ls hdfs://namenode/lab/data/
+```sh { .test-block #ghcr.io/amileo/csc1109-lab1:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
+hdfs dfs -ls hdfs://namenode/lab/data/
 ```
 
 Although this file has been added to our cluster. However, if we run the command `hdfs fsck
@@ -198,9 +197,9 @@ Although this file has been added to our cluster. However, if we run the command
 only a single node. To spread the data across all 4 nodes, we can run the following command and
 check the block locations again:
 
-```sh { .test-block #ghcr.io/amileo/csc1109-lab1:latest wrapper='docker compose exec -w /lab/ client bash -c "{command}"' }
-$ hdfs dfs -setrep 4 /lab/data/Word_count.txt
-$ hdfs fsck /lab/data/Word_count.txt -files -blocks -locations
+```sh { .test-block #ghcr.io/amileo/csc1109-lab1:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
+hdfs dfs -setrep 4 /lab/data/Word_count.txt
+hdfs fsck /lab/data/Word_count.txt -files -blocks -locations
 ```
 
 Now, you should be able to see that the average block replication for the file is 4.0, illustrating
@@ -231,25 +230,25 @@ With this java source file created, the next step is to connect to the `client` 
 you inside the client node you can compile `WordCount.java` on the hadoop cluster using javac and
 the `jar` bytecode packager by running:
 
-```sh { .test-block #ghcr.io/amileo/csc1109-lab1:latest wrapper='docker compose exec -w /lab/ client bash -c "{command}"' }
-$ hadoop com.sun.tools.javac.Main WordCount.java
-$ jar cf wordcount.jar WordCount*.class
+```sh { .test-block #ghcr.io/amileo/csc1109-lab1:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
+hadoop com.sun.tools.javac.Main WordCount.java
+jar cf wordcount.jar WordCount*.class
 ```
 
 By running `ls`, you should now see the file `wordcount.jar` present in the working directory. This
 file contains the `ApplicationMaster` object that the YARN framework will run on our cluster. To
 start this computation, you can run the following command:
 
-```sh { .test-block #ghcr.io/amileo/csc1109-lab1:latest wrapper='docker compose exec -w /lab/ client bash -c "{command}"' }
-$ hadoop jar wordcount.jar WordCount hdfs://namenode/lab/data/Word_count.txt hdfs://namenode/lab/data/output
+```sh { .test-block #ghcr.io/amileo/csc1109-lab1:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
+hadoop jar wordcount.jar WordCount hdfs://namenode/lab/data/Word_count.txt hdfs://namenode/lab/data/output
 ```
 
 Once the Hadoop cluster has finished running the `wordcount.jar` object on the cluster it will
 have placed an output folder at the `./output/` directory on the HDFS cluster. To retrieve
 this folder from `hdfs://namenode/lab/data/output` run the following command.
 
-```sh { .test-block #ghcr.io/amileo/csc1109-lab1:latest wrapper='docker compose exec -w /lab/ client bash -c "{command}"' }
-$ hdfs dfs -get hdfs://namenode/lab/data/output
+```sh { .test-block #ghcr.io/amileo/csc1109-lab1:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
+hdfs dfs -get hdfs://namenode/lab/data/output
 ```
 
 At this point, you can `exit` the client node. You should now be able to see a folder called
@@ -337,9 +336,9 @@ Hadoop cluster.
 docker compose exec -w /lab/ client bash
 ```
 
-```sh { .test-block #ghcr.io/amileo/csc1109-lab1:latest wrapper='docker compose exec -w /lab/ client bash -c "{command}"' }
-$ sudo pip install mrjob
-$ python mrcount.py -r hadoop hdfs://namenode/lab/data/Word_count.txt --output-dir hdfs://namenode/lab/data/output_mrjob
+```sh { .test-block #ghcr.io/amileo/csc1109-lab1:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
+sudo pip install mrjob
+python mrcount.py -r hadoop hdfs://namenode/lab/data/Word_count.txt --output-dir hdfs://namenode/lab/data/output_mrjob
 ```
 
 If we then retrieve the `output_mrjob` directory similar to how we retrieved the outputs in the

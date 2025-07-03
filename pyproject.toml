@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "docker>=7.1.0",
+    "loguru>=0.7.3",
     "markdown-callouts>=0.4.0",
     "mdformat>=0.7.22",
     "mdformat-pyproject>=0.0.2",
