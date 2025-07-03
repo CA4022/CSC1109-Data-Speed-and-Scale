@@ -1,3 +1,4 @@
+*[API]: Application Programming Interface
 *[AWS]: Amazon Web Services
 *[CLI]: Command Line Interface
 *[CSV]: Comma Seperated Values
@@ -11,7 +12,9 @@
 *[HPC]: High Performance Computing
 *[ML]: Machine Learning
 *[MR]: MapReduce
+*[RDD]: Replaceable Database Driver
 *[SLES]: SUSE Linux Enterprise Server
 *[SUSE]: Software und System Entwicklung
+*[TF-IDF]: Term Frequency-Inverse Document Frequency
 *[XML]: eXtensible Markup Language
 *[YARN]: Yet Another Resource Negotiator
