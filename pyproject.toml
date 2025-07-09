@@ -1,9 +1,9 @@
 [project]
 name = "csc1109-data-speed-and-scale"
-version = "2025.07.03"
+version = "2025.07.09"
 description = "Course materials for DCU's CSC1109 computer science labs."
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.11"
 dependencies = [
     "docker>=7.1.0",
     "loguru>=0.7.3",
@@ -23,6 +23,7 @@ dependencies = [
     "pymarkdownlnt>=0.9.30",
     "pymdown-extensions>=10.16",
     "tomlkit>=0.13.3",
+    "zizmor>=1.11.0",
 ]
 
 [tool.pymarkdown]

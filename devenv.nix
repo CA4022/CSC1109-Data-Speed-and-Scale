@@ -25,7 +25,10 @@ in {
     containerPkg
     pkgs.act
     pkgs.actionlint
+    pkgs.dive
     pkgs.git
     pkgs.just
+    pkgs.python313
+    pkgs.zizmor
   ];
 }

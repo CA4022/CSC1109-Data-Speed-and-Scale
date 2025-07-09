@@ -16,3 +16,5 @@ RUN chmod -R +x /test/
 COPY ./early-init.el /root/.config/emacs/early-init.el
 COPY ./init.el /root/.config/emacs/init.el
 RUN emacs --batch -l ./init.el
+WORKDIR straight/repos
+RUN for repo in */; do (cd "$repo" && echo "Compacting $repo" && git gc --aggressive --prune=now); done

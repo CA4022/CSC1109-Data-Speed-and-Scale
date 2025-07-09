@@ -1,4 +1,14 @@
 ARG BASE_OPENSUSE_VERSION=15.5
+
+FROM docker.io/opensuse/leap:${BASE_OPENSUSE_VERSION} AS fzf-builder
+
+RUN zypper --non-interactive install gzip tar wget && \
+    zypper clean --all
+
+WORKDIR /fzf
+RUN wget https://github.com/junegunn/fzf/releases/download/v0.62.0/fzf-0.62.0-linux_amd64.tar.gz && \
+    tar xzf fzf-0.62.0-linux_amd64.tar.gz
+
 FROM docker.io/opensuse/leap:${BASE_OPENSUSE_VERSION} AS base
 
 ARG BASE_OPENSUSE_VERSION
@@ -29,24 +39,27 @@ RUN zypper --non-interactive addrepo "https://download.opensuse.org/repositories
         gcc-${BASE_GCC_VERSION} \
         bash-${BASE_BASH_VERSION} \
         gzip emacs libgpm2 tar wget && \
-    zypper clean --all
+    zypper clean --all && \
+    echo "LANG=en_US.UTF-8"
 
-ENV PATH="/root/.local/bin:$PATH"
+ENV LANG en_US.UTF-8
+ENV LC_ALL en_US.UTF-8
+ENV PATH="/usr/local/bin:$PATH"
 
 # Add the non-essential user-friendly tools and configurations for students.
 # Separated from core because these components are more likely to change.
 FROM core-dependencies AS student-environment
 
-# Set up fzf. Install alternative shells, prompt generator, blesh requirements, etc
-RUN wget https://github.com/junegunn/fzf/releases/download/v0.62.0/fzf-0.62.0-linux_amd64.tar.gz && \
-    tar xzf fzf-0.62.0-linux_amd64.tar.gz && \
-    rm fzf-0.62.0-linux_amd64.tar.gz && \
-    mv fzf /usr/bin/fzf && \
-    zypper --non-interactive install zsh fish hashdeep jq starship gawk make wget glow lsd fd \
+# Removing locale data after install shaves ~250MB off final image size
+RUN zypper --non-interactive install zsh fish hashdeep starship make wget gawk glow lsd fd \
         fd-bash-completion ripgrep ripgrep-bash-completion tealdeer tealdeer-bash-completion \
-        symbols-only-nerd-fonts vim docker-bash-completion python312-pipx && \
+        symbols-only-nerd-fonts vim docker-bash-completion && \
+    zypper --non-interactive remove glibc-locale && \
     zypper clean --all && \
-    pipx install dotenv-cli
+    find /usr/share/locale -maxdepth 1 -mindepth 1 ! -name 'en_US' -exec rm -rf {} +
+
+# Required for emacs XDG runtime issue
+RUN mkdir -p /run/user/0
 
 # Set up blesh for bash shell
 WORKDIR /root
@@ -82,7 +95,10 @@ COPY .config/tealdeer .config/tealdeer
 COPY .config/fish .config/fish
 COPY .config/nushell .config/nushell
 
-COPY --from=ghcr.io/nushell/nushell:0.105.1-bookworm /bin/nu /bin/nu_plugin* /usr/local/bin/
+COPY --from=fzf-builder /fzf/fzf /usr/local/bin/fzf
+
+COPY --from=ghcr.io/nushell/nushell:0.105.1-bookworm /bin/nu /bin/nu/
+COPY --from=ghcr.io/nushell/nushell:0.105.1-bookworm /usr/bin/nu /usr/bin/
 
 COPY --from=ghcr.io/amileo/csc1109-base-root-config-bat:latest /usr/bin/bat /usr/bin/bat
 COPY --from=ghcr.io/amileo/csc1109-base-root-config-bat:latest /usr/share/man/man1/bat.1.gz /usr/share/man/man1/bat.1.gz
