@@ -71,6 +71,7 @@ userspace
 usr
 uv
 vs
+walkthrough
 wordcount
 xml
 yaml
