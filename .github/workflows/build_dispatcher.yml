@@ -278,7 +278,6 @@ jobs:
   build-lab3:
     needs:
       - determine-changes
-      - build-lab3-client
       - build-base
     if: >-
       always() &&
