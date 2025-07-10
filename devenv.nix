@@ -19,7 +19,10 @@ in {
   dotenv.enable = true;
   languages.python = {
     enable = true;
-    uv.enable = true;
+    package = pkgs.python313;
+    uv = {
+      enable = true;
+    };
   };
   packages = [
     containerPkg
@@ -28,7 +31,12 @@ in {
     pkgs.dive
     pkgs.git
     pkgs.just
+    pkgs.maven
     pkgs.python313
+    pkgs.stdenv.cc.cc.lib
     pkgs.zizmor
+  ];
+  env.LD_LIBRARY_PATH = lib.makeLibraryPath [
+    pkgs.stdenv.cc.cc.lib
   ];
 }
