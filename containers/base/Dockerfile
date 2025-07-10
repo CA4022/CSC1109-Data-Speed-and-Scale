@@ -12,7 +12,7 @@ RUN zypper --non-interactive install \
         python312 \
         wget \
         maven \
-        java-11-openjdk \
+        java-17-openjdk-devel \
         scala && \
     zypper clean --all
 
@@ -32,7 +32,8 @@ COPY ./test/ /test/
 RUN mv /test-base/ /test/base/ && chmod -R +x /test/
 
 # Set env variables
-ENV JAVA_HOME=/usr/lib64/jvm/java-11-openjdk-11
+ENV PATH="/opt/hdfs/bin:/opt/hadoop/bin:/opt/pig/bin:/apache-storm/bin:/apache-zookeeper-3.9.3-bin/bin:${PATH}"
+ENV JAVA_HOME=/usr/lib64/jvm/java-17-openjdk-17
 
 # Copy lab specific files and set entrypoint running
 COPY ./lab/ /lab/
