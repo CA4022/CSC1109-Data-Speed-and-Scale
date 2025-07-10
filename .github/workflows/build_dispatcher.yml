@@ -275,23 +275,6 @@ jobs:
       path: containers/lab1/
     secrets: inherit
 
-  build-lab3-client:
-    needs:
-      - determine-changes
-      - build-base
-    if: >-
-      always() &&
-      needs.determine-changes.outputs.lab3-client-changed == 'true' &&
-      needs.build-base.result != 'failure'
-    name: 'Build lab3 client container'
-    permissions:
-      contents: read
-      packages: write
-    uses: ./.github/workflows/build.yml
-    with:
-      path: containers/lab3/client
-    secrets: inherit
-
   build-lab3:
     needs:
       - determine-changes
@@ -300,7 +283,6 @@ jobs:
     if: >-
       always() &&
       needs.determine-changes.outputs.lab3-changed == 'true' &&
-      needs.build-lab3-client.result != 'failure' &&
       needs.build-base.result != 'failure'
     name: 'Build lab3 container'
     permissions:
