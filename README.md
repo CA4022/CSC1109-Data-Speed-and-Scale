@@ -13,7 +13,7 @@ creating images derived from this base for each lesson plan.
 - [ ] Implement labs
     - [X] Use hadoop filesystem + run compiled mapreduce jar
     - [ ] Hadoop + hive for structured data
-    - [ ] Hadoop + pig for structured/semistructured data
+    - [X] Hadoop + pig for structured/semistructured data
     - [ ] Hive and Pig on Movielens (guided example)
     - [ ] Spark dataframes + run spark wordcount + a bit of spark-shell (scala examples) + a bit on pyspark
     - [ ] Spark ml (run examples from distribution) + ML pipelines (example email spam classification)
@@ -27,9 +27,9 @@ creating images derived from this base for each lesson plan.
             - [ ] runc
             - [ ] crun
         - [ ] Minikube
-- [ ] New lab documentation
-    - [ ] mkdocs + readthedocs?
-    - [ ] Executable docs
+- [X] New lab documentation
+    - [X] mkdocs + readthedocs?
+    - [X] Executable docs
 - [ ] Integrate with moodle? If possible/needed
 
 # Notes
@@ -78,12 +78,12 @@ creating images derived from this base for each lesson plan.
         - vim (cos, well, its vim. it has to be everywhere)
         - neovim
         - emacs
-    - Added some basic QoL setups for those editors (except vim). Nothing fancy, just the minimum
-        most users would expect.
-    - Added completions, syntax highlighting and other quality-of-life plugins for bash
-    - Added a cleaner prompt to help orient students when they land inside the container
-    - Added a bunch of modern unix tools to replace basic utilities
-    - Added some orientation splashes on startup, to get students comfortable in the lab environment
+    - Added some basic QoL setups for those terminals and editors. Nothing fancy, just the minimum
+        most modern users who work in terminals regularly would expect.
+        - Added completions, syntax highlighting and other quality-of-life plugins for bash
+        - Added a cleaner prompt to help orient students when they land inside the container
+        - Added a bunch of modern unix tools to replace basic utilities
+        - Added some orientation splashes on startup, to get students comfortable in the lab environment
 - Made a fully automated container publishing pipeline for the base image, along with some
     automated script commands for managing calver versioning.
     - This provides us a hook to start building a CI/CD pipeline for course materials from.
@@ -91,5 +91,8 @@ creating images derived from this base for each lesson plan.
         build lesson plans around.
     - It will also allow us to trigger rebuilds and testing of lessons whenever the base is changed.
         - Ensures consistent env across all lessons
-        - Ensures all lesson plans continue to work, without manual testing being needed
-        - Quickly lets us know if something does break, without having to wait until mid-labs!
+- Made doc code blocks able to be automatically tested, to ensure that code for lessons does not
+    break between changes. This will allow us to move a lot quicker on keeping the course
+    up-to-date and in future updates to course materials.
+    - Ensures all lesson plans continue to work, without manual testing being needed
+    - Quickly lets us know if something does break, without having to wait until mid-labs!
