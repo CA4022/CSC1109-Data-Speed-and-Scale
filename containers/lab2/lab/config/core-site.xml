@@ -1,0 +1,18 @@
+<configuration>
+    <property>
+        <name>fs.default.name</name>
+        <value>hdfs://namenode</value>
+    </property>
+    <property>
+        <name>fs.defaultFS</name>
+        <value>hdfs://namenode</value>
+    </property>
+    <property>
+        <name>hadoop.proxyuser.hive.hosts</name>
+        <value>*</value>
+    </property>
+    <property>
+        <name>hadoop.proxyuser.hive.groups</name>
+        <value>*</value>
+    </property>
+</configuration>

@@ -275,6 +275,40 @@ jobs:
       path: containers/lab1/
     secrets: inherit
 
+  build-lab2-client:
+    needs:
+      - determine-changes
+      - build-base
+    if: >-
+      always() &&
+      needs.determine-changes.outputs.lab2-client-changed == 'true' &&
+      needs.build-base.result != 'failure'
+    name: 'Build lab2 client container'
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/build.yml
+    with:
+      path: containers/lab2/client
+    secrets: inherit
+
+  build-lab2:
+    needs:
+      - determine-changes
+      - build-base
+    if: >-
+      always() &&
+      needs.determine-changes.outputs.lab2-changed == 'true' &&
+      needs.build-base.result != 'failure'
+    name: 'Build lab2 container'
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/build.yml
+    with:
+      path: containers/lab2/
+    secrets: inherit
+
   build-lab3:
     needs:
       - determine-changes
