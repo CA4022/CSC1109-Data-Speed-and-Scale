@@ -1,4 +1,4 @@
-sepal.length,sepal.width,petal.length,petal.width,variety
+sepal_length,sepal_width,petal_length,petal_width,species
 6.6,3,4.4,1.4,Versicolor
 6.8,2.8,4.8,1.4,Versicolor
 6.7,3,5,1.7,Versicolor
