@@ -16,12 +16,6 @@ simple queries and file operations on external tables. Hive can either run on to
 HDFS/MapReduce cluster, or in local mode (useful for debugging). In this lab, as we are here
 to demonstrate and get hands-on experience with distributed computing, we will be in HDFS/MR mode.
 
-INFO: Hive requires an external database called the "Metastore", in which metadata is stored. This
-metastore can be either an SQL database or an Apache Derby database. In this example, we will be
-using a Derby database because it is better integrated with Hive but you can use an SQL db in your
-own experiments if you wish. More information on how to do this is available at the [Apache HIVE
-DockerHub Page](https://hub.docker.com/r/apache/hive)
-
 To download the container for this lab, run the following command:
 
 ```sh
