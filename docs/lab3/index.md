@@ -23,7 +23,17 @@ NOTE: If you look at the `docker-compose.yaml` for this lab, our usual HDFS clus
 `historyserver` node this time. This node serves to log statistics about MapReduce jobs, which pig
 uses to report the results of jobs.
 
-## Pig Examples 󱀆&nbsp; ##
+## What is Pig? 󱀆&nbsp; ##
+
+In our previous lab we discovered Apache Hive, a higher-level abstraction over HDFS/MR intended to
+make cluster computing more convenient and accessible for less specialised programmers. You likely
+noticed though that although Hive is convenient to use, it is not convenient to set up. Apache Pig
+is an even more high-level way to orchestrate tasks on a HDFS/MR cluster. If Pig detects a hadoop
+config it will immediately connect to that config and use it to execute its queries. Queries in pig
+are made using a procedural SQL-like language called "pig latin". This language allows programmers
+to easily interact with a HDFS/MR cluster and do simple analyses in a familiar, procedural way.
+
+## Pig Examples ##
 
 ### Word Count ###
 
