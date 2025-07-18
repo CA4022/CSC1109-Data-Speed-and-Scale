@@ -1,5 +1,5 @@
 ---
-title: "Bonus Lab 1: Big Data Cloud"
+title: "Bonus Lab 1: Big Data Cloud &nbsp;&nbsp;"
 ---
 
 {{ "# " ~ page.meta.title ~ " #" }}

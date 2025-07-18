@@ -338,6 +338,6 @@ tutorial on the topic
 ## Bonus: run on a Cloud Platform (AWS EMR or Google DataProc) ##
 
 We will come back to this after the Lecture on Amazon EC2 and Elastic MapReduce (EMR).
-[Bonus Lab 1: Big Data Cloud](../bonus1.md)
+[Bonus Lab 1: Big Data Cloud &nbsp;&nbsp;](../bonus1.md)
 
 WARNING: To run this on Elastic MapReduce you will need API keys from your AWS Console.

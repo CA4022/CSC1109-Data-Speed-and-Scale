@@ -23,7 +23,7 @@ NOTE: If you look at the `docker-compose.yaml` for this lab, our usual HDFS clus
 `historyserver` node this time. This node serves to log statistics about MapReduce jobs, which pig
 uses to report the results of jobs.
 
-## Pig Examples ##
+## Pig Examples 󱀆&nbsp; ##
 
 ### Word Count ###
 
@@ -65,3 +65,9 @@ you notice about this output?
 - [Operators example](https://techvidvan.com/tutorials/apache-pig-operators/)
 - [Movie examples](https://www.wikitechy.com/tutorials/apache-pig/apache-pig-example)
 
+## Bonus: using Pig and Hive on real big data ##
+
+If you want a more challenging problem to tackle with what you've learned so far, we have an extra
+lab walkthrough you can try that combines the use of Pig and Hive to process a real world big data
+dataset. If you want to test your skills so far try
+[Bonus Lab 2: Honey Roast Ham 󰾡&nbsp;󱀆&nbsp;](../bonus2.md)
