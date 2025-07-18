@@ -12,8 +12,11 @@
 *[HPC]: High Performance Computing
 *[ML]: Machine Learning
 *[MR]: MapReduce
+*[RAM]: Random Access Memory
 *[RDD]: Replaceable Database Driver
+*[REPL]: Read-Eval-Print Loop
 *[SLES]: SUSE Linux Enterprise Server
+*[SQL]: Structured Query Language
 *[SUSE]: Software und System Entwicklung
 *[TF-IDF]: Term Frequency-Inverse Document Frequency
 *[XML]: eXtensible Markup Language

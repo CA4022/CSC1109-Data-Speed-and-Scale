@@ -11,9 +11,10 @@ init_commands:
 
 {{ "# " ~ page.meta.title ~ " #" }}
 
-This lab covers material from week 3. During it we will deploy a HIVE node and practice with
-simple queries and file operations on external tables. HIVE can either run on top of a working
-HDFS/MapReduce cluster, or in local mode (useful for debugging).
+This lab covers material from week 3. During it we will deploy a Hive cluster and practice with
+simple queries and file operations on external tables. Hive can either run on top of a working
+HDFS/MapReduce cluster, or in local mode (useful for debugging). In this lab, as we are here
+to demonstrate and get hands-on experience with distributed computing, we will be in HDFS/MR mode.
 
 INFO: Hive requires an external database called the "Metastore", in which metadata is stored. This
 metastore can be either an SQL database or an Apache Derby database. In this example, we will be
@@ -40,17 +41,52 @@ the `docker-compose.yaml` file and `config` directories between Lab 1 and this l
 
 Once inside the lab container, you can deploy the cluster for this lab by running:
 
-```sh
+```sh { .test-block #ghcr.io/amileo/csc1109-lab3:latest }
 docker compose up -d
 ```
 
-## Connecting to the Hive ##
+## Anatomy of a Hive cluster ##
+
+If you examine the stack we just deployed, you will see the familiar structure of our
+HDFS/MapReduce cluster from lab 1. However, you will also see 3 new nodes that comprise the Hive
+query engine:
+
+- lab-hiveserver-1
+- lab-metastore-1
+- lab-postgres-1
+
+### Hiveserver ###
+
+The `hiveserver` node houses the query engine and interpreter for the hive. It also is responsible
+for other elements of client interaction such as authentication. When we query our HDFS cluster,
+the `hiveserver` will take care of converting those queries to MapReduce code and executing it.
+
+### Metastore ###
+
+The `metastore` handles the state management for the hive. When the `hiveserver` creates tables,
+assigns variables, or otherwise changes state, the `metastore` stores them. This also means it is
+responsible for retrieving the state, acting as a single source of truth for the entire hive. Of
+course, for big data applications this state metadata can become quite large, so the `metastore`
+needs some way of storing the state it manages on the disk instead of in RAM.
+
+### MetastoreDB ###
+
+The `metastoredb` is simply a database that acts as the storage backend for the `metastore`. In
+development, this backend database will often be Apache derby, as a lightweight, transparent, debug
+database. However, in production (as in this lab), this will usually be a PostgreSQL database (hence
+the container name `postgres`.
+
+The metastore can also use most common databases as its backend including MySQL, MariaDB, Oracle
+SQL, and Microsoft SQL. For even more distributed setups, it also supports cloud SQL databases (e.g:
+Amazon RDS, Google Cloud SQL, or Azure SQL), in addition to distributed SQL databases like TiDB.
+
+## Connecting to the Hive 󱃎&nbsp; ##
 
 As with most operations on a HPC cluster, it is good practice to connect to a specific client node
 instead of directly to a server node. To connect to the client node run:
 
 ```sh
-docker compose exec -it client bash
+docker compose exec -it client default_shell
 ```
 
 Once inside the client container, we need to open the REPL for running Hive commands. This REPL is
@@ -65,123 +101,77 @@ command:
 This will prompt the user to enter a username and password to connect to the Hive. For the purposes
 of this demonstration, the username and password here have both been set to "hive".
 
----
+## Sending Out Worker Bees 󰾢&nbsp; - Querying the Hive ###
 
-- Bootstrap locations used to store files on HDFS (you need to make sure hadoop is running!)
+Once we are deployed and connected to our hive cluster, running distributed queries is as simple
+as running some basic SQL commands. The lab environment includes a test file we can use to quickly
+demonstrate this at `data/iris.csv`(1). First though, we must move the file to our HDFS cluster.
+{ .annotate }
 
-  - Create warehouse folder under hive and provide permission:
+1. The iris dataset is a commonly used csv table for demonstrating data analysis tools. In data
+science, it could be described as the "Hello World" of datasets.
 
-    `$ bin/hdfs dfs -mkdir -p /user/hive/warehouse`
+```sh { .test-block #ghcr.io/amileo/csc1109-lab3:latest }
+hdfs dfs -mkdir -p /user/hive/data/
+hdfs dfs -put ./data/iris.csv /user/hive/iris.csv
+```
 
-    `$ bin/hdfs dfs -chmod g+w /user/hive/warehouse`
+Then, we can simply create a table, and read in that file.
 
-  - Create tmp folder in root and provide permission
+```sql
+--8<-- "lab2/src/create_table.sql"
+```
 
-    `$ bin/hdfs dfs -mkdir -p /tmp` should already exist from hadoop installation
+This moves the csv file to the hive cluster's data warehouse and parses it as a table. Then, if we
+view the head of the table, we can see the data we expect.
 
-    `$ bin/hdfs dfs -chmod g+w /tmp` should already have the right access rights from hadoop
-    installation
+```sql
+--8<-- "lab2/src/create_table.sql"
+```
 
-    `$ bin/hdfs dfs -mkdir -p /tmp/hive`
+At this point we have created a SQL table containing our dataset, that is decentrally stored across
+a number of nodes and where queries on that table will run across the entire cluster. From here, we
+can treat it as any other common, familiar SQL table while reaping the benefits of running on a
+HDFS/MapReduce cluster.
 
-    `$ bin/hdfs dfs -chmod 777 /tmp/hive`
+## Hive Documentation, Examples, and Tutorials ##
 
-- Run the shell (of the three modes to run HIVE, we will use command line)
+At this point, we encourage further, independent exploration of hive. This platform provides most
+of the capabilities of a normal SQL engine backed by the big data processing capability of a
+HDFS/MapReduce cluster, so it should provide a familiar setting in which to experiment with cluster
+computations.
 
-  - `$ $HIVE_HOME/bin/hive`
+### Reference manuals ###
 
-- Execute Hive queries (see example file in this repository and links in Hive Examples and Tutorials below)
+The most important pages in the Apache Hive documentation an be found here:
 
-- Exit hive shell
+- [Getting Started with Running Hive](https://cwiki.apache.org/confluence/display/Hive/GettingStarted#GettingStarted-RunningHiveCLI)
+- [Hive Data Definition Language](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DDL)
+- [Hive Data Manipulation Language](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DML#LanguageManualDML-HiveDataManipulationLanguage)
+- [Hive Select queries](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+Select)
 
-  - `$ >exit;`
+### Examples ###
 
-- Where are tables stored? (you need to clean this up if you want to recreate the same table)
+Examples of how to create, load, and 1uery data with Hive:
 
-  - `$ hdfs dfs -ls /user/hive/warehouse/table-name`
+- [Simple example queries (from step 15.)](https://www.java-success.com/10-setting-getting-started-hive-mac/)
+- [More query examples](https://datapeaker.com/en/big--data/hive-queries-15-basic-hive-queries-for-data-engineers/)
+- [Hive Join examples](https://www.sparkcodehub.com/hive/mastering-hive-joins)
+- [Hive Sampling examples](https://dwgeek.com/hive-table-sampling-concept-and-example.html/)
+- [Hive Subqueries examples](https://dwgeek.com/apache-hive-correlated-subquery-and-its-restrictions.html/)
 
-### Hive in local mode ###
+Create your own tables and load data from a file you have created or downloaded, then
+practice some queries.
 
-You can run hive in local mode. First make sure you have the right permission and directories
-locally (create such directories if they do not exist yet):
+- [Example: load csv file in HIVE table](https://sparkbyexamples.com/apache-hive/hive-load-csv-file-into-table/)
+- [Example: load data into tables](https://www.geeksforgeeks.org/hive-load-data-into-table/)
 
-- `$ sudo chmod 777 /tmp/hive/*`
-- `$ mkdir /tmp/hive/warehouse`
-- `$ sudo chmod g+w /tmp/hive/warehouse`
+You can find more query examples and SQL cheat-sheet
+[here](https://hortonworks.com/blog/hive-cheat-sheet-for-sql-users/)
 
-Then you need to change some configuration variables. I suggest not to change hive-site.xml or
-core-site.xml properties, but instead modify the some of the necessary variables for hive local
-execution before launching the hive shell for a specific terminal session (with EXPORT) and to set
-other variables for a specific hive session (with SET command) as below:
+Check manual on Loop for HIVEQL basics with examples.
 
-- Use the EXPORT command to set HIVE_OPTS for a session (note that to unset this for a
-  pseudo-distributed execution of HIVE you need to run the command `$ unset HIVE_OPTS`):
+### Additional tutorials ###
 
-`$ EXPORT  HIVE_OPTS='-hiveconf mapreduce.framework.name=local -hiveconf fs.defaultFS=file:///tmp -hiveconf hive.metastore.warehouse.dir=file:///tmp/hive/warehouse -hiveconf hive.exec.mode.local.auto=true'`
-
-This will will set the default warehouse dir to be /tmp/warehouse and the default file system to be
-in the local folder /tmp. With the above you have also created a path on local machine for mapreduce
-to work locally (note this is created in user home not in hadoop home as you write “/tmp…” and not
-“tmp…”) and you override the core-site.xml setup to run on local FS as opposed to HDFS.
-
-- Use the SET command for other variables to be set for a specific hive session (this can be done
-  from within the hive shell and it is reset once you exit hive’s CLI):
-
-<!-- can also set this by commandline: `$ hive> SET hive.exec.mode.local.auto=true; ` %(default is false) -->
-
-- `$ hive> SET hive.exec.mode.local.auto.inputbytes.max=50000000;`
-
-- `$ hive> SET hive.exec.mode.local.auto.input.files.max=5;`
-
-Note that by default mapred.local.dir=/tmp/hadoop-username/mapred and this is ok. You need to make
-sure mapred.local.dir points to a valid local path so the default path should be there or else you
-can specify a different one
-
-Check more info on Hive configuration at
-[Getting Started with Running Hive](https://cwiki.apache.org/confluence/display/Hive/GettingStarted#GettingStarted-RunningHiveCLI)
-
-### Hive Reference manual and Examples/Tutorials ###
-
-- Reference manuals:
-
-  - [Hive Data Definition Language](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DDL)
-  - [Hive Data Manipulation Language](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DML#LanguageManualDML-HiveDataManipulationLanguage)
-  - [Hive Select queries](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+Select)
-
-- Check examples to Create, Load, Query data with Hive:
-
-  - [Simple example queries (from step 15.)](https://www.java-success.com/10-setting-getting-started-hive-mac/)
-  - [More query examples](https://datapeaker.com/en/big--data/hive-queries-15-basic-hive-queries-for-data-engineers/)
-  - [Hive Join examples](https://www.sparkcodehub.com/hive/mastering-hive-joins)
-  - [Hive Sampling examples] ()
-  - [Hive Subqueries examples] ()
-
-- Create your own tables and load data from a .txt file you have created or downloaded, then
-  practice some queries.
-
-  - [Example: load csv file in HIVE table](https://sparkbyexamples.com/apache-hive/hive-load-csv-file-into-table/)
-  - [Example: load data into tables](https://www.geeksforgeeks.org/hive-load-data-into-table/)
-
-- You can find more query examples and SQL cheat-sheet
-  [here](https://hortonworks.com/blog/hive-cheat-sheet-for-sql-users/)
-
-- Check manual on Loop for HIVEQL basics with examples
-
-- Additional tutorials:
-
-  - [Hive tutorial for beginners](https://www.guru99.com/hive-tutorials.html)
-  - [Hive tutorial and refresher](https://www.analyticsvidhya.com/blog/2020/12/15-basic-and-highly-used-hive-queries-that-all-data-engineers-must-know/)
-
-### Hive errors and fixes ###
-
-Below is a list of possible errors you might encounter when installing and running Hive, and how to
-fix them.
-
-- [Guava incompatibility error](https://phoenixnap.com/kb/install-hive-on-ubuntu)
-- "Name node is in safe mode" error:
-  - Check if namenode safemode is ON: `$ $HADOOP_HOME/bin/hadoop dfsadmin –safemode get`
-  - If this is the case, disable it: `$ $HADOOP_HOME/bin/hadoop dfsadmin –safemode leave`
-- URISyntaxException: Check the problematic string into hive-site.xml file and replace it with
-  correct path
-- Other troubleshooting tips
-  [here](https://kb.databricks.com/metastore/hive-metastore-troubleshooting.html)
+- [Hive tutorial for beginners](https://www.guru99.com/hive-tutorials.html)
+- [Hive tutorial and refresher](https://www.analyticsvidhya.com/blog/2020/12/15-basic-and-highly-used-hive-queries-that-all-data-engineers-must-know/)

@@ -1,4 +1,5 @@
 api
+backend
 bottlenecked
 bytecode
 cheatsheet
@@ -12,6 +13,7 @@ dataproc
 dataset
 datasets
 db
+decentrally
 declarative
 declaratively
 env
@@ -21,6 +23,7 @@ fs
 gilectomy
 hadoop
 hdfs
+hiveserver
 homebrew
 http
 javac
@@ -43,6 +46,7 @@ noll
 nushell
 ok
 performant
+postgres
 plaintext
 pre
 py
