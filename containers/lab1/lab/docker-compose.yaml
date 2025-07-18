@@ -6,7 +6,7 @@ x-hadoop-common-config:
   volumes:
     - .:/lab/
     - /opt/hadoop/:${HADOOP_HOME}
-    - ./config/hadoop:${HADOOP_HOME}/etc/hadoop
+    - ./config/:${HADOOP_HOME}/etc/hadoop
 
 services:
   namenode:
@@ -48,7 +48,7 @@ services:
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
 
   client:
-    image: ghcr.io/amileo/csc1109-base
+    image: ghcr.io/amileo/csc1109-lab1-client
     hostname: client
     depends_on:
       - namenode
@@ -58,7 +58,7 @@ services:
     volumes:
       - .:/lab/
       - /opt/hadoop/:${HADOOP_HOME}
-      - ./config/hadoop:${HADOOP_HOME}/etc/hadoop
+      - ./config/:${HADOOP_HOME}/etc/hadoop
     environment:
       - SHELL=${SHELL}
       - HADOOP_HOME=${HADOOP_HOME}
