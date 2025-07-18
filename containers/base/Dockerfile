@@ -9,6 +9,7 @@ ARG BASE_COMPOSE_VERSION
 RUN zypper --non-interactive install \
         docker-${BASE_DOCKER_VERSION} \
         docker-compose-${BASE_COMPOSE_VERSION} \
+        fuse-overlayfs \
         python312 \
         wget \
         maven \
