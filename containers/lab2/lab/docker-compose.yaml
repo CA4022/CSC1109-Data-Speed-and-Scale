@@ -18,7 +18,7 @@ x-hive-common-config:
     - .:/lab/
     - ./config:${HIVE_HOME}/conf
     - ./hive_init.sh:/hive_init.sh
-    - /opt/hive/lib/postgresql-42.5.1.jar:/opt/hive/lib/postgresql.jar
+    - /opt/hive/lib/postgresql.jar:/opt/hive/lib/postgresql.jar
 
 services:
   namenode:
@@ -137,7 +137,8 @@ services:
     environment:
       - SHELL=${SHELL}
       - HADOOP_HOME=${HADOOP_HOME}
-      - HADOOP_USER_NAME=${HIVE_USER_NAME}
+      - HADOOP_USER_NAME=${HADOOP_USER_NAME}
       - HIVE_HOME=${HIVE_HOME}
+      - HIVE_USER_NAME=${HIVE_USER_NAME}
     stdin_open: true
     tty: true
