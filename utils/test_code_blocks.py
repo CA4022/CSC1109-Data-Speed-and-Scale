@@ -27,7 +27,6 @@ if not MKDOCS_DEV_MODE:
         client = docker.from_env()
     except Exception as e:
         logger.error(f"Could not connect to Docker daemon. Is Docker running? {e}")
-        breakpoint()
 
 
 def run_docker_test(
