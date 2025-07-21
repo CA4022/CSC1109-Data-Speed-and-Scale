@@ -30,9 +30,11 @@ in {
     pkgs.actionlint
     pkgs.dive
     pkgs.git
+    pkgs.jdt-language-server
     pkgs.just
     pkgs.maven
     pkgs.python313
+    pkgs.python313Packages.pip
     pkgs.stdenv.cc.cc.lib
     pkgs.zizmor
   ];

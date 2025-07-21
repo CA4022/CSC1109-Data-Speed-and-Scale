@@ -359,3 +359,37 @@ jobs:
     with:
       path: containers/lab3/
     secrets: inherit
+
+  build-lab4-client:
+    needs:
+      - determine-changes
+      - build-base
+    if: >-
+      always() &&
+      needs.determine-changes.outputs.lab4-client-changed == 'true' &&
+      needs.build-base.result != 'failure'
+    name: 'Build lab4 client container'
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/build.yml
+    with:
+      path: containers/lab4/client
+    secrets: inherit
+
+  build-lab4:
+    needs:
+      - determine-changes
+      - build-base
+    if: >-
+      always() &&
+      needs.determine-changes.outputs.lab4-changed == 'true' &&
+      needs.build-base.result != 'failure'
+    name: 'Build lab4 container'
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/build.yml
+    with:
+      path: containers/lab4/
+    secrets: inherit

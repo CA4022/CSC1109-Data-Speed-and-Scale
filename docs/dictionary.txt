@@ -1,6 +1,8 @@
+acking
 api
 backend
 bottlenecked
+bottlenecking
 bytecode
 cheatsheet
 config
@@ -8,6 +10,8 @@ coreutils
 csv
 ctrl
 customisable
+dataflow
+dataflows
 datanode
 dataproc
 dataset
@@ -16,6 +20,7 @@ db
 decentrally
 declarative
 declaratively
+dfs
 env
 filesystem
 filetree
@@ -37,6 +42,7 @@ md
 metastore
 ml
 mllib
+movielens
 mrcount
 mvn
 namenode
@@ -49,15 +55,23 @@ performant
 postgres
 plaintext
 pre
+preconfigured
 py
 pyproject
 pyspark
+pystorm
 qwik
+realtime
 recommender
 resourcemanager
+runtime
 safemode
+shellbolt
 shingling
+splitline
+splitlines
 src
+statefulness
 stopwordsremover
 subcommand
 subcommands
@@ -71,6 +85,8 @@ tokenize
 tokenizer
 toml
 txt
+unbuffered
+undebuggable
 userspace
 usr
 uv

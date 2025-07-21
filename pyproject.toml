@@ -1,6 +1,6 @@
 [project]
 name = "csc1109-data-speed-and-scale"
-version = "2025.07.21"
+version = "2025.07.22"
 description = "Course materials for DCU's CSC1109 computer science labs."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -22,6 +22,7 @@ dependencies = [
     "mkdocs-spellcheck[all]>=1.1.1",
     "pymarkdownlnt>=0.9.30",
     "pymdown-extensions>=10.16",
+    "pystorm>=3.1.4",
     "tomlkit>=0.13.3",
     "zizmor>=1.11.0",
 ]

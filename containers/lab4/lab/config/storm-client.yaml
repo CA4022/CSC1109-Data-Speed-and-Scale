@@ -1,0 +1,5 @@
+storm.zookeeper.servers:
+  - "zookeeper"
+
+nimbus.seeds: ["nimbus"]
+topology.builtin.metrics.bucket.size.secs: 2

@@ -25,7 +25,7 @@ for further processing, you would need to clean and organize the data, including
     - decide which files to merge or not into single tables
     - etc... based on what queries/exploration/analysis you need to run
 
-3. With Pig, do some simple analyis on the data you have loaded and cleaned, specifically:
+3. With Pig, do some simple analysis on the data you have loaded and cleaned, specifically:
     - What is the title of the movie with the highest number of ratings (top-rated movie)?
     - What is the title of the most liked movie (e.g. only 5 stars ratings OR only 4 and 5 star
     ratings OR majority of 5 star ratings)
@@ -52,9 +52,9 @@ difficulty):
 details of how the files are organised.
 - Note that when you execute Pig and Hive onto your Hadoop cluster, you need to:
   - run dfs and yarn
-  - check your JAVA_HOME, HADOOP_HOME, HIVE_HOME and PIG_HOME are set corectly, if not use `export`
+  - check your JAVA_HOME, HADOOP_HOME, HIVE_HOME and PIG_HOME are set correctly, if not use `export`
   to set them.
-  - make sure the MovieLens dataset you downleaded is present onto the hadoop HDFS (if not, use
+  - make sure the MovieLens dataset you downloaded is present onto the hadoop HDFS (if not, use
   `-put` or `-copyFromLocal` to move it)
 
 ## Useful Links ##
