@@ -12,6 +12,7 @@ RUN zypper --non-interactive install \
         fuse-overlayfs \
         python312 \
         wget \
+        man \
         maven \
         java-17-openjdk-devel \
         scala && \
