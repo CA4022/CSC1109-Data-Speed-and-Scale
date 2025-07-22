@@ -268,3 +268,6 @@ for the storm cluster by running:
 ```sh { .test-block #ghcr.io/amileo/csc1109-lab4:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
 storm list
 ```
+
+You can also see the topology in action by opening your browser and navigating to [http://127.0.0.1:8080/](http://127.0.0.1:8080/)
+to open the apache storm monitoring WebUI.
