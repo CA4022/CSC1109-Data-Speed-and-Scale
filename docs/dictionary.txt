@@ -92,6 +92,7 @@ usr
 uv
 vs
 walkthrough
+wentz
 wordcount
 xml
 yaml

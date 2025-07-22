@@ -228,6 +228,11 @@ start this computation, you can run the following command:
 hadoop jar wordcount.jar WordCount hdfs://namenode/lab/data/Word_count.txt hdfs://namenode/lab/data/output
 ```
 
+TIP: If you want to test this on even bigger text files you can find many, many plaintext public
+domain books to download at [Project Gutenberg](https://gutenberg.org). For example, you could
+download "The Fairy-Faith in Celtic Countries by W. Y. Evans-Wentz" by running:
+`wget https://gutenberg.org/ebooks/34853.txt.utf-8`
+
 Once the Hadoop cluster has finished running the `wordcount.jar` object on the cluster it will
 have placed an output folder at the `./output/` directory on the HDFS cluster. To retrieve
 this folder from `hdfs://namenode/lab/data/output` run the following command.
