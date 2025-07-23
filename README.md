@@ -12,13 +12,13 @@ creating images derived from this base for each lesson plan.
 
 - [ ] Implement labs
     - [X] Use hadoop filesystem + run compiled mapreduce jar
-    - [ ] Hadoop + hive for structured data
+    - [X] Hadoop + hive for structured data
     - [X] Hadoop + pig for structured/semistructured data
-    - [ ] Hive and Pig on Movielens (guided example)
+    - [X] Hive and Pig on Movielens (guided example)
     - [ ] Spark dataframes + run spark wordcount + a bit of spark-shell (scala examples) + a bit on pyspark
     - [ ] Spark ml (run examples from distribution) + ML pipelines (example email spam classification)
     - [ ] Recommender systems example (collaborative filtering from Spark ML)
-    - [ ] STORM (just to run a simple topology)
+    - [X] STORM (just to run a simple topology)
 - [X] Image building workflows
 - [ ] Testing workflows
     - [ ] Every OS
