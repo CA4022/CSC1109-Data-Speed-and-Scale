@@ -73,6 +73,23 @@ distributed structures (e.g: MapReduce), allowing for easier optimisation and ma
 makes apache storm a powerful tool for creating very large, highly concurrent data processing
 topologies.
 
+# What is a Topology? #
+
+`Bolts` and `Spouts` in Storm are organised into a composite class called a `Topology`.
+A `Topology` is a "Distributed Acyclic Graph" (DAG) that defines the complete logic of a real-time
+application. In this graph:
+
+- The nodes are the `Spouts` and `Bolts`.
+- The edges are the data streams of `Tuples` that flow between them.
+
+The term "Directed" here means that data flows in a specific, predefined direction — being pushed
+from `Spouts` to `Bolts`, and then from bolt to bolt. The term "Acyclic" is crucial; it means the
+graph has no cycles or loops. This is a fundamental constraint that guarantees a tuple will not be
+passed around in an infinite loop and that processing for any given piece of data will eventually
+end. This well-defined, loop-free structure allows the Storm scheduler to effectively partition the
+graph and distribute its components across a cluster of machines, enabling massive parallelism and
+fault-tolerance.
+
 # Your first Storm Topology - Wordcount #
 
 As we did with the other HPC technologies we've learned so far, lets start by creating a storm
