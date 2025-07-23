@@ -6,7 +6,9 @@ ARG BASE_GIT_VERSION
 ARG BASE_DOCKER_VERSION
 ARG BASE_COMPOSE_VERSION
 
-RUN zypper --non-interactive install \
+RUN zypper addrepo https://download.opensuse.org/repositories/home:yeey:OpenWebUI/15.6/home:yeey:OpenWebUI.repo && \
+    zypper --non-interactive --gpg-auto-import-keys refresh && \
+    zypper --non-interactive install \
         docker-${BASE_DOCKER_VERSION} \
         docker-compose-${BASE_COMPOSE_VERSION} \
         fuse-overlayfs \
