@@ -273,7 +273,7 @@ docker compose exec -it client default_shell
 ```
 
 And once inside the client, we tell the storm cluster to run our topology on the
-`data/word_count.txt` file.
+`data/Word_count.txt` file.
 
 ```sh { .test-block #ghcr.io/amileo/csc1109-lab4:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
 storm jar target/lab-1.0.0-jar-with-dependencies.jar com.csc1104.lab.WordCountTopology /lab/data/Word_count.txt /lab/out.txt
@@ -286,5 +286,13 @@ for the storm cluster by running:
 storm list
 ```
 
-You can also see the topology in action by opening your browser and navigating to [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
-to open the apache storm monitoring WebUI.
+You can also see the topology in action by opening your browser and navigating to
+[http://127.0.0.1:8000/](http://127.0.0.1:8000/) to open the apache storm monitoring WebUI.
+
+At this point, you should be able to see the current word count for the file you provided by
+viewing the file `/lab/out.txt` (by running `cat /lab/out.txt`).
+
+QUESTION: You may notice in your results that this program does not filter out punctuation marks.
+As hinted at [previously](#splitlinebolt) this is exactly the kind of string handling operation
+that can be cumbersome in Java but easier in Python. Can you improve the word count topology to
+have it remove punctuation marks without significantly impacting performance?
