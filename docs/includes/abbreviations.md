@@ -10,10 +10,12 @@
 *[GNU]: GNU is Not Unix
 *[HDFS]: Hadoop Distributed File System
 *[HPC]: High Performance Computing
+*[JVM]: Java Virtual Machine
 *[ML]: Machine Learning
 *[MR]: MapReduce
 *[RAM]: Random Access Memory
-*[RDD]: Replaceable Database Driver
+*[RDD]: Resilient Distributed Dataset
+*[RDS]: Relational Database Server
 *[REPL]: Read-Eval-Print Loop
 *[SLES]: SUSE Linux Enterprise Server
 *[SQL]: Structured Query Language

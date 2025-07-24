@@ -36,7 +36,7 @@ COPY ./test/ /test/
 RUN mv /test-base/ /test/base/ && chmod -R +x /test/
 
 # Set env variables
-ENV PATH="/opt/hdfs/bin:/opt/hadoop/bin:/opt/hive/bin:/opt/pig/bin:/apache-storm/bin:/apache-zookeeper-3.9.3-bin/bin:${PATH}"
+ENV PATH="/opt/hdfs/bin:/opt/hadoop/bin:/opt/hive/bin:/opt/pig/bin:/apache-storm/bin:/apache-zookeeper-3.9.3-bin/bin:/opt/spark:${PATH}"
 ENV JAVA_HOME=/usr/lib64/jvm/java-17-openjdk-17
 
 # Copy lab specific files and set entrypoint running
