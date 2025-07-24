@@ -17,7 +17,7 @@ This lab asks you to try and set up a simple Apache Storm topology.
 To download the container for this lab, run the following command:
 
 ```sh
-docker run --privileged --hostname lab4 -p 8080:8080 -it {{ page.meta.docker_test_image }}
+docker run --privileged --hostname lab4 -p 8000:8080 -it {{ page.meta.docker_test_image }}
 ```
 
 Once the container has downloaded and initialised, deploy your docker compose stack. You can
@@ -286,5 +286,5 @@ for the storm cluster by running:
 storm list
 ```
 
-You can also see the topology in action by opening your browser and navigating to [http://127.0.0.1:8080/](http://127.0.0.1:8080/)
+You can also see the topology in action by opening your browser and navigating to [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
 to open the apache storm monitoring WebUI.
