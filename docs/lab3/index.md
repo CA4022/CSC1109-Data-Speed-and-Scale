@@ -68,7 +68,7 @@ you notice about this output?
 --8<-- "lab3/src/merge_csv.pig"
 ```
 
-### Further Reading and Examples ###
+### Further Reading and Examples &nbsp; ###
 
 - [PigLatin basics](http://pig.apache.org/docs/r0.17.0/basic.html#load)
 - [Git script examples](https://gist.github.com/brikis98/1332818)
