@@ -1,5 +1,4 @@
 set -x LANG en_US.UTF-8
-set -x USER root
 set -x COLORTERM "truecolor"
 set -x MANPAGER "bat -l man -p"
 set -x STARSHIP_CONFIG "$HOME/.config/starship/fish.toml"
