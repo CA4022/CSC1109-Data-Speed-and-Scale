@@ -2,6 +2,7 @@
 
 import asyncio
 import os
+from pathlib import Path
 import subprocess
 
 
@@ -17,8 +18,8 @@ SPLASH = """\033[35m
 def display_markdown(files: list[str]):
     with subprocess.Popen(["glow"], stdin=subprocess.PIPE) as glow_proc:
         assert glow_proc.stdin is not None
-        for fname in files:
-            with open(fname, "rb") as f:
+        for fpath in (Path(f).expanduser() for f in files):
+            with fpath.open("rb") as f:
                 glow_proc.stdin.write(f.read())
         glow_proc.stdin.close()
         glow_proc.wait()
@@ -192,7 +193,7 @@ async def main():
     try:
         await selector.select()
         print(SPLASH)
-        display_markdown(["/root/CSC1109.md", "/lab/lab.md"])
+        display_markdown(["~/CSC1109.md", "/lab/lab.md"])
         await daemon_startup
         selector.start()
 
