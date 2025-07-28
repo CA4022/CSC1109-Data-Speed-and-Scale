@@ -1,6 +1,6 @@
 # Add env variables that blesh expects
 export LANG=en_US.UTF-8
-export STARSHIP_CONFIG="~/.config/starship/bash.toml"
+export STARSHIP_CONFIG="$HOME/.config/starship/bash.toml"
 
 case $- in
   *i*) source ~/.local/share/blesh/ble.sh --noattach;;
