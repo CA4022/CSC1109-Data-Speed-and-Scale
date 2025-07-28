@@ -1,4 +1,4 @@
-FROM ghcr.io/amileo/csc1109-base:latest AS lab1-environment
+FROM ghcr.io/amileo/csc1109-dind:latest AS lab1-environment
 
 COPY --from=docker.io/apache/hadoop:3.4.1 /opt/hadoop/ /opt/hadoop/
 COPY --from=docker.io/apache/hive:4.0.1 /opt/hive/ /opt/hive/

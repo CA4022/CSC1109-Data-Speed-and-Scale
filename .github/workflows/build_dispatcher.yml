@@ -19,6 +19,7 @@ jobs:
       base-root-config-nvim: ${{ steps.filter.outputs.base-root-config-nvim }}
       base-root-changed: ${{ steps.consolidate.outputs.base-root-changed }}
       base-changed: ${{ steps.consolidate.outputs.base-changed }}
+      dind-changed: ${{ steps.consolidate.outputs.dind-changed }}
       lab1-client-changed: ${{ steps.consolidate.outputs.lab1-client-changed }}
       lab1-changed: ${{ steps.consolidate.outputs.lab1-changed }}
       lab2-client-changed: ${{ steps.consolidate.outputs.lab2-client-changed }}
@@ -55,6 +56,8 @@ jobs:
               - 'containers/base/root/**'
             base:
               - 'containers/base/**'
+            base:
+              - 'containers/dind/**'
             lab1-client:
               - 'containers/lab1/client/**'
             lab1:
@@ -99,29 +102,31 @@ jobs:
             "${{ steps.filter.outputs.base-root-config-nvim }}",
           )))
           base_root_output = str_to_bool("${{ steps.filter.outputs.base-root }}")
-          base_changed = str_to_bool("${{ steps.filter.outputs.base }}")
-
           base_root_changed = any([*base_config_outputs, base_root_output])
-
           github_output["base-root-changed"] = base_root_changed
-          github_output["base-changed"] = base_root_changed or base_changed
+
+          base_changed = str_to_bool("${{ steps.filter.outputs.base }}") or base_root_changed
+          github_output["base-changed"] = base_changed
+
+          dind_changed = str_to_bool("${{ steps.filter.outputs.dind }}") or base_changed
+          github_output["dind-changed"] = dind_changed
 
           # Consolidate lab change logic
           lab_changes = {
             k: v or base_changed for k, v in
             {
-              "lab1-client-changed": str_to_bool("${{ steps.filter.outputs.lab1-client }}"),
-              "lab1-changed": str_to_bool("${{ steps.filter.outputs.lab1 }}"),
-              "lab2-client-changed": str_to_bool("${{ steps.filter.outputs.lab2-client }}"),
-              "lab2-changed": str_to_bool("${{ steps.filter.outputs.lab2 }}"),
-              "lab3-client-changed": str_to_bool("${{ steps.filter.outputs.lab3-client }}"),
-              "lab3-changed": str_to_bool("${{ steps.filter.outputs.lab3 }}"),
-              "lab4-client-changed": str_to_bool("${{ steps.filter.outputs.lab4-client }}"),
-              "lab4-changed": str_to_bool("${{ steps.filter.outputs.lab4 }}"),
-              "lab5-client-changed": str_to_bool("${{ steps.filter.outputs.lab5-client }}"),
-              "lab5-changed": str_to_bool("${{ steps.filter.outputs.lab5 }}"),
-              "lab6-client-changed": str_to_bool("${{ steps.filter.outputs.lab6-client }}"),
-              "lab6-changed": str_to_bool("${{ steps.filter.outputs.lab6 }}"),
+              "lab1-client-changed": str_to_bool("${{ steps.filter.outputs.lab1-client }}") or base_changed,
+              "lab1-changed": str_to_bool("${{ steps.filter.outputs.lab1 }}") or dind_changed,
+              "lab2-client-changed": str_to_bool("${{ steps.filter.outputs.lab2-client }}") or base_changed,
+              "lab2-changed": str_to_bool("${{ steps.filter.outputs.lab2 }}") or dind_changed,
+              "lab3-client-changed": str_to_bool("${{ steps.filter.outputs.lab3-client }}") or base_changed,
+              "lab3-changed": str_to_bool("${{ steps.filter.outputs.lab3 }}") or dind_changed,
+              "lab4-client-changed": str_to_bool("${{ steps.filter.outputs.lab4-client }}") or base_changed,
+              "lab4-changed": str_to_bool("${{ steps.filter.outputs.lab4 }}") or dind_changed,
+              "lab5-client-changed": str_to_bool("${{ steps.filter.outputs.lab5-client }}") or base_changed,
+              "lab5-changed": str_to_bool("${{ steps.filter.outputs.lab5 }}") or dind_changed,
+              "lab6-client-changed": str_to_bool("${{ steps.filter.outputs.lab6-client }}") or base_changed,
+              "lab6-changed": str_to_bool("${{ steps.filter.outputs.lab6 }}") or dind_changed,
             }.items()
           }
           github_output.update(lab_changes)
@@ -258,6 +263,23 @@ jobs:
       path: containers/base/
     secrets: inherit
 
+  build-dind:
+    needs:
+      - determine-changes
+      - build-base
+    if: >-
+      always() &&
+      needs.determine-changes.outputs.dind-changed == 'true' &&
+      needs.build-base.result != 'failure'
+    name: 'Build dind container'
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/build.yml
+    with:
+      path: containers/dind/
+    secrets: inherit
+
   build-lab1-client:
     needs:
       - determine-changes
@@ -278,11 +300,11 @@ jobs:
   build-lab1:
     needs:
       - determine-changes
-      - build-base
+      - build-dind
     if: >-
       always() &&
       needs.determine-changes.outputs.lab1-changed == 'true' &&
-      needs.build-base.result != 'failure'
+      needs.build-dind.result != 'failure'
     name: 'Build lab1 container'
     permissions:
       contents: read
@@ -312,11 +334,11 @@ jobs:
   build-lab2:
     needs:
       - determine-changes
-      - build-base
+      - build-dind
     if: >-
       always() &&
       needs.determine-changes.outputs.lab2-changed == 'true' &&
-      needs.build-base.result != 'failure'
+      needs.build-dind.result != 'failure'
     name: 'Build lab2 container'
     permissions:
       contents: read
@@ -346,11 +368,11 @@ jobs:
   build-lab3:
     needs:
       - determine-changes
-      - build-base
+      - build-dind
     if: >-
       always() &&
       needs.determine-changes.outputs.lab3-changed == 'true' &&
-      needs.build-base.result != 'failure'
+      needs.build-dind.result != 'failure'
     name: 'Build lab3 container'
     permissions:
       contents: read
@@ -380,11 +402,11 @@ jobs:
   build-lab4:
     needs:
       - determine-changes
-      - build-base
+      - build-dind
     if: >-
       always() &&
       needs.determine-changes.outputs.lab4-changed == 'true' &&
-      needs.build-base.result != 'failure'
+      needs.build-dind.result != 'failure'
     name: 'Build lab4 container'
     permissions:
       contents: read
@@ -414,11 +436,11 @@ jobs:
   build-lab5:
     needs:
       - determine-changes
-      - build-base
+      - build-dind
     if: >-
       always() &&
       needs.determine-changes.outputs.lab5-changed == 'true' &&
-      needs.build-base.result != 'failure'
+      needs.build-dind.result != 'failure'
     name: 'Build lab5 container'
     permissions:
       contents: read
