@@ -54,7 +54,6 @@ FROM core-dependencies AS student-environment
 RUN zypper --non-interactive install zsh fish hashdeep starship make wget gawk glow lsd fd \
         fd-bash-completion ripgrep ripgrep-bash-completion tealdeer tealdeer-bash-completion \
         symbols-only-nerd-fonts vim docker-bash-completion && \
-    zypper --non-interactive remove glibc-locale && \
     zypper clean --all && \
     find /usr/share/locale -maxdepth 1 -mindepth 1 ! -name 'en_US' -exec rm -rf {} +
 
