@@ -1,4 +1,4 @@
-style: "/root/.config/glamour/catppuccin-mocha.json"
+style: "~/.config/glamour/catppuccin-mocha.json"
 local: false
 mouse: false
 pager: false

@@ -74,4 +74,4 @@ if not ("EDITOR" in $env) {
     $env.EDITOR = "vim"
 }
 $env.config.buffer_editor = $env.EDITOR
-$env.STARSHIP_CONFIG = "/root/.config/starship/nu.toml"
+$env.STARSHIP_CONFIG = "~/.config/starship/nu.toml"

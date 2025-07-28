@@ -1,15 +1,14 @@
 # Add env variables that blesh expects
 export LANG=en_US.UTF-8
-export USER=root
-export STARSHIP_CONFIG="/root/.config/starship/bash.toml"
+export STARSHIP_CONFIG="~/.config/starship/bash.toml"
 
 case $- in
-  *i*) source /root/.local/share/blesh/ble.sh --noattach;;
+  *i*) source ~/.local/share/blesh/ble.sh --noattach;;
     *) return;;
 esac
 
 eval "$(fzf --bash)"
-export OSH="/root/.oh-my-bash"
+export OSH="~/.oh-my-bash"
 
 completions=(git docker docker-compose maven ssh)
 aliases=(general docker ls)

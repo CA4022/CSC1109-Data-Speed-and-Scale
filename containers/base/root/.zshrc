@@ -1,8 +1,7 @@
 export LANG=en_US.UTF-8
-export USER=root
 export COLORTERM="truecolor"
 export MANPAGER="bat -l man -p"
-export STARSHIP_CONFIG="/root/.config/starship/zsh.toml"
+export STARSHIP_CONFIG="$HOME/.config/starship/zsh.toml"
 
 trap 'echo "\e[32mGoodbye! 👋\e[m"' EXIT
 
