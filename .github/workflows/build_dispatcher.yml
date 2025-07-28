@@ -56,7 +56,7 @@ jobs:
               - 'containers/base/root/**'
             base:
               - 'containers/base/**'
-            base:
+            dind:
               - 'containers/dind/**'
             lab1-client:
               - 'containers/lab1/client/**'
