@@ -65,6 +65,7 @@ $env.config.color_config = {
     }
 }
 
+$env.USER = (whoami | str trim)
 $env.LANG = "en_US.UTF-8"
 $env.COLORTERM = "truecolor"
 $env.MANPAGER = "bat -l man -p"
