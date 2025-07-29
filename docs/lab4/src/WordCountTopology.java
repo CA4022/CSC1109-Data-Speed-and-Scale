@@ -14,8 +14,7 @@ public class WordCountTopology {
         builder.setBolt("split", new SplitLineBolt(), 4).shuffleGrouping("spout");
         builder.setBolt("count", new WordCountBolt(), 4)
                 .fieldsGrouping("split", new Fields("word"));
-        builder.setBolt("report", new ReportBolt())
-                .globalGrouping("count");
+        builder.setBolt("report", new ReportBolt()).globalGrouping("count");
 
         if (args.length < 2) {
             System.err.println("Usage: WordCountTopology <input-file> <output-file>");

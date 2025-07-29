@@ -4,16 +4,16 @@ from pyspark.sql.functions import col, lower, split, explode
 
 
 def word_count(spark: SparkSession, in_file: str, out_path: str):
-    spark.read.text(in_file) \
-        .select(
-            explode(
-                split(lower(col("value")), r"[^a-zA-Z']+")
-            ).alias("word")
-        ) \
-        .where(col("word") != "") \
-        .groupBy("word") \
-        .count() \
-        .write.mode("overwrite").option("delimiter", ": ").csv(out_path)
+    (
+        spark.read.text(in_file)
+        .select(explode(split(lower(col("value")), r"[^a-zA-Z']+")).alias("word"))
+        .where(col("word") != "")
+        .groupBy("word")
+        .count()
+        .write.mode("overwrite")
+        .option("delimiter", ": ")
+        .csv(out_path)
+    )
 
 
 def main():

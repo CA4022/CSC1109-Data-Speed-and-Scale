@@ -22,7 +22,8 @@ public class WordCountBolt extends BaseRichBolt {
     private List<Tuple> batch;
 
     @Override
-    public void prepare(Map<String, Object> topoConf, TopologyContext context, OutputCollector collector) {
+    public void prepare(
+            Map<String, Object> topoConf, TopologyContext context, OutputCollector collector) {
         this.counts = new HashMap<>();
         this.collector = collector;
         this.batch = new ArrayList<>(BATCH_SIZE);

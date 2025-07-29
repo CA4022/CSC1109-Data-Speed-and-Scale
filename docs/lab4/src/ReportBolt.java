@@ -33,7 +33,8 @@ public class ReportBolt extends BaseRichBolt {
     }
 
     @Override
-    public void prepare(Map<String, Object> topoConf, TopologyContext context, OutputCollector collector) {
+    public void prepare(
+            Map<String, Object> topoConf, TopologyContext context, OutputCollector collector) {
         this.finalCounts = new HashMap<>();
         this.outputFile = (String) topoConf.get("outputFile");
         try {

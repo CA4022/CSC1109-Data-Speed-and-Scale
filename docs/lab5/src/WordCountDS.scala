@@ -14,11 +14,14 @@ object WordCountDS {
     import spark.implicits._
 
     try {
-      spark.read.textFile("data/Word_count.txt")
+      spark.read
+        .textFile("data/Word_count.txt")
         .flatMap(_.toLowerCase.split("[^a-zA-Z']+"))
         .filter(_.nonEmpty)
-        .groupBy("value").count()
-        .write.csv(outputPath)
+        .groupBy("value")
+        .count()
+        .write
+        .csv(outputPath)
     } catch {
       case e: Exception =>
         println(s"An error occurred: ${e.getMessage}")

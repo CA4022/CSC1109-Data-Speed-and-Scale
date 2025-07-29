@@ -10,12 +10,14 @@ def handle_line(line: str) -> list[str]:
 
 
 def word_count(spark: SparkSession, in_file: str, out_path: str):
-    spark.sparkContext.textFile(in_file) \
-        .flatMap(handle_line) \
-        .filter(bool) \
-        .map(lambda word: (word, 1)) \
-        .reduceByKey(int.__add__) \
+    (
+        spark.sparkContext.textFile(in_file)
+        .flatMap(handle_line)
+        .filter(bool)
+        .map(lambda word: (word, 1))
+        .reduceByKey(int.__add__)
         .saveAsTextFile(out_path)
+    )
 
 
 def main():

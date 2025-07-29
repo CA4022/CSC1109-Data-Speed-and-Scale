@@ -21,7 +21,8 @@ public class FileSpout extends BaseRichSpout {
     private HashMap<String, String> pendingTuples;
 
     @Override
-    public void open(Map<String, Object> conf, TopologyContext context, SpoutOutputCollector collector) {
+    public void open(
+            Map<String, Object> conf, TopologyContext context, SpoutOutputCollector collector) {
         this.collector = collector;
         this.pendingTuples = new HashMap<>();
         try {
