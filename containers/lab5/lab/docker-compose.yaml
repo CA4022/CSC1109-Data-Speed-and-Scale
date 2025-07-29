@@ -13,6 +13,7 @@ x-spark-common-config:
   image: ${SPARK_IMAGE}:${SPARK_VERSION}
   volumes:
     - /lab/:/opt/spark/work-dir/
+    - ./config/:${HADOOP_HOME}/etc/hadoop
 
 services:
   namenode:
@@ -39,6 +40,9 @@ services:
   spark-master:
     <<: *spark-common-config
     command: /opt/spark/bin/spark-class org.apache.spark.deploy.master.Master
+    environment:
+      - HADOOP_HOME=${HADOOP_HOME}
+      - HADOOP_USER_NAME=${HADOOP_USER_NAME}
     ports:
       - "7077:7077"
       - "8080:8080"
@@ -46,6 +50,9 @@ services:
   spark-worker:
     <<: *spark-common-config
     command: /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
+    environment:
+      - HADOOP_HOME=${HADOOP_HOME}
+      - HADOOP_USER_NAME=${HADOOP_USER_NAME}
     depends_on:
       - spark-master
     links:
@@ -56,6 +63,10 @@ services:
 
   client:
     image: ghcr.io/amileo/csc1109-lab5-client
+    environment:
+      - SHELL=${SHELL}
+      - HADOOP_HOME=${HADOOP_HOME}
+      - HADOOP_USER_NAME=${HADOOP_USER_NAME}
     depends_on:
       - spark-master
     links:
@@ -64,7 +75,5 @@ services:
     working_dir: /lab/
     volumes:
       - .:/lab/
-    environment:
-      - SHELL=${SHELL}
     stdin_open: true
     tty: true

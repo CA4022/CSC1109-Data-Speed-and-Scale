@@ -217,11 +217,19 @@ mvn package
 The package can then be submitted to the Spark cluster to run using the following command.
 
 ```sh { .test-block #ghcr.io/amileo/csc1109-lab5:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
-spark-submit --class WordCountJava --master spark://spark-master:7070 target/lab-1.0.0.jar data/Word_count.txt output/java/
+spark-submit --class WordCountJava --master spark://spark-master:7077 target/lab-1.0.0.jar hdfs://namenode/data/Word_count.txt hdfs://namonode/output/java/
 ```
 
 WARNING: Remember to connect to the client node in the cluster before running this command! If you
 don't connect to a gateway node you won't be able to find "spark-master" on your local network.
+
+INFO: Remember to move your files to the hadoop cluster before running this on the spark cluster!
+If you need a refresher on how to do this, refer back to
+[Lab1](../lab1/index.md#adding-a-file-to-the-hdfs-cluster).
+
+NOTE: You can also run this locally by running without the `--master` flag. If you do this, you
+will only be using the local node to compute. This is useful for debugging because you can run the
+program locally without the need for a spark cluster or a centralised hadoop cluster
 
 You should now see `WordCountJava` running in the Spark master WebUI, and when it is finished
 running you should see the result outputs in the `output/java` directory. You can check the
@@ -323,7 +331,7 @@ Our jar file has now been recompiled to include our new Scala `WordCountRDD` cla
 this class as before.
 
 ```sh { .test-block #ghcr.io/amileo/csc1109-lab5:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
-spark-submit --class WordCountRDD --master spark://spark-master:7070 target/lab-1.0.0.jar data/Word_count.txt output/scala-rdd/
+spark-submit --class WordCountRDD --master spark://spark-master:7077 target/lab-1.0.0.jar hdfs://namenode/data/Word_count.txt hdfs://namonode/output/scala-rdd/
 ```
 
 #### Using Datasets ####
@@ -347,7 +355,7 @@ mvn package
 And we can resubmit the same job using this `WordCountDS` class.
 
 ```sh { .test-block #ghcr.io/amileo/csc1109-lab5:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
-spark-submit --class WordCountDS --master spark://spark-master:7070 target/lab-1.0.0.jar data/Word_count.txt output/scala-ds/
+spark-submit --class WordCountDS --master spark://spark-master:7077 target/lab-1.0.0.jar hdfs://namenode/data/Word_count.txt hdfs://namonode/output/scala-ds/
 ```
 
 This approach is considered best practice where possible in modern Spark programming, as it allows
@@ -386,13 +394,13 @@ our distributed word count task. The following lines will perform a word count v
 in python.
 
 ```python
- >>> lines = sc.textFile("data/Word_count.txt")
+ >>> lines = sc.textFile("hdfs://namenode/data/Word_count.txt")
  >>> lower = lines.map(lambda line: line.lower())
  >>> words = lower.flatMap(lambda line: re.split(r"[^a-zA-Z']+", line))
  >>> non_empty = words.filter(bool)
  >>> ones = non_empty.map(lambda word: (word, 1))
  >>> counts = ones.reduceByKey(int.__add__)
- >>> counts.saveAsTextFile("output/python-repl")
+ >>> counts.saveAsTextFile("hdfs://namenode/output/python-repl")
 ```
 
 NOTE: You may notice if you try to examine one of your variables here that they do not appear to
@@ -430,8 +438,14 @@ We can use `spark-submit` to submit this `pyspark` script similarly to how we us
 JVM objects interacting with Spark.
 
 ```sh { .test-block #ghcr.io/amileo/csc1109-lab5:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
-spark-submit --master spark://spark-master:7070 WordCountPythonRDD.py data/Word_count.txt output/python/
+uv run spark-submit --master spark://spark-master:7077 WordCountPythonRDD.py hdfs://namenode/data/Word_count.txt hdfs://namonode/output/python-rdd/
 ```
+
+WARNING: Here, we **need** to use `uv` to run the command, as this runs `spark-submit` in an
+environment that is pinned to `python3.10`. Running without `uv run` will cause `spark-submit` to
+run using the container's system python interpreter, which is `python3.6`, raising a
+`ModuleNotFound` error as `python3.6` lacks the `importlib.resources` package which `pyspark`
+needs.
 
 #### Using DataFrames ####
 
@@ -450,8 +464,14 @@ more optimized execution DAG for common operations.
 Similar to in our previous example, we can simply submit this via the `spark-submit` program.
 
 ```sh { .test-block #ghcr.io/amileo/csc1109-lab5:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
-spark-submit --master spark://spark-master:7070 WordCountPythonRDD.py data/Word_count.txt output/python/
+uv run spark-submit --master spark://spark-master:7077 WordCountPythonRDD.py hdfs://namenode/data/Word_count.txt hdfs://namonode/output/python-df/
 ```
+
+QUESTION: So far, when running distributed code we have been accessing files on our Hadoop cluster.
+However, often, we want the cluster to run computations on files that are on the client's local
+drive without needing to deploy a whole hadoop cluster. Can you figure out how to do this by
+modifying the code provided? (HINT: you can easily broadcast data across a Spark cluster in python
+using the `sc.broadcast` method)
 
 ## Further Reading and Examples &nbsp; ##
 
