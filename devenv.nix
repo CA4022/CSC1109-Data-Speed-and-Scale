@@ -33,8 +33,10 @@ in {
     pkgs.jdt-language-server
     pkgs.just
     pkgs.maven
+    pkgs.metals
     pkgs.python313
     pkgs.python313Packages.pip
+    pkgs.scalafmt
     pkgs.stdenv.cc.cc.lib
     pkgs.zizmor
   ];

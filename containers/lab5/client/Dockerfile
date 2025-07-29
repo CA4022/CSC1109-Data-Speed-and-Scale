@@ -1,9 +1,14 @@
 FROM ghcr.io/amileo/csc1109-base
 
-COPY --from=docker.io/library/spark:4.0.0-scala2.13-java17-python3-ubuntu /opt/spark/ /opt/spark/
+COPY --from=docker.io/library/spark:4.0.0-scala2.13-java17-python3-ubuntu /opt/ /opt/
+COPY --from=docker.io/apache/hadoop:3.4.1 /opt/hadoop/ /opt/hadoop/
 
-RUN useradd -m spark && \
-    mkdir /home/spark/ && \
-    chown -R spark /home/spark/
+RUN groupadd spark && \
+    groupadd hadoop && \
+    useradd -g spark -g hadoop -k /root/ -m spark
 
+ENV SPARK_HOME=/opt/spark/
+ENV SPARK_LOCAL_IP="127.0.0.1"
+
+ENTRYPOINT default_shell
 USER spark
