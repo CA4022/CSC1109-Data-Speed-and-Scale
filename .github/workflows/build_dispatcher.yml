@@ -449,3 +449,22 @@ jobs:
     with:
       path: containers/lab5/
     secrets: inherit
+
+  build-lab6-client:
+    needs:
+      - determine-changes
+      - build-base
+    if: >-
+      always() &&
+      needs.determine-changes.outputs.lab6-client-changed == 'true' &&
+      needs.build-base.result != 'failure'
+    name: 'Build lab6 client container'
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/build.yml
+    with:
+      path: containers/lab6/client
+    secrets: inherit
+
+
