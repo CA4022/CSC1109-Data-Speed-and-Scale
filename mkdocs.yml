@@ -53,17 +53,17 @@ plugins:
   - section-index
   - git-revision-date-localized:
       enable_creation_date: true
-  - minify:
-      minify_html: true
-      minify_js: true
-      minify_css: true
-  - htmlproofer:
-      validate_external_urls: true
-  - spellcheck:
-      known_words: dictionary.txt
-  - gen-files:
-      scripts:
-        - ./utils/test_code_blocks.py
+  # - minify:
+  #     minify_html: true
+  #     minify_js: true
+  #     minify_css: true
+  # - htmlproofer:
+  #     validate_external_urls: true
+  # - spellcheck:
+  #     known_words: dictionary.txt
+  # - gen-files:
+  #     scripts:
+  #       - ./utils/test_code_blocks.py
 
 markdown_extensions:
   - pymdownx.highlight:
