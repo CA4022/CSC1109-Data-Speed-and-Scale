@@ -1,0 +1,29 @@
+The word count is the number of words in a document or passage of text. Word counting may be needed when a text is required to stay within certain numbers of words. This may particularly be the case in academia, legal proceedings, journalism and advertising. Word count is commonly used by translators to determine the price of a translation job. Word counts may also be used to calculate measures of readability and to measure typing and reading speeds (usually in words per minute). When converting character counts to words, a measure of 5 or 6 characters to a word is generally used for English.
+
+
+== Software ==
+Modern web browsers support word counting via extensions, via a JavaScript bookmarklet, or a script that is hosted in a website. Most word processors can also count words. Unix-like systems include a  program, wc, specifically for word counting. There are a wide variety of word counting tools available online.
+Different word counting programs may give varying results, depending on the text segmentation rule details. The exact number of words often is not a strict requirement, thus the variation is acceptable.
+
+
+== In fiction ==
+Novelist Jane Smiley suggests that length is an important quality of the novel. However, novels can vary tremendously in length; Smiley lists novels as typically being between 100,000 and 175,000 words, while National Novel Writing Month requires its novels to be at least 50,000 words. There are no firm rules: for example, the boundary between a novella and a novel is arbitrary and a literary work may be difficult to categorise. But while the length of a novel is mainly dependent on its writer, lengths may also vary by subgenre; many chapter books for children start at a length of about 16,000 words, and a typical mystery novel might be in the 60,000 to 80,000 word range while a thriller could be well over 100,000 words.
+The Science Fiction and Fantasy Writers of America specifies word lengths for each category of its Nebula Award categories:
+
+
+== In non-fiction ==
+The acceptable length of an academic dissertation varies greatly, dependent predominantly on the subject. Numerous American universities limit Ph.D. dissertations to 100,000 words, barring special permission for exceeding this limit.
+
+
+== See also ==
+Flash fiction
+Twitterature
+Word lists by frequency
+
+
+== References ==
+
+
+== Sources ==
+DeRocher, James E.; Miron, Murray S.; Patten, Sam M.; Pratt, Charles C. (1973), The Counting of Words: A Review of the History, Techniques and Theory of Word Counts with Annotated Bibliography (PDF), Syracuse University Research Corporation, p. 302, ED098814.
+Michaels, Melisa (2005), Focusing on the Wrong Things, Science Fiction Writers of America, archived from the original on April 17, 2009 An article on the relative importance of various word count methods in fiction publishing.

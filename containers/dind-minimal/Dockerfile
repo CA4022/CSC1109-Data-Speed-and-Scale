@@ -23,7 +23,7 @@ RUN zypper --non-interactive addrepo "https://download.opensuse.org/repositories
         docker-${BASE_DOCKER_VERSION} \
         docker-compose-${BASE_COMPOSE_VERSION} \
         fuse-overlayfs && \
-    zypper clean --all && \
-    mkdir -p /test/ && \
-    echo "echo 'No tests implemented!'" >> /test/test.sh && \
-    chmod +x /test/test.sh
+    zypper clean --all
+
+COPY test.sh /test/test.sh
+RUN chmod +x /test/test.sh

@@ -1,0 +1,79 @@
+version: "3.8"
+
+x-hadoop-common-config:
+  &hadoop-common-config
+  image: ${HADOOP_RUNNER_IMAGE}:${HADOOP_RUNNER_VERSION}
+  volumes:
+    - .:/lab/
+    - /opt/hadoop/:${HADOOP_HOME}
+    - ./config/:${HADOOP_HOME}/etc/hadoop
+
+x-spark-common-config:
+  &spark-common-config
+  image: ${SPARK_IMAGE}:${SPARK_VERSION}
+  volumes:
+    - /lab/:/opt/spark/work-dir/
+    - ./config/:${HADOOP_HOME}/etc/hadoop
+
+services:
+  namenode:
+    <<: *hadoop-common-config
+    hostname: namenode
+    command: ["hdfs", "namenode"]
+    ports:
+      - 9870:9870
+    environment:
+      - HADOOP_HOME=${HADOOP_HOME}
+      - HADOOP_USER_NAME=${HADOOP_USER_NAME}
+      - ENSURE_NAMENODE_DIR=/tmp/hadoop-root/dfs/name
+
+  datanode:
+    <<: *hadoop-common-config
+    command: ["hdfs", "datanode"]
+    environment:
+      - HADOOP_HOME=${HADOOP_HOME}
+      - HADOOP_USER_NAME=${HADOOP_USER_NAME}
+    deploy:
+      mode: replicated
+      replicas: 4
+
+  spark-master:
+    <<: *spark-common-config
+    command: /opt/spark/bin/spark-class org.apache.spark.deploy.master.Master
+    environment:
+      - HADOOP_HOME=${HADOOP_HOME}
+      - HADOOP_USER_NAME=${HADOOP_USER_NAME}
+    ports:
+      - "7077:7077"
+      - "8080:8080"
+
+  spark-worker:
+    <<: *spark-common-config
+    command: /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
+    environment:
+      - HADOOP_HOME=${HADOOP_HOME}
+      - HADOOP_USER_NAME=${HADOOP_USER_NAME}
+    depends_on:
+      - spark-master
+    links:
+      - spark-master
+    deploy:
+      mode: replicated
+      replicas: 4
+
+  client:
+    image: ghcr.io/amileo/csc1109-lab6-client
+    environment:
+      - SHELL=${SHELL}
+      - HADOOP_HOME=${HADOOP_HOME}
+      - HADOOP_USER_NAME=${HADOOP_USER_NAME}
+    depends_on:
+      - spark-master
+    links:
+      - spark-master
+    command: sleep infinity
+    working_dir: /lab/
+    volumes:
+      - .:/lab/
+    stdin_open: true
+    tty: true
