@@ -289,7 +289,6 @@ jobs:
   build-dind-minimal:
     needs:
       - determine-changes
-      - build-base
     if: >-
       always() &&
       needs.determine-changes.outputs.dind-minimal-changed == 'true'
@@ -476,7 +475,6 @@ jobs:
   build-lab6-client:
     needs:
       - determine-changes
-      - build-base
     if: >-
       always() &&
       needs.determine-changes.outputs.lab6-client-changed == 'true'
