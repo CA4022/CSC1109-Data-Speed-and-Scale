@@ -4,9 +4,7 @@ ARG BASE_GCC_VERSION
 ARG BASE_BASH_VERSION
 ARG BASE_GIT_VERSION
 
-RUN zypper addrepo https://download.opensuse.org/repositories/home:yeey:OpenWebUI/15.6/home:yeey:OpenWebUI.repo && \
-    zypper --non-interactive --gpg-auto-import-keys refresh && \
-    zypper --non-interactive install \
+RUN zypper --non-interactive install \
         python312 \
         wget \
         man \
