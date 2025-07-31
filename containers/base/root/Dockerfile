@@ -1,4 +1,4 @@
-ARG BASE_OPENSUSE_VERSION=15.5
+ARG BASE_OPENSUSE_VERSION=15.6
 
 FROM docker.io/opensuse/leap:${BASE_OPENSUSE_VERSION} AS fzf-builder
 
@@ -39,11 +39,10 @@ RUN zypper --non-interactive addrepo "https://download.opensuse.org/repositories
         gcc-${BASE_GCC_VERSION} \
         bash-${BASE_BASH_VERSION} \
         gzip emacs libgpm2 tar wget && \
-    zypper clean --all && \
-    echo "LANG=en_US.UTF-8"
+    zypper clean --all
 
-ENV LANG en_US.UTF-8
-ENV LC_ALL en_US.UTF-8
+ENV LANG="en_US.UTF-8"
+ENV LC_ALL="en_US.UTF-8"
 ENV PATH="/usr/local/bin:$PATH"
 
 # Add the non-essential user-friendly tools and configurations for students.
