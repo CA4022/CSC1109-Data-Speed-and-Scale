@@ -20,6 +20,7 @@ jobs:
       base-root-changed: ${{ steps.consolidate.outputs.base-root-changed }}
       base-changed: ${{ steps.consolidate.outputs.base-changed }}
       dind-changed: ${{ steps.consolidate.outputs.dind-changed }}
+      dind-minimal-changed: ${{ steps.consolidate.outputs.dind-minimal-changed }}
       lab1-client-changed: ${{ steps.consolidate.outputs.lab1-client-changed }}
       lab1-changed: ${{ steps.consolidate.outputs.lab1-changed }}
       lab2-client-changed: ${{ steps.consolidate.outputs.lab2-client-changed }}
@@ -58,6 +59,8 @@ jobs:
               - 'containers/base/**'
             dind:
               - 'containers/dind/**'
+            dind-minimal:
+              - 'containers/dind-minimal/**'
             lab1-client:
               - 'containers/lab1/client/**'
             lab1:
@@ -110,6 +113,9 @@ jobs:
 
           dind_changed = str_to_bool("${{ steps.filter.outputs.dind }}") or base_changed
           github_output["dind-changed"] = dind_changed
+
+          dind_changed = str_to_bool("${{ steps.filter.outputs.dind-minimal }}")
+          github_output["dind-minimal-changed"] = dind_changed
 
           # Consolidate lab change logic
           lab_changes = {
@@ -279,6 +285,23 @@ jobs:
     with:
       path: containers/dind/
     secrets: inherit
+
+  build-dind-minimal:
+    needs:
+      - determine-changes
+      - build-base
+    if: >-
+      always() &&
+      needs.determine-changes.outputs.dind-minimal-changed == 'true'
+    name: 'Build dind-minimal container'
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/build.yml
+    with:
+      path: containers/dind-minimal/
+    secrets: inherit
+
 
   build-lab1-client:
     needs:
@@ -456,8 +479,7 @@ jobs:
       - build-base
     if: >-
       always() &&
-      needs.determine-changes.outputs.lab6-client-changed == 'true' &&
-      needs.build-base.result != 'failure'
+      needs.determine-changes.outputs.lab6-client-changed == 'true'
     name: 'Build lab6 client container'
     permissions:
       contents: read
@@ -466,5 +488,4 @@ jobs:
     with:
       path: containers/lab6/client
     secrets: inherit
-
 
