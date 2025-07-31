@@ -31,5 +31,8 @@ COPY ./spark-defaults.conf ${SPARK_CONF_DIR}/spark-defaults.conf
 COPY jupyter_server_config.py /home/jovyan/.jupyter/jupyter_server_config.py
 COPY user-settings /home/jovyan/.jupyter/lab/user-settings
 USER root
-RUN chown -R jovyan /home/jovyan/.jupyter/
+RUN chown -R jovyan /home/jovyan/.jupyter/ && \
+    mkdir -p /test/ && \
+    echo "echo 'No tests implemented!'" >> /test/test.sh && \
+    chmod +x /test/test.sh
 USER jovyan
