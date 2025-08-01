@@ -2,7 +2,9 @@ FROM quay.io/jupyter/all-spark-notebook:2025-07-28
 
 ENV PATH=/home/jovyan/.local/bin/:${PATH}
 
-RUN conda install -n base -y \
+RUN echo "3.10.*" > /opt/conda/conda-meta/pinned && \
+    conda install -n base -y \
+        python=3.10 \
         ipywidgets \
         jupyter-lsp \
         jupyterlab-day \
