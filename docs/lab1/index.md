@@ -74,6 +74,31 @@ Once your docker compose stack finishes deploying, you can view the deployed con
 - lab-nodemanager-1
 - lab-client-1
 
+??? EXAMPLE
+
+    While running a calculation across 8 computers is impressive, it barely scratches the surface
+    of Hadoop's power. For a true sense of scale, let's look at what a massive user like
+    **LinkedIn** does with it.
+
+    Back in 2021, their
+    [largest single Hadoop cluster]((https://www.linkedin.com/blog/engineering/open-source/scaling-linkedin-s-hadoop-yarn-cluster-beyond-10-000-nodes))
+    was already a behemoth with:
+
+    - Over 10,000 nodes
+    - More than 1 billion objects
+    - Over 500 PB of storage
+    - An average access latency of <10 ms
+
+    The computational power of this single cluster rivals a world-class supercomputer. And that was
+    years ago — they've since been working to scale it even further.
+
+    What's truly mind-boggling is that this is just one of **dozens** of federated clusters LinkedIn
+    operates! They've effectively used Hadoop to transform their entire data infrastructure into one
+    of the largest, globally-distributed supercomputers in existence.
+
+    You can read the 2021 report from LinkedIn's engineering team
+    [here](https://www.linkedin.com/blog/engineering/open-source/scaling-linkedin-s-hadoop-yarn-cluster-beyond-10-000-nodes).
+
 ### NameNode ###
 
 The NameNode serves as the master server for the HDFS cluster. Think of it as the "table of
