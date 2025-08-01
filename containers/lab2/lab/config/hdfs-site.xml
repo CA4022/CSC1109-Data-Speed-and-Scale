@@ -5,6 +5,10 @@
     </property>
     <property>
         <name>dfs.replication</name>
-        <value>1</value>
+        <value>4</value>
+    </property>
+    <property>
+      <name>dfs.webhdfs.enabled</name>
+      <value>true</value>
     </property>
 </configuration>
