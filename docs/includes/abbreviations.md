@@ -1,3 +1,4 @@
+*[ALS]: Alternating Least Squares
 *[API]: Application Programming Interface
 *[AWS]: Amazon Web Services
 *[CLI]: Command Line Interface
@@ -11,8 +12,10 @@
 *[HDFS]: Hadoop Distributed File System
 *[HPC]: High Performance Computing
 *[JVM]: Java Virtual Machine
+*[LSH]: Locality Sensitive Hashing
 *[ML]: Machine Learning
 *[MR]: MapReduce
+*[NLP]: Natural Language Processing
 *[RAM]: Random Access Memory
 *[RDD]: Resilient Distributed Dataset
 *[RDS]: Relational Database Server

@@ -37,6 +37,7 @@ hiveserver
 homebrew
 http
 javac
+jupyter
 labsheet
 localhost
 lockfile
