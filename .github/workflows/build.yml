@@ -30,6 +30,9 @@ jobs:
       - name: Set container environment
         run: echo "CONTAINER_ENV=docker" >> $GITHUB_ENV
 
+      - name: Enable Docker buildkit
+        run: echo "DOCKER_BUILDKIT=1" >> $GITHUB_ENV
+
       - name: Define image name and tag
         id: meta
         run: |
