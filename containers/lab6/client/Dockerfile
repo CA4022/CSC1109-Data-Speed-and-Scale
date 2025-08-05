@@ -23,7 +23,6 @@ RUN echo "3.10.*" > /opt/conda/conda-meta/pinned && \
 USER jovyan
 
 RUN mamba update -n base --all --yes && \
-    mamba remove -n base -y python && \
     mamba install -n base -y \
         python=3.10 \
         ipywidgets \
