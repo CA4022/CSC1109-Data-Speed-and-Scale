@@ -1,4 +1,4 @@
-FROM docker.io/jupyter/all-spark-notebook:python-3.10
+FROM quay.io/jupyter/all-spark-notebook:2025-07-28
 
 ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 ENV LD_LIBRARY_PATH=$JAVA_HOME/lib/server:$LD_LIBRARY_PATH
@@ -13,7 +13,8 @@ COPY user-settings /home/jovyan/.jupyter/lab/user-settings
 USER root
 
 COPY ./spark-defaults.conf ${SPARK_CONF_DIR}/spark-defaults.conf
-RUN chown -R jovyan /home/jovyan/.jupyter/ && \
+RUN echo "3.10.*" > /opt/conda/conda-meta/pinned && \
+    chown -R jovyan /home/jovyan/.jupyter/ && \
     chown -R jovyan /home/jovyan/.local/ && \
     mkdir -p /test/ && \
     echo "echo 'No tests implemented!'" >> /test/test.sh && \
@@ -22,7 +23,9 @@ RUN chown -R jovyan /home/jovyan/.jupyter/ && \
 USER jovyan
 
 RUN mamba update -n base --all --yes && \
+    mamba remove -n base -y python && \
     mamba install -n base -y \
+        python=3.10 \
         ipywidgets \
         jupyter-lsp \
         jupyterlab-day \
@@ -47,3 +50,4 @@ RUN mamba update -n base --all --yes && \
     rm rapaio-jupyter-kernel-2.2.0.jar
 
 COPY --from=docker.io/apache/hadoop:3.4.1 /opt/hadoop/ /opt/hadoop/
+ENTRYPOINT bash
