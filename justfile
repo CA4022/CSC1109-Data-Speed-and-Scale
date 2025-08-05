@@ -121,7 +121,7 @@ test target_dir='.' log_file='/tmp/build_test_log.txt':
 # Build and then run the container
 build_and_run target_dir +run_args:
     @just --justfile {{justfile()}} build '{{target_dir}}'
-    @just --justfile {{justfile()}} run '{{target_dir}}' -- {{run_args}}
+    @just --justfile {{justfile()}} run '{{target_dir}}' {{run_args}}
 
 # Build and then test the container
 build_and_test target_dir='.' log_file='/tmp/build_test_log.txt':
