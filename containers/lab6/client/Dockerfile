@@ -49,4 +49,3 @@ RUN mamba update -n base --all --yes && \
     rm rapaio-jupyter-kernel-2.2.0.jar
 
 COPY --from=docker.io/apache/hadoop:3.4.1 /opt/hadoop/ /opt/hadoop/
-ENTRYPOINT bash
