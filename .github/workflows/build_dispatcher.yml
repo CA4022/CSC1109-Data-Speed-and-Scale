@@ -33,6 +33,7 @@ jobs:
       lab5-changed: ${{ steps.consolidate.outputs.lab5-changed }}
       lab6-client-changed: ${{ steps.consolidate.outputs.lab6-client-changed }}
       lab6-changed: ${{ steps.consolidate.outputs.lab6-changed }}
+      bonus3-changed: ${{ steps.consolidate.outputs.bonus3-changed }}
 
     steps:
       - name: Checkout repository
@@ -85,6 +86,8 @@ jobs:
               - 'containers/lab6/client/**'
             lab6:
               - 'containers/lab6/**'
+            bonus3:
+              - 'containers/bonus3/**'
 
       - name: Consolidate change logic
         id: consolidate
@@ -133,6 +136,7 @@ jobs:
               "lab5-changed": str_to_bool("${{ steps.filter.outputs.lab5 }}") or dind_changed,
               "lab6-client-changed": str_to_bool("${{ steps.filter.outputs.lab6-client }}") or base_changed,
               "lab6-changed": str_to_bool("${{ steps.filter.outputs.lab6 }}") or dind_changed,
+              "bonus3-changed": str_to_bool("${{ steps.filter.outputs.bonus3 }}") or base_changed,
             }.items()
           }
           github_output.update(lab_changes)
@@ -485,5 +489,20 @@ jobs:
     uses: ./.github/workflows/build.yml
     with:
       path: containers/lab6/client
+    secrets: inherit
+
+  build-bonus3:
+    needs:
+      - determine-changes
+    if: >-
+      always() &&
+      needs.determine-changes.outputs.bonus3-changed == 'true'
+    name: 'Build bonus lab 3 container'
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/build.yml
+    with:
+      path: containers/bonus3
     secrets: inherit
 

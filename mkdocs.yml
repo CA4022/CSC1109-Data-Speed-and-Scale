@@ -15,6 +15,7 @@ nav:
   - Lab 6: lab6/index.md
   - Bonus Lab 1: bonus1.md
   - Bonus Lab 2: bonus2.md
+  - Bonus Lab 3: bonus3/index.md
 
 theme:
   name: material
