@@ -16,12 +16,11 @@ c.LanguageServerManager.language_servers = {
         "mime_types": ["text/x-python"],
         "display_name": "Python Language Server (Pyright)",
     },
-    "metals": {
-        "argv": [shutil.which("metals")],
-        "languages": ["scala", "java", "java-source"],
-        "version": 2,
-        "mime_types": ["text/x-scala", "text/x-java", "text/x-java-source"],
-        "display_name": "Scala/Java Language Server (Metals)",
-    },
+    # "metals": {
+    #     "argv": [shutil.which("metals")],
+    #     "languages": ["scala", "java", "java-source"],
+    #     "version": 2,
+    #     "mime_types": ["text/x-scala", "text/x-java", "text/x-java-source"],
+    #     "display_name": "Scala/Java Language Server (Metals)",
+    # },
 }
-
