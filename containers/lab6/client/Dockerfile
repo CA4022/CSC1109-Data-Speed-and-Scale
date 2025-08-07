@@ -1,4 +1,4 @@
-FROM quay.io/jupyter/all-spark-notebook:2025-07-28
+FROM quay.io/jupyter/all-spark-notebook:java-17.0.15
 
 ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 ENV LD_LIBRARY_PATH=$JAVA_HOME/lib/server:$LD_LIBRARY_PATH
