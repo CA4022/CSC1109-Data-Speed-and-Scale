@@ -54,4 +54,5 @@ RUN mamba update -n base --all --yes && \
 
 COPY java_logo.png /home/jovyan/.local/share/jupyter/kernels/rapaio-jupyter-kernel/logo-64x64.png
 COPY --from=docker.io/apache/hadoop:3.4.1 /opt/hadoop/ /opt/hadoop/
-ENV CLASSPATH=$(hadoop classpath --glob)
+COPY 10set-classpath.sh /usr/local/bin/before-notebook.d/
+RUN chmod +x /usr/local/bin/before-notebook.d/10set-classpath.sh
