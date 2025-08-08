@@ -14,6 +14,7 @@ USER root
 COPY ./spark-defaults.conf ${SPARK_CONF_DIR}/spark-defaults.conf
 RUN echo "3.10.*" > /opt/conda/conda-meta/pinned && \
     chown -R jovyan /home/jovyan/.jupyter/ && \
+    mkdir -p /home/jovyan/.local/ && \
     chown -R jovyan /home/jovyan/.local/ && \
     mkdir -p /test/ && \
     echo "echo 'No tests implemented!'" >> /test/test.sh && \
@@ -54,5 +55,6 @@ RUN mamba update -n base --all --yes && \
 
 COPY java_logo.png /home/jovyan/.local/share/jupyter/kernels/rapaio-jupyter-kernel/logo-64x64.png
 COPY --from=docker.io/apache/hadoop:3.4.1 /opt/hadoop/ /opt/hadoop/
-COPY 10set-classpath.sh /usr/local/bin/before-notebook.d/
-RUN chmod +x /usr/local/bin/before-notebook.d/10set-classpath.sh
+
+RUN conda env config vars set -n base CLASSPATH=$(hadoop classpath --glob)
+
