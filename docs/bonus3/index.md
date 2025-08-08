@@ -20,6 +20,12 @@ its prominence in HPC, this is not the only approach that exists to distributed 
 bonus lab, we invite you to take a brief foray into the other main branch of distributed computing:
 **"Process Parallelism"**.
 
+To download the container for this lab, run the following command:
+
+```sh
+docker run --hostname bonus3 --network host -it {{ page.meta.docker_test_image }}
+```
+
 ## Process Parallelism ##
 
 Process parallelism much more closely resembles the kind of parallelism you have likely already
@@ -140,10 +146,10 @@ resource availability and data locality(4).
 
 Originally developed by Ericsson to be the backbone of their massive, distributed, transcontinental
 telecoms network; the BEAM VM was open sourced in 1998 along with the "Erlang" language for
-programming it. This has led to the emergence of an entire ecosystem of languages that run on the
-BEAM VM, such as elixir, clojerl, and gleam. Of these, elixir is the most popular (eclipsing erlang
-itself). Here, we will demonstrate some distributed, process parallelised computations on the BEAM
-using elixir.
+programming it as part of the "Open Telecoms Platform". This has led to the emergence of an entire
+ecosystem of languages that run on the BEAM VM, such as elixir, clojerl, and gleam. Of these,
+elixir is the most popular (eclipsing erlang itself). Here, we will demonstrate some distributed,
+process parallelised computations on the BEAM using elixir.
 
 While the BEAM's roots are in telecommunications, its principles of fault tolerance and massive
 concurrency are finding new life in the world of AI and data engineering. The Elixir ecosystem has
