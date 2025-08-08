@@ -81,7 +81,7 @@ Once your docker compose stack finishes deploying, you can view the deployed con
     **LinkedIn** does with it.
 
     Back in 2021, their
-    [largest single Hadoop cluster]((https://www.linkedin.com/blog/engineering/open-source/scaling-linkedin-s-hadoop-yarn-cluster-beyond-10-000-nodes))
+    [largest single Hadoop cluster](https://www.linkedin.com/blog/engineering/open-source/scaling-linkedin-s-hadoop-yarn-cluster-beyond-10-000-nodes)
     was already a behemoth with:
 
     - Over 10,000 nodes
@@ -368,6 +368,10 @@ tutorial on the topic
 ## Bonus: run on a Cloud Platform (AWS EMR or Google DataProc) ##
 
 We will come back to this after the Lecture on Amazon EC2 and Elastic MapReduce (EMR).
-[Bonus Lab 1: Big Data Cloud &nbsp;&nbsp;](../bonus1.md)
+[Bonus Lab 1: Cloudy with a chance of YARN calls &nbsp;&nbsp;](../bonus1.md)
 
 WARNING: To run this on Elastic MapReduce you will need API keys from your AWS Console.
+
+NOTE: This lab includes several of these "Bonus Labs". They are not **mandatory**, but for those
+with a particular interest in this field in computing, we encourage you to take these on if you get
+the chance.

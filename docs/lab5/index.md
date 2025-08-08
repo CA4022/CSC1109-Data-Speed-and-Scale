@@ -473,7 +473,7 @@ drive without needing to deploy a whole hadoop cluster. Can you figure out how t
 modifying the code provided? (HINT: you can easily broadcast data across a Spark cluster in python
 using the `sc.broadcast` method)
 
-## Further Reading and Examples &nbsp; ##
+## Further Reading & Examples &nbsp; ##
 
 - [Running built-in Spark examples](http://spark.apache.org/docs/latest/)
 - [Spark quickstart page](https://spark.apache.org/docs/latest/quick-start.html#basics)

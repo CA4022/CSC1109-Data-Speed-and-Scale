@@ -57,7 +57,8 @@ details of how the files are organised.
   - make sure the MovieLens dataset you downloaded is present onto the hadoop HDFS (if not, use
   `-put` or `-copyFromLocal` to move it)
 
-## Useful Links ##
+## Further Reading & Examples &nbsp; ##
+
 Useful Links on Pig, Hive and MovieLens (note that not all the data necessary to run the queries
 below is contained in the small dataset):
 

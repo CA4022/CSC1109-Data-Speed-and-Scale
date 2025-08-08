@@ -128,7 +128,7 @@ a number of nodes and where queries on that table will run across the entire clu
 can treat it as any other common, familiar SQL table while reaping the benefits of running on a
 HDFS/MapReduce cluster.
 
-## Hive Documentation, Examples, and Tutorials ##
+## Further Reading & Examples &nbsp; ##
 
 At this point, we encourage further, independent exploration of hive. This platform provides most
 of the capabilities of a normal SQL engine backed by the big data processing capability of a

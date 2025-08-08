@@ -16,7 +16,7 @@ learning systems capable of processing vast amounts of data in a scalable, effic
 lab will place you in an interactive, jupyter environment with access to the full power and
 capabilities of a (locally simulated, of course) Spark cluster. The documentation here will provide
 some pointers and a wealth of resources for Machine Learning with Spark. Your goal for this lab
-will be to implement the program outlined [below](#the-challenges). By combining the pointers and
+will be to implement the systems outlined [below](#the-challenges). By combining the pointers and
 resources here with the expertise you have built so far you should have all the tools you need at
 this point to solve these big data ML problems yourself! 
 
@@ -373,7 +373,14 @@ Challenge 2 will be to create a distributed system capable of recommending movie
     - Version: 1
     - Notes: Derived from reviews on the film review aggregator website "imdb.com"
 
-## Further Reading and Examples &nbsp; ##
+>? TIP: When you get these systems working, you **could** try deploying them to the cloud similar to
+> the challenge posed all the way back in Lab 1 when we directed you to [Bonus Lab 1](../bonus1.md).
+> At this point, you will have (for all intents and purposes) deployed your own content
+> recommendation infrastructure from scratch, using the same tools and techniques you would in any
+> famous FAANG company! Just remember us when you've added a letter to that acronym with your new
+> billion dollar tech startup‽
+
+## Further Reading & Examples &nbsp; ##
 
 ### ML in Spark ###
 
@@ -383,10 +390,10 @@ You can read the main ML library documentation [here](https://spark.apache.org/d
 - spark.mllib package is now in maintenance mode (RDD-based API) available
 [here](https://spark.apache.org/docs/latest/mllib-guide.html)
 
-Note: SparkML (on DataFrames) supports ML pipelines and should therefore be your library of
+NOTE: SparkML (on DataFrames) supports ML pipelines and should therefore be your library of
 choice for ML on Spark (e.g. in your assignment).
 
-Warning: While you can do ML with Spark in any of the languages we have covered, we do think it is
+WARNING: While you can do ML with Spark in any of the languages we have covered, we do think it is
 important to stress: **we recommend using Python for this!** There is a reason that python has
 become the de-facto standard in ML and data science: it **excels** as a high-level glue language
 for wrapping highly optimised libraries in other languages, moving data between them, and
@@ -405,18 +412,26 @@ The corresponding code is also illustrated in the [MLlib manual](https://spark.a
 
 ### Statistical Correlation ###
 
-The example is illustrated [here](https://spark.apache.org/docs/latest/ml-statistics.html#correlation) and contained in `correlation_example.py`
+The example is illustrated
+[here](https://spark.apache.org/docs/latest/ml-statistics.html#correlation) and contained in
+`correlation_example.py`
+
 - start spark master and worker as seen in previous labs (if not running already)
 - submit the task to your spark server
-    - `$ spark-submit --master spark://spark-master:7077 examples/src/main/python/ml/correlation_example.py`
+    ```sh
+    spark-submit --master spark://spark-master:7077 examples/src/main/python/ml/correlation_example.py
+    ```
 - check in your output the spearman's and pearson's correlation matrix for the input vectors
 
 ### K-Means clustering ###
 
 The example is illustrated [here](https://spark.apache.org/docs/latest/ml-clustering.html#k-means) and contained in `kmeans_example.py`
+
 - start spark master and worker as seen in previous labs (if not running already)
 - submit the task to your spark server
-    - `$ spark-submit --master spark://spark-master:7077 examples/src/main/python/ml/kmeans_example.py`
+    ```sh
+    spark-submit --master spark://spark-master:7077 examples/src/main/python/ml/kmeans_example.py
+    ```
 - check output
 
 ### Feature Extraction, Transformation and Selection ###
@@ -433,11 +448,12 @@ text features), transform features (e.g. n-grams used for shingling, remove stop
 ...), select a subset of relevant features (e.g. from a vector column), and hashing (including LSH,
 min-hash seen in item similarity and used for clustering and recommendation).
 
-Note: You are likely to have a mix of data types (RDDs and DataFrames) in complex projects. When
+WARNING: You are likely to have a mix of data types (RDDs and DataFrames) in complex projects. When
 interacting with data remember to confirm what data structure is used to wrap it, as this will
 determine what functions you can use to interact with it.
 
 Try and run the following examples from the [spark documentation](https://spark.apache.org/docs/latest/ml-features.html):
+
 - Word2Vec or CountVectoriser
 - StopWordsRemover (try it with a different language)
 - n-grams
@@ -479,7 +495,7 @@ The Spark documentation recommendation is based on ALS matrix factorisation algo
 examples of how to build a RecSys based on Collaborative filtering with ALS in PySpark include:
 
 - [Movie recommender](https://spark.apache.org/docs/latest/ml-collaborative-filtering.html)
-- [Book recommender](https://towardsdatascience.com/building-a-recommendation-engine-to-recommend-books-in-spark-f09334d47d67)
+- [Book recommender](https://medium.com/data-science/building-a-recommendation-engine-to-recommend-books-in-spark-f09334d47d67)
 
 ### Other ML libraries with Spark integrations ###
 

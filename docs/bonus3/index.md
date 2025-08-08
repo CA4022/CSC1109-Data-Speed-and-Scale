@@ -31,7 +31,7 @@ docker run --hostname bonus3 --network host -it {{ page.meta.docker_test_image }
 Process parallelism much more closely resembles the kind of parallelism you have likely already
 encountered when programming in a purely local context (e.g: using threads or multiprocessing). In
 fact, it is the exact same paradigm of parallel computing we usually use in this context! However,
-stretching this familiar model that works locally across a network takes the famililar issues with
+stretching this familiar model that works locally across a network takes the familiar issues with
 this paradigm locally and cranks them up to 11. The familiar cracks like race conditions that exist
 in this model on a local scale become gaping chasms that are extraordinarily difficult to navigate.
 
@@ -87,7 +87,7 @@ above:
 
 The most prominent example of a system used for distributed, actor based process parallelism is the
 Erlang BEAM, which underpins many of the highest volume distributed systems you probably interact
-with regularly such as telecom switching systems (including much of the world's mobile and fixed
+with regularly such as telecoms switching systems (including much of the world's mobile and fixed
 telephony infrastructure), online gaming platforms, livestreaming platforms (e.g: Twitch), and
 messaging services like WhatsApp and Discord.
 { .annotate }
@@ -107,7 +107,7 @@ messaging services like WhatsApp and Discord.
     saying that
     { .annotate }
 
-    1. Despite the consisten claim of Smalltalk as the "first" OOP language, I would argue that
+    1. Despite the consistent claim of Smalltalk as the "first" OOP language, I would argue that
         "Simula" (which predates it by over a decade) has all the features of OOP and simply lacks
         the terminology invented by Smalltalk.
 
@@ -159,9 +159,11 @@ While the BEAM's roots are in telecommunications, its principles of fault tolera
 concurrency are finding new life in the world of AI and data engineering. The Elixir ecosystem has
 recently seen the development of powerful tools like:
 
-- Nx (Numerical Elixir): A library that brings TensorFlow/PyTorch-style tensor computations to the BEAM, complete with pluggable backends for compiling to CPUs and GPUs.
+- Nx (Numerical Elixir): A library that brings TensorFlow/PyTorch-style tensor computations to the
+    BEAM, complete with pluggable backends for compiling to CPUs and GPUs.
 - Axon: A deep learning library built on Nx for creating neural networks.
-- Livebook: An interactive and collaborative code notebook environment (akin to Jupyter) built in Elixir.
+- Livebook: An interactive and collaborative code notebook environment (akin to Jupyter) built in
+    Elixir.
 
 This combination allows developers to build robust, distributed data ingestion pipelines, serve
 machine learning models at massive scale, and perform interactive data analysis, all within the
@@ -181,14 +183,14 @@ ML model instances simultaneously(1).
 
     A primary reason that elixir has become the favoured BEAM programming language is
     because of its clever use of syntactic semantics and other abstractions for actor isolation.
-    Translated into plain English: the elixir language's syntax is carefully designed so that it makes
-    it easy to get the most out of the BEAM VM. The elixir compiler is very good at guiding the
-    programmer to patterns that produce better BEAM bytecode. It encourages better process isolation,
-    discourages side-effects between processes, and provides a standard library that localises
-    unreliable code (such as IO code) into as few minimal processes as possible. It also has a very
-    active and enthusiastic community that maintain a vibrant collaborative ecosystem. All of this
-    allows us to use elixir to efficiently leverage the BEAM VM without many of the headaches of doing
-    it manually in Erlang!
+    Translated into plain English: the elixir language's syntax is carefully designed so that it
+    makes it easy to get the most out of the BEAM VM. The elixir compiler is very good at guiding
+    the programmer to patterns that produce better BEAM bytecode. It encourages better process
+    isolation, discourages side-effects between processes, and provides a standard library that
+    localises unreliable code (such as IO code) into as few minimal processes as possible. It also
+    has a very active and enthusiastic community that maintain a vibrant collaborative ecosystem.
+    All of this allows us to use elixir to efficiently leverage the BEAM VM without many of the
+    headaches of doing it manually in Erlang!
 
     ??? FAILURE
         To keep with our tradition of naming bonus labs with bad puns that are relevant to that lab:
@@ -272,7 +274,7 @@ iex> :timer.tc(fn -> Task.async_stream(1..5, &Lab.Slow.run/1) |> Enum.to_list() 
 
 The only difference between the two is that one uses `Enum.map` to run the function calls
 sequentially in the current process, whereas the other uses `Task.async_stream` to lazily queue
-one distinct processfor each element, then pipes those processes to `Enum.to_list` which requests
+one distinct process for each element, then pipes those processes to `Enum.to_list` which requests
 and collects them. This perfectly demonstrates the power of the actor model and BEAM: there is no
 "function colouring" between sync and async, parsing off an asynchronous process is as simple as
 telling the BEAM to run your code in its own process instead of the current one.
@@ -309,7 +311,7 @@ want it to handle crashes.
 #### Supervising the Counter (The BEAM and Errors) ####
 
 So far we have been using the BEAM's default supervisors that are automatically assigned to spawned
-processes. However, if we want som more custom functionality, we can alwasy create a custom
+processes. However, if we want som more custom functionality, we can always create a custom
 supervisor for processes we want finer control over. For example, we can easily create a supervisor
 for our `Lab.Counter` process as shown below:
 
@@ -318,7 +320,7 @@ for our `Lab.Counter` process as shown below:
 ```
 
 Now, we can run the counter in a supervised way by running `Lab.Counter.Supervisor.start_link`
-instead of running `start_link` directly on hte counter. This starts the counter in a fault
+instead of running `start_link` directly on the counter. This starts the counter in a fault
 tolerant, supervised way that will restart automatically if it crashes. You can test this as
 before, and note the new behaviour after you call `crash`.
 
@@ -329,7 +331,7 @@ to demonstrate the other distributed computing systems covered in this course. U
 implementation where data flows through a static DAG, our Elixir version will use a dynamic pool of
 worker processes managed by a supervisor. The main process will stream lines from the file, sending
 each line as a message to an available worker. Each worker will count the words in its chunk and
-send its result back to the calling node, which reduces and aggregates the final totals. Thi
+send its result back to the calling node, which reduces and aggregates the final totals. This
 showcases a "Coordinating Process" pattern common in stateful, highly concurrent systems. Compared
 to the other implementations, this one has a few other key flavour differences that might jump out
 at you immediately.
@@ -361,7 +363,7 @@ simply connecting 2 laptops or making a BEAM cluster with your friend next to yo
 surprisingly easy to do using `iex`s `--sname` flag. You may need to run the container with the
 network in `host` mode though to bypass docker's builtin network isolation!
 
-## Further Reading and Examples &nbsp; ##
+## Further Reading & Examples &nbsp; ##
 
 - [The BEAM Book](https://blog.stenmans.org/theBeamBook/)
 - [BEAM By Example](https://gomoripeti.github.io/beam_by_example/)

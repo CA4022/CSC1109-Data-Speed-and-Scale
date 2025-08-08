@@ -7,7 +7,7 @@ title: "CSC1109: Data Speed and Scale"
 ## Introduction ##
 
 Welcome to CSC1109! This lab will teach you how to handle big data at high speed and large scale.
-In the modern data-drive world of online algorithmic engines and machine learning this is an
+In the modern data-driven world of online algorithmic engines and machine learning this is an
 essential skill that no computer scientist or programmer should ignore.
 
 This course will provide an introduction to the essential tools that underpin much of  our modern
@@ -36,11 +36,22 @@ practice these skills to get the most out of this lab. These skills include:
 - &nbsp; Basic java programming
 - &nbsp; Basic python programming
 
-SUCCESS: HPC computing is dominated by tools, remote nodes, and distributed systems that can only
-really be used in a CLI. We understand that many programmers prefer GUI tools and are not very
-comfortable working in the CLI. For those programmers: don't be intimidated! The environment
+NOTE: This domain of computing is dominated by tools, remote nodes, and distributed systems that
+can only really be used in a CLI. We understand that many programmers prefer GUI tools and are not
+very comfortable working in the CLI. For those programmers: don't be intimidated! The environment
 provided for this module has been pre-configured to create a user friendly, efficient, and modern
 CLI environment.
+
+!!! NOTE "A note on **Big Data** and **HPC**"
+    Throughout this lab, you will frequently see mention of tools and practises for High
+    Performance Computing (HPC), so much so that you might be forgiven for thinking this is a
+    HPC lab! Rest assured, you are in the right lab: "Data Speed and Scale", focused on handling
+    extremely large datasets effectively. However, the topics of "Big Data" and HPC are somewhat
+    inseparable because if we have **BIG** data, we inherently need **BIG** computational power if
+    we want results in a reasonable timeframe. Your courses on HPC will have significant and
+    important overlap with this one, so consider them complimentary to one another. After all: if
+    you ever write code for a supercomputer or have to work on a massive cloud at an internet tech
+    giant you'll be glad you know how to handle your data with speed **and** scale!
 
 ## Getting Set Up ##
 
@@ -83,8 +94,8 @@ proceed. If not, please follow the installation instructions for your operating 
 === "&nbsp; Linux"
 
     For Linux distributions, it is recommended to install the Docker Engine from Docker's official
-    repositories to ensure you have the latest version. While you can install from your distribution's
-    default repositories, the package may be outdated.
+    repositories to ensure you have the latest version. While you can install from your
+    distribution's default repositories, the package may be outdated.
 
     Here is a general guide for `systemd`-based distributions like Fedora, Ubuntu, and others:
 
@@ -127,6 +138,64 @@ proceed. If not, please follow the installation instructions for your operating 
     > user interface and integrates with your desktop environment. You can find the installation
     > instructions [here](https://docs.docker.com/desktop/install/linux-install/).
 <!-- pyml enable MD046 -->
+
+In addition to installation, you may also need to increase the resources available to docker to
+ensure you can reliably run the simulated distributed systems that we will be running in this lab.
+To do this, you can follow the instructions below.
+
+=== "&nbsp; Windows and &nbsp; MacOS (Docker Desktop)"
+
+    For Windows and MacOS, resource limits are managed through the Docker Desktop graphical interface.
+
+    >? DANGER: **Allocate Sufficient Resources to Docker**
+    >
+    > Data processing frameworks like Spark and Hadoop can be very resource-intensive. By default,
+    > Docker Desktop limits the amount of CPU and memory (RAM) it can use, which is often too low for
+    > big data tasks. Insufficient resources can cause your programs to fail with cryptic errors
+    > that are difficult to debug.
+    >
+    > Before proceeding, you **must** configure Docker to provide more resources.
+    >
+    > 1.  Open **Docker Desktop**.
+    > 2.  Go to **Settings** (the gear icon ⚙️).
+    > 3.  Navigate to the **Resources** > **Advanced** section.
+    > 4.  Adjust the sliders to allocate **at least**:
+    >     * **CPUs:** 4
+    >     * **Memory:** 8 GB
+    > 5.  Click **Apply & Restart**.
+    >
+    > > NOTE: If your computer has more resources available (e.g., 16GB of RAM or more), allocating
+    > > more to Docker will result in better performance.
+
+=== "&nbsp; Linux (Docker Engine CLI)"
+
+    When using Docker Engine directly on Linux, resource limits are not set globally. Instead, they
+    are specified for **each container** when you launch it using flags on the `docker run` command.
+    containers deployed via the CLI are generally deployed in a more resource aware fashion than
+    those deployed via the GUI, so you may not need to do this. However, if you find you are having
+    frequent crashes try the following.
+
+    >? DANGER: **Allocate Sufficient Resources to Your Container**
+    >
+    > Data processing frameworks like Spark and Hadoop can be very resource-intensive. You must
+    > tell Docker to allocate enough CPU and memory to the lab container, otherwise your programs
+    > may fail with cryptic errors.
+    >
+    > You will need to add the `--cpus` and `--memory` flags to the `docker run` command **every
+    > time you start the lab environment.**
+    >
+    > For example, to start the base lab environment with 4 CPU cores and 8 GB of RAM, you would
+    > modify the command like this:
+    >
+    > ```sh
+    > docker run --cpus="4.0" --memory="8g" --privileged --hostname csc1109-base -it ghcr.io/amileo/csc1109-base:latest
+    > ```
+    >
+    > We recommend allocating **at least 4 CPUs and 8GB of memory** for the labs.
+    >
+    > > TIP: For a more graphical experience similar to Windows and macOS, you can install **Docker
+    > > Desktop for Linux**. It provides a settings panel to manage default resource allocations for
+    > > all containers, which can be more convenient.
 
 ## The Lab Environment ##
 
