@@ -104,14 +104,18 @@ messaging services like WhatsApp and Discord.
     most influential OOP language actually works in a way that more closely resembles this "agent
     model" than modern OOP! When asked about modern OOP the creator of Smalltalk, Alan Kay, has
     said he wouldn't consider it to be in line with what was originally intended in his language,
-    saying that "OOP to me means only messaging, local retention and protection and hiding of
-    state-process, and extreme late-binding of all things.". In this framing of OOP, Erlang could
-    be considered **far** more OOP than Java!
+    saying that
     { .annotate }
 
     1. Despite the consisten claim of Smalltalk as the "first" OOP language, I would argue that
         "Simula" (which predates it by over a decade) has all the features of OOP and simply lacks
         the terminology invented by Smalltalk.
+
+    !!! QUOTE "Alan Kay - 2003"
+        OOP to me means only messaging, local retention and protection and hiding of state-process,
+        and extreme late-binding of all things.
+
+    In this framing of OOP, Erlang could be considered **far** more OOP than Java!
 
 ## The BEAM ##
 
