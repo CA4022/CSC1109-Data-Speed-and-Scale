@@ -116,7 +116,7 @@ test target_dir='.' log_file='/tmp/build_test_log.txt':
     set -euo pipefail
     TAG=$(just --justfile {{justfile()}} get_tag '{{target_dir}}')
     echo "Testing image: ${TAG}"
-    {{ CONTAINER_CMD }} run --privileged --rm "${TAG}" /test/test.sh {{log_file}}
+    {{ CONTAINER_CMD }} run --privileged --entrypoint="" --rm "${TAG}" /test/test.sh {{log_file}}
 
 # Build and then run the container
 build_and_run target_dir +run_args:
