@@ -6,7 +6,6 @@ ENV HADOOP_HOME=/opt/hadoop
 ENV HADOOP_USER_NAME=hadoop
 ENV PATH=/home/jovyan/.local/bin/:/opt/hadoop/bin/:${PATH}
 
-COPY java_logo.png /home/jovyan/.local/share/jupyter/kernels/rapaio-jupyter-kernel/logo-64x64.png
 COPY jupyter_server_config.py /home/jovyan/.jupyter/jupyter_server_config.py
 COPY user-settings /home/jovyan/.jupyter/lab/user-settings
 
@@ -25,6 +24,7 @@ USER jovyan
 RUN mamba update -n base --all --yes && \
     mamba install -n base -y \
         python=3.10 \
+        fsspec \
         ipywidgets \
         jupyter-lsp \
         jupyterlab-day \
@@ -34,6 +34,7 @@ RUN mamba update -n base --all --yes && \
         jupyterlab-unfold \
         jupyterlab-variableinspector \
         jupyterlab_widgets \
+        pyarrow \
         pyright && \
     mamba clean --all --yes && \
     wget -q https://git.io/coursier-cli && \
@@ -51,4 +52,6 @@ RUN mamba update -n base --all --yes && \
     chmod +x /home/jovyan/.local/bin/jq
 
 
+COPY java_logo.png /home/jovyan/.local/share/jupyter/kernels/rapaio-jupyter-kernel/logo-64x64.png
 COPY --from=docker.io/apache/hadoop:3.4.1 /opt/hadoop/ /opt/hadoop/
+ENV CLASSPATH=$(hadoop classpath --glob)

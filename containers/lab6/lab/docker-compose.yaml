@@ -6,20 +6,20 @@ x-hadoop-common-config:
   volumes:
     - .:/lab/
     - /opt/hadoop/:${HADOOP_HOME}
-    - ./config/:${HADOOP_HOME}/etc/hadoop
+    - ./config/:${HADOOP_HOME}/etc/hadoop/
 
 x-spark-common-config:
   &spark-common-config
   image: ${SPARK_IMAGE}:${SPARK_VERSION}
   volumes:
-    - /lab/:/opt/spark/work-dir/
-    - ./config/:${HADOOP_HOME}/etc/hadoop
+    - /lab/:/lab/
+    - ./config/:/var/config/hadoop/
 
 services:
   namenode:
     <<: *hadoop-common-config
     hostname: namenode
-    command: ["hdfs", "namenode"]
+    command: ["/opt/hadoop/bin/hdfs", "namenode"]
     ports:
       - 9870:9870
     environment:
@@ -29,7 +29,7 @@ services:
 
   datanode:
     <<: *hadoop-common-config
-    command: ["hdfs", "datanode"]
+    command: ["/opt/hadoop/bin/hdfs", "datanode"]
     environment:
       - HADOOP_HOME=${HADOOP_HOME}
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
@@ -44,7 +44,6 @@ services:
       - HADOOP_HOME=${HADOOP_HOME}
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
     ports:
-      - "7077:7077"
       - "8080:8080"
 
   spark-worker:
@@ -64,16 +63,18 @@ services:
   client:
     image: ghcr.io/amileo/csc1109-lab6-client
     environment:
-      - SHELL=${SHELL}
+      - SHELL=bash
       - HADOOP_HOME=${HADOOP_HOME}
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
+    ports:
+      - 8888:8888
     depends_on:
       - spark-master
     links:
       - spark-master
-    command: sleep infinity
     working_dir: /lab/
     volumes:
       - .:/lab/
+      - ./config/:${HADOOP_HOME}/etc/hadoop/
     stdin_open: true
     tty: true

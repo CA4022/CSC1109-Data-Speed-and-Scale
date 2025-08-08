@@ -491,6 +491,24 @@ jobs:
       path: containers/lab6/client
     secrets: inherit
 
+  build-lab6:
+    needs:
+      - determine-changes
+      - build-dind
+    if: >-
+      always() &&
+      needs.determine-changes.outputs.lab6-changed == 'true' &&
+      needs.build-dind.result != 'failure'
+    name: 'Build lab6 container'
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/build.yml
+    with:
+      path: containers/lab6/
+    secrets: inherit
+
+
   build-bonus3:
     needs:
       - determine-changes
