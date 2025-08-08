@@ -515,7 +515,7 @@ jobs:
     if: >-
       always() &&
       needs.determine-changes.outputs.bonus3-changed == 'true'
-    name: 'Build bonus lab 3 container'
+    name: 'Build bonus3 container'
     permissions:
       contents: read
       packages: write
