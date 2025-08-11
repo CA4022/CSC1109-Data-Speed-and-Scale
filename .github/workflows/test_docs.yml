@@ -39,6 +39,13 @@ jobs:
         run: echo "CONTAINER_ENV=docker" >> $GITHUB_ENV
         shell: bash
 
+      - name: Set up Docker
+        if: runner.os == "macOS"
+        run: |
+          brew install docker
+          colima start
+        shell: bash
+
       - name: Run doc tests
         run: uv run ./utils/test_code_blocks.py
         shell: bash
