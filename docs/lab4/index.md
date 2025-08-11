@@ -7,7 +7,8 @@ volumes:
   mode: ro
 init_commands:
   - mkdir /lab/src/main/resources/
-  - cp /lab/src/main/java/com/csc1104/lab/splitline.py /lab/src/main/resources/splitline.py
+  - cp /lab/src/main/com/csc1104/lab/splitline.py /lab/src/main/resources/splitline.py
+  - docker compose up -d
 ---
 
 {{ "# " ~ page.meta.title ~ " #" }}

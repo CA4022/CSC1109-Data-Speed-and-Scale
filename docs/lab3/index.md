@@ -1,12 +1,6 @@
 ---
 title: "Lab 3: Pig"
 docker_image: ghcr.io/amileo/csc1109-lab3:latest
-volumes:
-- host_path: ./docs/lab3/src/
-  container_path: /lab/src/
-  mode: ro
-init_commands:
-  - cp -r /lab/src/* /lab/
 ---
 
 {{ "# " ~ page.meta.title ~ " #" }}

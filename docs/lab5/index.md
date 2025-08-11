@@ -14,6 +14,7 @@ init_commands:
   - cp /lab/docs_src/*.java /lab/src/main/java/
   - cp /lab/docs_src/*.scala /lab/src/main/scala/
   - cp /lab/docs_src/*.py /lab/
+  - docker compose up -d
 ---
 
 {{ "# " ~ page.meta.title ~ " #" }}
@@ -247,7 +248,7 @@ perform a word count via the Scala REPL. Then, we will show 2 simple examples of
 programs written in Scala, one directly using RDDs, the other using `DataSet`s. We will not be
 demonstrating `DataFrame`s here, as they are intended for tabular data and so are not the right
 abstraction for this task, however you can find some examples of Spark code using the `DataFrame`
-API [below](#further-reading-and-examples).
+API [below](#further-reading-examples).
 
 Note: The suggested version of Scala is 2.13.X, but there should be very little compatibility issues
 with Scala 3. The recommended version for Apache Hadoop 3 and later is Spark 4.0.0 (last release)

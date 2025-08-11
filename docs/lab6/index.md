@@ -1,12 +1,6 @@
 ---
 title: "Lab 6: Machine Learning with Spark"
 docker_image: ghcr.io/amileo/csc1109-lab6:latest
-volumes:
-- host_path: ./docs/lab6/src/
-  container_path: /lab/src/
-  mode: ro
-init_commands:
-  - cp -r /lab/src/* /lab/
 ---
 
 {{ "# " ~ page.meta.title ~ " #" }}
@@ -23,7 +17,7 @@ this point to solve these big data ML problems yourself! 
 To download the container for this lab, run the following command:
 
 ```sh
-docker run --privileged --hostname lab6 -p 8000:8080 -p 4040:4040 -p 8000:8000 -p 8888:8888 -p 9870:9870 {{ page.meta.docker_image }}
+docker run --privileged --hostname lab6 -v image-cache:/var/lib/docker -p 8000:8080 -p 4040:4040 -p 8000:8000 -p 8888:8888 -p 9870:9870 {{ page.meta.docker_image }}
 ```
 
 This will automatically deploy the stack without forking it as a daemon, as we will not be working

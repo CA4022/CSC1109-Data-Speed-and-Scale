@@ -19,13 +19,7 @@ to demonstrate and get hands-on experience with distributed computing, we will b
 To download the container for this lab, run the following command:
 
 ```sh
-docker run \
-    --privileged \
-    --hostname lab2 \
-    -p 9870:9870 \
-    -p 10000:10000 \
-    -p 10002:10002 \
-    -it {{ page.meta.docker_image }}
+docker run --privileged --hostname lab2 -p 9870:9870 -p 10000:10000 -p 10002:10002 -it {{ page.meta.docker_image }}
 ```
 
 INFO: Adding a Hive server to our Hadoop cluster requires us to bootstrap a few directories in our
@@ -35,7 +29,7 @@ the `docker-compose.yaml` file and `config` directories between Lab 1 and this l
 
 Once inside the lab container, you can deploy the cluster for this lab by running:
 
-```sh { .test-block #ghcr.io/amileo/csc1109-lab3:latest }
+```sh { .test-block #ghcr.io/amileo/csc1109-lab2:latest }
 docker compose up -d
 ```
 
@@ -105,9 +99,9 @@ demonstrate this at `data/iris.csv`(1). First though, we must move the file to o
 1. The iris dataset is a commonly used csv table for demonstrating data analysis tools. In data
 science, it could be described as the "Hello World" of datasets.
 
-```sh { .test-block #ghcr.io/amileo/csc1109-lab3:latest }
+```sh { .test-block #ghcr.io/amileo/csc1109-lab2:latest }
 hdfs dfs -mkdir -p /user/hive/data/
-hdfs dfs -put ./data/iris.csv /user/hive/iris.csv
+hdfs dfs -put /lab/data/iris.csv /user/hive/iris.csv
 ```
 
 Then, we can simply create a table, and read in that file.
@@ -146,7 +140,7 @@ The most important pages in the Apache Hive documentation an be found here:
 
 ### Examples ###
 
-Examples of how to create, load, and 1uery data with Hive:
+Examples of how to create, load, and query data with Hive:
 
 - [Simple example queries (from step 15.)](https://www.java-success.com/10-setting-getting-started-hive-mac/)
 - [More query examples](https://datapeaker.com/en/big--data/hive-queries-15-basic-hive-queries-for-data-engineers/)
@@ -157,13 +151,13 @@ Examples of how to create, load, and 1uery data with Hive:
 Create your own tables and load data from a file you have created or downloaded, then
 practice some queries.
 
-- [Example: load csv file in HIVE table](https://sparkbyexamples.com/apache-hive/hive-load-csv-file-into-table/)
+- [Example: load csv file in Hive table](https://sparkbyexamples.com/apache-hive/hive-load-csv-file-into-table/)
 - [Example: load data into tables](https://www.geeksforgeeks.org/hive-load-data-into-table/)
 
 You can find more query examples and SQL cheat-sheet
 [here](https://hortonworks.com/blog/hive-cheat-sheet-for-sql-users/)
 
-Check manual on Loop for HIVEQL basics with examples.
+Check manual on Loop for HiveQL basics with examples.
 
 ### Additional tutorials ###
 

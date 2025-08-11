@@ -7,6 +7,7 @@ volumes:
   mode: ro
 init_commands:
   - cp -r /lab/src/* /lab/
+  - elixirc *.ex
 ---
 
 {{ "# " ~ page.meta.title ~ " #" }}
@@ -245,8 +246,8 @@ You can run this in any of the following ways:
         ```
 
 TIP: If you have a directory full of `.ex` files and you want to be able to quickly and easily
-compile them all to use interactively in `iex`, you simply need to run `elixir *.ex`. Just remember
-to make sure you won't create any namespace conflicts if you do this!
+compile them all to use interactively in `iex`, you simply need to run `elixirc *.ex`. Just
+remember to make sure you won't create any namespace conflicts if you do this!
 
 ### nth Fibonacci Number ###
 
@@ -265,11 +266,11 @@ processing the input to stdio. We can use this to demonstrate simple concurrency
 `iex` shell you can time any function using the `:timer.tc` function. You can then run the
 following to see concurrency in action:
 
-```elixir
+```elixir { .test-block #ghcr.io/amileo/csc1109-bonus3:latest }
 # The following line maps our `run` function onto the numbers 1 to 5 synchronously
-iex> :timer.tc(fn -> Enum.map(1..5, &Lab.Slow.run/1) end) # this should take >5s
+:timer.tc(fn -> Enum.map(1..5, &Lab.Slow.run/1) end) # this should take >5s
 # Instead, this line runs maps `run` in concurrent processes, taking <5s
-iex> :timer.tc(fn -> Task.async_stream(1..5, &Lab.Slow.run/1) |> Enum.to_list() end)
+:timer.tc(fn -> Task.async_stream(1..5, &Lab.Slow.run/1) |> Enum.to_list() end)
 ```
 
 The only difference between the two is that one uses `Enum.map` to run the function calls
@@ -287,19 +288,20 @@ telling the BEAM to run your code in its own process instead of the current one.
 
 Now, we can start our counter and interact with it to see it work.
 
+<!-- NOTE: We can't test this block because it DELIBERATELY causes a crash! -->
 ```elixir
-iex> Lab.Counter.start_link # You could also start it with an initial value, e.g: `start_link(2)`
-iex> Lab.Counter.read # Should start at 0
-iex> Lab.Counter.increment
-iex> Lab.Counter.read # Should be 1 now
-iex> Lab.Counter.increment
-iex> Lab.Counter.read # Should be 2 now
-iex> Enum.each(1..5, fn _ -> Lab.Counter.increment end) # We can call multiple times at once
-iex> Lab.Counter.read # Should be 7 now
-iex> Lab.Counter.crash # Lets trigger a crash on purpose!
-iex> Lab.Counter.read # Oh, it didn't recover automatically...
-iex> Lab.Counter.start_link
-iex> Lab.Counter.read # At least we can restart it without crashing the VM
+Lab.Counter.start_link # You could also start it with an initial value, e.g: `start_link(2)`
+Lab.Counter.read # Should start at 0
+Lab.Counter.increment
+Lab.Counter.read # Should be 1 now
+Lab.Counter.increment
+Lab.Counter.read # Should be 2 now
+Enum.each(1..5, fn _ -> Lab.Counter.increment end) # We can call multiple times at once
+Lab.Counter.read # Should be 7 now
+Lab.Counter.crash # Lets trigger a crash on purpose!
+Lab.Counter.read # Oh, it didn't recover automatically...
+Lab.Counter.start_link
+Lab.Counter.read # At least we can restart it without crashing the VM
 ```
 
 As you probably noticed while running this sequence of commands: if the `Lab.Counter` process
@@ -354,8 +356,8 @@ at you immediately.
 
 To perform our usual test word count, we can simply run:
 
-```elixir
-iex> Lab.WordCount.count_words({:file, "data/Word_count.txt", "out.txt"})
+```elixir { .test-block #ghcr.io/amileo/csc1109-bonus3:latest }
+Lab.WordCount.count_words({:file, "data/Word_count.txt", "out.txt"})
 ```
 
 QUESTION: As a final challenge: can you get this running on a true, distributed cluster? Even by
