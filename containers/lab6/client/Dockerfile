@@ -8,6 +8,7 @@ ENV PATH=/home/jovyan/.local/bin/:/opt/hadoop/bin/:${PATH}
 
 COPY jupyter_server_config.py /home/jovyan/.jupyter/jupyter_server_config.py
 COPY user-settings /home/jovyan/.jupyter/lab/user-settings
+COPY test /test
 
 USER root
 
@@ -16,8 +17,6 @@ RUN echo "3.10.*" > /opt/conda/conda-meta/pinned && \
     chown -R jovyan /home/jovyan/.jupyter/ && \
     mkdir -p /home/jovyan/.local/ && \
     chown -R jovyan /home/jovyan/.local/ && \
-    mkdir -p /test/ && \
-    echo "echo 'No tests implemented!'" >> /test/test.sh && \
     chmod +x /test/test.sh
 
 USER jovyan
