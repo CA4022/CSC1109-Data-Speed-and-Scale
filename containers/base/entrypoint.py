@@ -3,6 +3,7 @@
 import asyncio
 import os
 from pathlib import Path
+import shutil
 import subprocess
 
 
@@ -104,15 +105,11 @@ class Selector:
         print(f"{' ' * indent * 4}{self.name}: {self.choice} {self.icons[self.choice]}")
 
     def start(self):
-        raise NotImplementedError(
-            "The method `start` has not been implemented for this selector."
-        )
+        raise NotImplementedError("The method `start` has not been implemented for this selector.")
 
 
 class EnvSelector(Selector):
-    def __init__(
-        self, name: str, prompt: str, items: list[tuple[str, str, str]], env_var: str
-    ):
+    def __init__(self, name: str, prompt: str, items: list[tuple[str, str, str]], env_var: str):
         super().__init__(name, prompt, items)
         self.env_var = env_var
 
@@ -155,15 +152,16 @@ class ShellSelector(Selector):
         try:
             os.execvp(self.commands[self.choice], [self.commands[self.choice]])
         except FileNotFoundError as e:
-            msg = (
-                f"Error: The shell '{self.choice}' could not be found on your system.",
-            )
+            msg = (f"Error: The shell '{self.choice}' could not be found on your system.",)
             raise EnvironmentError(msg) from e
 
 
 async def main():
-    daemon_startup = asyncio.create_task(
-        start_daemon("dockerd", "docker info", "/var/log/dockerd.log")
+    has_docker = shutil.which("docker") is not None
+    daemon_startup = (
+        asyncio.create_task(start_daemon("dockerd", "docker info", "/var/log/dockerd.log"))
+        if has_docker
+        else None
     )
 
     selector = ShellSelector(
@@ -194,11 +192,12 @@ async def main():
         await selector.select()
         print(SPLASH)
         display_markdown(["~/CSC1109.md", "/lab/lab.md"])
-        await daemon_startup
+        if daemon_startup:
+            await daemon_startup
         selector.start()
 
     except (RuntimeError, asyncio.TimeoutError, EnvironmentError) as e:
-        if not daemon_startup.done():
+        if daemon_startup and not daemon_startup.done():
             daemon_startup.cancel()
         raise e
     except asyncio.CancelledError as e:
