@@ -22,7 +22,6 @@ dependencies = [
     "mkdocs-spellcheck[all]>=1.1.1",
     "pymarkdownlnt>=0.9.30",
     "pymdown-extensions>=10.16",
-    "pystorm>=3.1.4",
     "tomlkit>=0.13.3",
     "zizmor>=1.11.0",
 ]
