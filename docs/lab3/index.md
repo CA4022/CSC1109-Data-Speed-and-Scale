@@ -1,7 +1,7 @@
 ---
 title: "Lab 3: Pig"
-docker_test_image: ghcr.io/amileo/csc1109-lab3:latest
-test_volumes:
+docker_image: ghcr.io/amileo/csc1109-lab3:latest
+volumes:
 - host_path: ./docs/lab3/src/
   container_path: /lab/src/
   mode: ro
@@ -16,7 +16,7 @@ This lab covers the basics of Apache Pig with examples.
 To download the container for this lab, run the following command:
 
 ```sh
-docker run --privileged --hostname lab3 -p 9870:9870 -p 19888:19888 -it {{ page.meta.docker_test_image }}
+docker run --privileged --hostname lab3 -p 9870:9870 -p 19888:19888 -it {{ page.meta.docker_image }}
 ```
 
 NOTE: If you look at the `docker-compose.yaml` for this lab, our usual HDFS cluster has an added

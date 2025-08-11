@@ -1,7 +1,7 @@
 ---
 title: "Lab 4: Storm"
-docker_test_image: ghcr.io/amileo/csc1109-lab4:latest
-test_volumes:
+docker_image: ghcr.io/amileo/csc1109-lab4:latest
+volumes:
 - host_path: ./docs/lab4/src/
   container_path: /lab/src/main/com/csc1104/lab/
   mode: ro
@@ -17,7 +17,7 @@ This lab asks you to try and set up a simple Apache Storm topology.
 To download the container for this lab, run the following command:
 
 ```sh
-docker run --privileged --hostname lab4 -p 8000:8080 -it {{ page.meta.docker_test_image }}
+docker run --privileged --hostname lab4 -p 8000:8080 -it {{ page.meta.docker_image }}
 ```
 
 Once the container has downloaded and initialised, deploy your docker compose stack. You can

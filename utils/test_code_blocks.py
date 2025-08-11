@@ -2,13 +2,15 @@ import datetime
 import os
 import re
 import shlex
+import sys
 import time
 from pathlib import Path
+from typing import Iterator
 
 import docker
 import mkdocs_gen_files
 import yaml
-from docker.errors import APIError, ContainerError, ImageNotFound
+from docker.errors import APIError, ContainerError, DockerException, ImageNotFound
 from mkdocs.plugins import get_plugin_logger
 
 DIRECT_LOGGING = os.environ.get("DIRECT_LOGGING") == "1"
@@ -17,16 +19,33 @@ if DIRECT_LOGGING:
     from loguru import logger
 else:
     logger = get_plugin_logger("test_code_blocks")
-MKDOCS_DEV_MODE = os.environ.get("MKDOCS_DEV_MODE") == "1"
 
+DOCS_DEV_MODE = os.environ.get("DOCS_DEV_MODE") == "1"
+CLIENT = None
 
-client = None
-
-if not MKDOCS_DEV_MODE:
+if not DOCS_DEV_MODE:
     try:
-        client = docker.from_env()
+        CLIENT = docker.from_env()
+    except DockerException as e:
+        errors: list[Exception] = [e]
+        for socket in (
+            "unix://var/run/docker.sock",
+            "unix://var/run/docker/docker.sock",
+            "unix://var/run/podman.sock",
+            "unix://var/run/podman/podman.sock",
+        ):
+            try:
+                CLIENT = docker.DockerClient(base_url=socket)
+                break
+            except Exception as e:
+                errors.append(e)
+        else:
+            raise ExceptionGroup("Couldn't find a valid docker socket!", errors)
     except Exception as e:
-        logger.error(f"Could not connect to Docker daemon. Is Docker running? {e}")
+        logger.error("Could not connect to Docker daemon. Is Docker running?")
+        raise ConnectionError("Could not connect to Docker daemon.") from e
+
+assert CLIENT is not None, "`CLIENT` should not be `None`!"
 
 
 def run_docker_test(
@@ -44,7 +63,7 @@ def run_docker_test(
     `volumes_config_for_page` is expected to be a list of dicts from the page's frontmatter.
     `init_commands_for_page` is a list of commands from the page's frontmatter to run once.
     """
-    if not client:
+    if not CLIENT:
         return False, "Docker client not initialized. Cannot run tests."
 
     logger.info(f"Testing {page_path} with image {docker_image} and shell {shell}...")
@@ -62,29 +81,27 @@ def run_docker_test(
             docker_volumes_dict[str(host_path)] = {"bind": container_path, "mode": mode}
     else:
         logger.info(
-            f"No 'test_volumes' specified in frontmatter for {page_path}. Running without custom volumes."
+            f"No 'volumes' specified in frontmatter for {page_path}. Running without custom volumes."
         )
 
     try:
         output_log.append(f"Ensuring Docker image '{docker_image}' is available...")
         try:
-            client.images.pull(docker_image)
-            output_log.append(
-                f"Image '{docker_image}' pulled successfully (or already present)."
-            )
+            CLIENT.images.pull(docker_image)
+            output_log.append(f"Image '{docker_image}' pulled successfully (or already present).")
         except ImageNotFound:
             output_log.append(f"ERROR: Docker image '{docker_image}' not found.")
             return False, "\n".join(output_log)
         except APIError as e:
-            output_log.append(
-                f"ERROR: Docker API error pulling image '{docker_image}': {e}"
-            )
+            output_log.append(f"ERROR: Docker API error pulling image '{docker_image}': {e}")
             return False, "\n".join(output_log)
 
-        container_name = f"mkdocs-test-{page_path.stem.replace('/', '-')}-{Path(page_path).parent.name}-{shell}"
+        container_name = (
+            f"mkdocs-test-{page_path.stem.replace('/', '-')}-{Path(page_path).parent.name}-{shell}"
+        )
         output_log.append(f"Starting container: {container_name} with shell {shell}")
 
-        container = client.containers.run(
+        container = CLIENT.containers.run(
             image=docker_image,
             name=container_name,
             detach=True,
@@ -110,12 +127,8 @@ def run_docker_test(
             output_log.append(
                 f"ERROR: Failed to initiate dockerd startup command. Exit code: {exec_result.exit_code}"
             )
-            stdout_err = (
-                exec_result.output[0].decode("utf-8") if exec_result.output[0] else ""
-            )
-            stderr_err = (
-                exec_result.output[1].decode("utf-8") if exec_result.output[1] else ""
-            )
+            stdout_err = exec_result.output[0].decode("utf-8") if exec_result.output[0] else ""
+            stderr_err = exec_result.output[1].decode("utf-8") if exec_result.output[1] else ""
             if stdout_err:
                 output_log.append(f"STDOUT: {stdout_err}")
             if stderr_err:
@@ -133,16 +146,8 @@ def run_docker_test(
                         stream=False,
                         demux=True,
                     )
-                    stdout = (
-                        init_result.output[0].decode("utf-8")
-                        if init_result.output[0]
-                        else ""
-                    )
-                    stderr = (
-                        init_result.output[1].decode("utf-8")
-                        if init_result.output[1]
-                        else ""
-                    )
+                    stdout = init_result.output[0].decode("utf-8") if init_result.output[0] else ""
+                    stderr = init_result.output[1].decode("utf-8") if init_result.output[1] else ""
 
                     if stdout:
                         output_log.append("  STDOUT:\n" + stdout)
@@ -188,8 +193,7 @@ def run_docker_test(
                 )
                 if dockerd_logs.exit_code == 0:
                     output_log.append(
-                        "\n--- /var/log/dockerd.log ---\n"
-                        + dockerd_logs.output[0].decode("utf-8")
+                        "\n--- /var/log/dockerd.log ---\n" + dockerd_logs.output[0].decode("utf-8")
                     )
                 else:
                     output_log.append(
@@ -201,9 +205,7 @@ def run_docker_test(
             return success, "\n".join(output_log)
 
         for i, (lang, code_block_content, command_wrapper) in enumerate(code_blocks):
-            output_log.append(
-                f"\n--- Executing Block {i + 1} ({lang}) with {shell} ---"
-            )
+            output_log.append(f"\n--- Executing Block {i + 1} ({lang}) with {shell} ---")
 
             commands_to_execute = []
             if lang in ["sh", "bash", "fish", "zsh", "nu"]:
@@ -215,12 +217,14 @@ def run_docker_test(
                         continue
                     if command_wrapper:
                         commands_to_execute.append(
-                            command_wrapper.replace("{command}", line).replace(
-                                "{shell}", shell
-                            )
+                            command_wrapper.replace("{command}", line).replace("{shell}", shell)
                         )
                     else:
                         commands_to_execute.append(line)
+            elif lang == "python":
+                commands_to_execute.append(f"python -c '{code_block_content}'")
+            elif lang == "elixir":
+                commands_to_execute.append(f"elixir -e '{code_block_content}'")
             else:
                 if command_wrapper:
                     commands_to_execute.append(
@@ -244,12 +248,8 @@ def run_docker_test(
                         stream=False,
                         demux=True,
                     )
-                    stdout = (
-                        result.output[0].decode("utf-8") if result.output[0] else ""
-                    )
-                    stderr = (
-                        result.output[1].decode("utf-8") if result.output[1] else ""
-                    )
+                    stdout = result.output[0].decode("utf-8") if result.output[0] else ""
+                    stderr = result.output[1].decode("utf-8") if result.output[1] else ""
                     exit_code = result.exit_code
 
                     if stdout:
@@ -259,9 +259,7 @@ def run_docker_test(
 
                     if exit_code != 0:
                         success = False
-                        output_log.append(
-                            f"  ERROR: Command failed with exit code {exit_code}"
-                        )
+                        output_log.append(f"  ERROR: Command failed with exit code {exit_code}")
                         break
 
                 except ContainerError as e:
@@ -285,9 +283,7 @@ def run_docker_test(
                 break
     except ImageNotFound:
         success = False
-        output_log.append(
-            f"ERROR: Docker image '{docker_image}' not found for testing."
-        )
+        output_log.append(f"ERROR: Docker image '{docker_image}' not found for testing.")
     except APIError as e:
         success = False
         output_log.append(f"ERROR: Docker API error: {e}")
@@ -306,11 +302,21 @@ def run_docker_test(
                     f"WARNING: Could not stop/remove container '{container.name}': {e}"
                 )
             except Exception as e:
-                output_log.append(
-                    f"WARNING: An error occurred during container cleanup: {e}"
-                )
+                output_log.append(f"WARNING: An error occurred during container cleanup: {e}")
 
     return success, "\n".join(output_log)
+
+
+def filter_targets(x: Iterator[Path]) -> Iterator[Path]:
+    if len(sys.argv) < 2:
+        return x
+    else:
+        targets = [Path(p) for p in sys.argv[1:]]
+
+        def filter_condition(ix: Path) -> bool:
+            return ix.relative_to("./docs") in targets
+
+        return filter(filter_condition, x)
 
 
 def main():
@@ -321,8 +327,9 @@ def main():
     all_test_results = []
     overall_success = True
 
-    for path in sorted(docs_dir.rglob("*.md")):
-        with open(path, "r", encoding="utf-8") as f:
+    for path in sorted(filter_targets(docs_dir.rglob("*.md"))):
+        logger.info(f"Running tests for {path}")
+        with path.open("r", encoding="utf-8") as f:
             content = f.read()
 
         code_block_regex = re.compile(
@@ -338,15 +345,13 @@ def main():
         volumes_for_page = None
         init_commands_for_page = None
 
-        front_matter_match = re.match(
-            r"---(?P<frontmatter>.*?)\n---", content, re.DOTALL
-        )
+        front_matter_match = re.match(r"---(?P<frontmatter>.*?)\n---", content, re.DOTALL)
         if front_matter_match:
             try:
                 fm = yaml.safe_load(front_matter_match.group("frontmatter"))
                 # This is now a fallback image if a block doesn't specify its own
-                default_docker_image = fm.get("docker_test_image")
-                volumes_for_page = fm.get("test_volumes")
+                default_docker_image = fm.get("docker_image")
+                volumes_for_page = fm.get("volumes")
                 init_commands_for_page = fm.get("init_commands")
             except yaml.YAMLError as e:
                 logger.warning(f"Could not parse frontmatter in {path}: {e}")
@@ -358,7 +363,7 @@ def main():
             if not image_for_block:
                 logger.warning(
                     f"Skipping a test block in {path.name} because it has no image ID (#image) "
-                    f"and no default 'docker_test_image' is set in the frontmatter."
+                    f"and no default 'docker_image' is set in the frontmatter."
                 )
                 continue
 
@@ -366,15 +371,15 @@ def main():
             code = match.group("code")
             command_wrapper = match.group("wrapper")
 
-            tests_by_image.setdefault(image_for_block, []).append(
-                (lang, code, command_wrapper)
-            )
+            tests_by_image.setdefault(image_for_block, []).append((lang, code, command_wrapper))
 
         if tests_by_image:
             for docker_image, code_blocks in tests_by_image.items():
-                logger.info(
-                    f"Found {len(code_blocks)} blocks for image '{docker_image}' in {path.name}"
-                )
+                n_blocks = len(code_blocks)
+                if n_blocks < 1:
+                    logger.info(f"No code blocks found. Skipping tests for {path.name}")
+                    continue
+                logger.info(f"Found {n_blocks} blocks for image '{docker_image}' in {path.name}")
 
                 for shell in shells:
                     current_test_status = {}
@@ -435,7 +440,7 @@ def main():
 
 
 if __name__ == "__main__":
-    if MKDOCS_DEV_MODE:
+    if DOCS_DEV_MODE:
         logger.warning("Dev mode: skipping code block tests!")
     else:
         main()

@@ -1,7 +1,7 @@
 ---
 title: "Lab 2: Hive"
-docker_test_image: ghcr.io/amileo/csc1109-lab2:latest
-test_volumes:
+docker_image: ghcr.io/amileo/csc1109-lab2:latest
+volumes:
 - host_path: ./docs/lab2/src/
   container_path: /lab/src/
   mode: ro
@@ -25,7 +25,7 @@ docker run \
     -p 9870:9870 \
     -p 10000:10000 \
     -p 10002:10002 \
-    -it {{ page.meta.docker_test_image }}
+    -it {{ page.meta.docker_image }}
 ```
 
 INFO: Adding a Hive server to our Hadoop cluster requires us to bootstrap a few directories in our

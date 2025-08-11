@@ -1,7 +1,7 @@
 ---
 title: "Bonus Lab 3: To BEAM, or not to BEAM 󰓉&nbsp;&nbsp;"
-docker_test_image: ghcr.io/amileo/csc1109-bonus3:latest
-test_volumes:
+docker_image: ghcr.io/amileo/csc1109-bonus3:latest
+volumes:
 - host_path: ./docs/bonus3/src/
   container_path: /lab/src/
   mode: ro
@@ -23,7 +23,7 @@ bonus lab, we invite you to take a brief foray into the other main branch of dis
 To download the container for this lab, run the following command:
 
 ```sh
-docker run --hostname bonus3 --network host -it {{ page.meta.docker_test_image }}
+docker run --hostname bonus3 --network host -it {{ page.meta.docker_image }}
 ```
 
 ## Process Parallelism ##

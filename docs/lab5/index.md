@@ -1,7 +1,7 @@
 ---
 title: "Lab 5: Spark"
-docker_test_image: ghcr.io/amileo/csc1109-lab5:latest
-test_volumes:
+docker_image: ghcr.io/amileo/csc1109-lab5:latest
+volumes:
 - host_path: ./docs/lab5/src/
   container_path: /lab/docs_src/
   mode: ro
@@ -24,7 +24,7 @@ spark-shell, and executing spark code written in Java, Scala, and Python.
 To download the container for this lab, run the following command:
 
 ```sh
-docker run --privileged --hostname lab5 -p 8000:8080 -p 9870:9870 -it {{ page.meta.docker_test_image }}
+docker run --privileged --hostname lab5 -p 8000:8080 -p 9870:9870 -it {{ page.meta.docker_image }}
 ```
 
 Once inside the container, you can deploy cluster as a docker stack as normal.

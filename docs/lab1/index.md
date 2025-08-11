@@ -1,7 +1,7 @@
 ---
 title: "Lab 1: Hadoop MapReduce"
-docker_test_image: ghcr.io/amileo/csc1109-lab1:latest
-test_volumes:
+docker_image: ghcr.io/amileo/csc1109-lab1:latest
+volumes:
 - host_path: ./docs/lab1/src/
   container_path: /lab/src/
   mode: ro
@@ -173,7 +173,7 @@ To begin running computations on our cluster, we must first begin my adding file
 filesystem. To do this, we must first begin by connecting to our client node. To do this, we run
 the following code:
 
-```sh { .test-block #ghcr.io/amileo/csc1109-lab1:latest }
+```sh
 docker compose exec client default_shell
 ```
 
