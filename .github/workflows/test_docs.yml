@@ -48,6 +48,13 @@ jobs:
           colima start
         shell: bash
 
+      - name: Log in to the GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Run doc tests
         run: uv run ./utils/test_code_blocks.py
         shell: bash
