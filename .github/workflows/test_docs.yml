@@ -43,3 +43,10 @@ jobs:
         run: uv run ./utils/test_code_blocks.py
         shell: bash
 
+      - name: Upload results on failure
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: test_results.md
+          path: docs/test_results.md
+
