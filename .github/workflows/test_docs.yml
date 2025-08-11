@@ -48,5 +48,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: test_results.md
-          path: docs/test_results.md
+          path: test_results.md
 
