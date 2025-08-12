@@ -16,10 +16,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
-        # NOTE: `--privileged` currently doesn't work on Mac OS GHW image due to M1/Colima restrictions
+        os: [ubuntu-latest]
+        # NOTE: Mac OS and Windows tests are not included here because:
+        #     - Mac OS: `--privileged` currently doesn't work due to M1/Colima restrictions
+        #     - Windows: The `windows-latest` images doesn't allow testing linux based containers
+        # In theory: this is less than ideal but should be fine since once we get inside the
+        #     container our environments should be predictably the same
         # os: [ubuntu-latest, macos-latest, windows-latest]
+        container_runtime: [docker, podman]
 
+    name: Test Docs (${{ matrix.os }} | ${{ matrix.container_runtime }})
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -37,14 +43,28 @@ jobs:
         uses: extractions/setup-just@v2
 
       - name: Set container environment
-        run: echo "CONTAINER_ENV=docker" >> $GITHUB_ENV
+        run: echo "CONTAINER_ENV=${{ matrix.container_runtime }}" >> $GITHUB_ENV
         shell: bash
 
       - name: Set up Docker
-        uses: docker/setup-docker-action@v4
+        if: matrix.container_runtime == 'docker'
+        uses: docker/setup-qemu-action@v3
 
-      - name: Log in to the GitHub Container Registry
+      - name: Set up Podman
+        if: matrix.container_runtime == 'podman'
+        uses: ghcr.io/actions/setup-podman@v3
+
+      - name: Log in to GHCR (Docker)
+        if: matrix.container_runtime == 'docker'
         uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Log in to GHCR (Podman)
+        if: matrix.container_runtime == 'podman'
+        uses: redhat-actions/podman-login@v1
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -58,6 +78,5 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: test_results-${{ matrix.os }}.md
+          name: test_results-${{ matrix.os }}-${{ matrix.container_runtime }}.md
           path: ${{ github.workspace }}/docs/test_results.md
-
