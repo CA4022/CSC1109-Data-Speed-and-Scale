@@ -52,7 +52,7 @@ jobs:
 
       - name: Set up Podman
         if: matrix.container_runtime == 'podman'
-        uses: ghcr.io/actions/setup-podman@v3
+        uses: gacts/install-podman@v1
 
       - name: Log in to GHCR (Docker)
         if: matrix.container_runtime == 'docker'
