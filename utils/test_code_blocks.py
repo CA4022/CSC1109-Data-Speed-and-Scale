@@ -115,36 +115,18 @@ def run_docker_test(
             image=docker_image,
             name=container_name,
             detach=True,
+            stdin_open=True,
+            tty=True,
             remove=True,
-            command=["tail", "-f", "/dev/null"],
             volumes=docker_volumes_dict,
             environment={"SHELL": shell, "EDITOR": "micro"},
             privileged=True,
         )
         output_log.append(f"Container '{container.id}' started.")
+        breakpoint()
+        import time
 
-        output_log.append("Starting dockerd inside the container...")
-        dockerd_startup_cmd = "nohup dockerd > /var/log/dockerd.log 2>&1 &"
-        dockerd_check_cmd = "docker info"
-
-        exec_result = container.exec_run(
-            cmd=["bash", "-c", dockerd_startup_cmd],
-            stream=False,
-            demux=True,
-            detach=True,
-        )
-        if exec_result.exit_code != 0:
-            output_log.append(
-                f"ERROR: Failed to initiate dockerd startup command. Exit code: {exec_result.exit_code}"
-            )
-            stdout_err = exec_result.output[0].decode("utf-8") if exec_result.output[0] else ""
-            stderr_err = exec_result.output[1].decode("utf-8") if exec_result.output[1] else ""
-            if stdout_err:
-                output_log.append(f"STDOUT: {stdout_err}")
-            if stderr_err:
-                output_log.append(f"STDERR: {stderr_err}")
-            success = False
-            return success, "\n".join(output_log)
+        time.sleep(20)
 
         if init_commands_for_page:
             output_log.append("\n--- Executing Initialization Commands ---")
@@ -176,43 +158,6 @@ def run_docker_test(
                         f"ERROR: An error occurred during init command execution: {e}"
                     )
                     break
-
-        max_wait_time = 90
-        poll_interval = 1
-        output_log.append(f"Polling for dockerd readiness (max {max_wait_time}s)...")
-
-        for _ in range(int(max_wait_time / poll_interval)):
-            try:
-                check_result = container.exec_run(
-                    cmd=["bash", "-c", dockerd_check_cmd], stream=False, demux=True
-                )
-                if check_result.exit_code == 0:
-                    output_log.append("dockerd is up and running.")
-                    break
-            except Exception as e:
-                output_log.append(f"Warning during dockerd check: {e}")
-            time.sleep(poll_interval)
-        else:
-            output_log.append(
-                f"ERROR: Timed out waiting for dockerd to start after {max_wait_time} seconds. Check container logs for dockerd output."
-            )
-            success = False
-            try:
-                dockerd_logs = container.exec_run(
-                    cmd="cat /var/log/dockerd.log", stream=False, demux=True
-                )
-                if dockerd_logs.exit_code == 0:
-                    output_log.append(
-                        "\n--- /var/log/dockerd.log ---\n" + dockerd_logs.output[0].decode("utf-8")
-                    )
-                else:
-                    output_log.append(
-                        f"Could not retrieve dockerd logs: {dockerd_logs.output[1].decode('utf-8')}"
-                    )
-            except Exception as log_e:
-                output_log.append(f"Failed to retrieve dockerd logs: {log_e}")
-
-            return success, "\n".join(output_log)
 
         for i, (lang, code_block_content, command_wrapper) in enumerate(code_blocks):
             output_log.append(f"\n--- Executing Block {i + 1} ({lang}) with {shell} ---")
