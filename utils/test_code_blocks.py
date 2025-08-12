@@ -28,12 +28,20 @@ if not DOCS_DEV_MODE:
         CLIENT = docker.from_env()
     except DockerException as e:
         errors: list[Exception] = [e]
-        for socket in (
-            "unix://var/run/docker.sock",
-            "unix://var/run/docker/docker.sock",
-            "unix://var/run/podman.sock",
-            "unix://var/run/podman/podman.sock",
-        ):
+
+        if sys.platform == "win32":
+            logger.info("`docker.from_env()` failed. Trying Windows-specific named pipe.")
+            socket_urls = ["npipe:////./pipe/docker_engine"]
+        else:  # If not windows: default to unix-like behaviour
+            logger.info("`docker.from_env()` failed. Trying common Unix sockets.")
+            socket_urls = [
+                "unix://var/run/docker.sock",
+                "unix://var/run/docker/docker.sock",
+                "unix://var/run/podman.sock",
+                "unix://var/run/podman/podman.sock",
+            ]
+
+        for socket in socket_urls:
             try:
                 CLIENT = docker.DockerClient(base_url=socket)
                 break
@@ -42,7 +50,9 @@ if not DOCS_DEV_MODE:
         else:
             raise ExceptionGroup("Couldn't find a valid docker socket!", errors)
     except Exception as e:
-        logger.error("Could not connect to Docker daemon. Is Docker running?")
+        logger.error(
+            "A critical error occurred while connecting to the Docker daemon. Is Docker installed and running?"
+        )
         raise ConnectionError("Could not connect to Docker daemon.") from e
 
 assert CLIENT is not None, "`CLIENT` should not be `None`!"
