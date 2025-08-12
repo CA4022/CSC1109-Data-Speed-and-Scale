@@ -60,8 +60,9 @@ jobs:
       - name: Install crun and configure Podman
         if: matrix.config.oci == 'crun'
         run: |
+          sudo add-apt-repository universe
           sudo apt-get update
-          sudo apt-get install -y crun
+          sudo apt-get install -y criu crun
           sudo mkdir -p /etc/containers
           echo '[engine]' | sudo tee /etc/containers/containers.conf
           echo 'runtime = "crun"' | sudo tee -a /etc/containers/containers.conf
