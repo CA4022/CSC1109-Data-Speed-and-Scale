@@ -17,17 +17,18 @@ update/streamline this module.
     - [X] Recommender systems example (collaborative filtering from Spark ML)
     - [X] STORM (just to run a simple topology)
 - [X] Image building workflows
-- [ ] Testing workflows
-    - [ ] Every OS
-    - [ ] Other OCI container systems? (if time allows. focus on docker primarily though)
-        - [ ] Podman
-            - [ ] runc
-            - [ ] crun
-        - [ ] Minikube
+- [X] Testing workflows
+    - [-] Every OS
+        - Only linux is properly supported by github workflows for now
+    - [X] Other OCI container systems? (if time allows. focus on docker primarily though)
+        - [X] Podman
+            - [X] runc
+            - [X] crun
 - [X] New lab documentation
     - [X] mkdocs + readthedocs?
     - [X] Executable docs
-- [ ] Integrate with moodle? If possible/needed
+- [-] Integrate with moodle? If possible/needed
+    - Decided probably not useful at all given how this turned out
 
 # Notes
 
