@@ -17,17 +17,16 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        config:
-          - { runtime: 'docker', oci: 'default', name: 'docker' }
-          - { runtime: 'podman', oci: 'runc',    name: 'podman (runc)' }
-          - { runtime: 'podman', oci: 'crun',    name: 'podman (crun)' }
         # NOTE: Mac OS and Windows tests are not included here because:
         #     - Mac OS: `--privileged` currently doesn't work due to M1/Colima restrictions
         #     - Windows: The `windows-latest` images doesn't allow testing linux based containers
         # In theory: this is less than ideal but should be fine since once we get inside the
         #     container our environments should be predictably the same
         # os: [ubuntu-latest, macos-latest, windows-latest]
-        container_runtime: [docker, podman]
+        config:
+          - { runtime: 'docker', oci: 'default', name: 'docker' }
+          - { runtime: 'podman', oci: 'runc',    name: 'podman (runc)' }
+          - { runtime: 'podman', oci: 'crun',    name: 'podman (crun)' }
 
     name: Test Docs (${{ matrix.os }} | ${{ matrix.config.name }})
     runs-on: ${{ matrix.os }}
