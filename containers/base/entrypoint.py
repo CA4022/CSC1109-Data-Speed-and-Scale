@@ -113,6 +113,17 @@ class EnvSelector(Selector):
         super().__init__(name, prompt, items)
         self.env_var = env_var
 
+    async def select(self):
+        if self.env_var in os.environ and os.environ[self.env_var]:
+            existing = os.environ[self.env_var]
+            if existing in self.commands.values():
+                self.choice = next(opt for opt, cmd in self.commands.items() if cmd == existing)
+                print(
+                    f'{self.name} is already set to "{self.choice}" ({existing}), skipping selection.'
+                )
+                return
+        await super().select()
+
     def start(self):
         os.environ[self.env_var] = self.commands[self.choice]
 
@@ -130,8 +141,21 @@ class ShellSelector(Selector):
 
     async def select(self):
         print()
-        await super().select()
+        if "SHELL" in os.environ and os.environ["SHELL"]:
+            existing_shell = os.environ["SHELL"]
+            if existing_shell in self.commands.values():
+                self.choice = next(
+                    opt for opt, cmd in self.commands.items() if cmd == existing_shell
+                )
+                print(
+                    f'{self.name} is already set to "{self.choice}" ({existing_shell}), skipping selection.'
+                )
+            else:
+                await super().select()
+        else:
+            await super().select()
         print()
+
         for s in self.selectors:
             await s.select()
             print()
