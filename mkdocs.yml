@@ -31,6 +31,12 @@ theme:
     - content.code.select
     - content.code.annotate
     - content.tooltips
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.instant.progress
+    - navigation.instant.preview
+    - navigation.indexes
+    - navigation.top
   palette:
     # Palette toggle for light mode
     - scheme: default
