@@ -17,6 +17,10 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
+        config:
+          - { runtime: 'docker', oci: 'default', name: 'docker' }
+          - { runtime: 'podman', oci: 'runc',    name: 'podman (runc)' }
+          - { runtime: 'podman', oci: 'crun',    name: 'podman (crun)' }
         # NOTE: Mac OS and Windows tests are not included here because:
         #     - Mac OS: `--privileged` currently doesn't work due to M1/Colima restrictions
         #     - Windows: The `windows-latest` images doesn't allow testing linux based containers
@@ -25,7 +29,7 @@ jobs:
         # os: [ubuntu-latest, macos-latest, windows-latest]
         container_runtime: [docker, podman]
 
-    name: Test Docs (${{ matrix.os }} | ${{ matrix.container_runtime }})
+    name: Test Docs (${{ matrix.os }} | ${{ matrix.config.name }})
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -43,19 +47,29 @@ jobs:
         uses: extractions/setup-just@v2
 
       - name: Set container environment
-        run: echo "CONTAINER_ENV=${{ matrix.container_runtime }}" >> $GITHUB_ENV
+        run: echo "CONTAINER_ENV=${{ matrix.config.runtime }}" >> $GITHUB_ENV
         shell: bash
 
       - name: Set up Docker
-        if: matrix.container_runtime == 'docker'
+        if: matrix.config.runtime == 'docker'
         uses: docker/setup-qemu-action@v3
 
       - name: Set up Podman
-        if: matrix.container_runtime == 'podman'
+        if: matrix.config.runtime == 'podman'
         uses: gacts/install-podman@v1
 
+      - name: Install crun and configure Podman
+        if: matrix.config.oci == 'crun'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y crun
+          sudo mkdir -p /etc/containers
+          echo '[engine]' | sudo tee /etc/containers/containers.conf
+          echo 'runtime = "crun"' | sudo tee -a /etc/containers/containers.conf
+        shell: bash
+
       - name: Log in to GHCR (Docker)
-        if: matrix.container_runtime == 'docker'
+        if: matrix.config.runtime == 'docker'
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -63,7 +77,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Log in to GHCR (Podman)
-        if: matrix.container_runtime == 'podman'
+        if: matrix.config.runtime == 'podman'
         uses: redhat-actions/podman-login@v1
         with:
           registry: ghcr.io
@@ -78,5 +92,5 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: test_results-${{ matrix.os }}-${{ matrix.container_runtime }}.md
+          name: test_results-${{ matrix.os }}-${{ matrix.config.name }}.md
           path: ${{ github.workspace }}/docs/test_results.md
