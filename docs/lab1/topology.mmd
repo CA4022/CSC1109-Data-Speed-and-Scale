@@ -1,0 +1,63 @@
+graph TD
+    subgraph "User Interaction"
+        Client("lab-client-1")
+    end
+
+    subgraph "HDFS (Storage Layer)"
+        direction LR
+        NameNode("lab-namenode-1")
+        subgraph "Data Storage"
+            direction TB
+            DataNode1("lab-datanode-1")
+            DataNode2("lab-datanode-2")
+            DataNode3("lab-datanode-3")
+            DataNode4("lab-datanode-4")
+        end
+    end
+
+    subgraph "YARN (Compute Layer)"
+        direction LR
+        ResourceManager("lab-resourcemanager-1")
+        NodeManager("lab-nodemanager-1")
+    end
+
+    %% --- Connections ---
+
+    %% HDFS Flow
+    Client -- "Filesystem Metadata" --> NameNode
+    NameNode -- "Block Locations" --> Client
+    Client -- "Read/Write Data Blocks" --> DataNode1
+    Client -- "Read/Write Data Blocks" --> DataNode2
+    Client -- "Read/Write Data Blocks" --> DataNode3
+    Client -- "Read/Write Data Blocks" --> DataNode4
+    DataNode1 -- "Block Reports & Heartbeats" --> NameNode
+    DataNode2 -- "Block Reports & Heartbeats" --> NameNode
+    DataNode3 -- "Block Reports & Heartbeats" --> NameNode
+    DataNode4 -- "Block Reports & Heartbeats" --> NameNode
+
+    %% YARN Flow
+    Client -- "Submit Job" --> ResourceManager
+    ResourceManager -- "Allocate Container" --> NodeManager
+    NodeManager -- "Container Status" --> ResourceManager
+
+    %% Data Locality Flow
+    NodeManager -- "Dispatch container" --> DataNode1
+    NodeManager -- "Dispatch container" --> DataNode2
+    NodeManager -- "Dispatch container" --> DataNode3
+    NodeManager -- "Dispatch container" --> DataNode4
+
+    %% Layout Enforcement (Invisible Link)
+    NameNode --> ResourceManager
+
+    %% Style Definitions
+    classDef hdfs stroke:#f9f,stroke-width:2px;
+    classDef yarn stroke:#bbf,stroke-width:2px;
+    classDef client stroke:#dfd,stroke-width:2px;
+
+    class NameNode,DataNode1,DataNode2,DataNode3,DataNode4 hdfs;
+    class ResourceManager,NodeManager yarn;
+    class Client client;
+
+    %% Make the layout enforcement link invisible
+    linkStyle 17 stroke-width:0;
+

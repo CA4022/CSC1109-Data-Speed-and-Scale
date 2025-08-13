@@ -1,0 +1,45 @@
+graph TD
+    subgraph "User Interaction"
+        Client("lab-client-1")
+    end
+
+    subgraph "Spark Cluster"
+        direction TB
+        Master("spark-master")
+
+        subgraph "Worker Nodes"
+            direction TB
+            Worker1("spark-worker-1")
+            Worker2("spark-worker-2")
+            Worker3("spark-worker-3")
+            Worker4("spark-worker-4")
+        end
+    end
+
+    subgraph "Hadoop Cluster"
+        Hadoop("HDFS")
+    end
+
+    %% --- Connections ---
+    Client -- "Submit Job" --> Master
+    Master -- "Delegate Tasks" --> Worker1
+    Master -- "Delegate Tasks" --> Worker2
+    Master -- "Delegate Tasks" --> Worker3
+    Master -- "Delegate Tasks" --> Worker4
+    Worker1 -- "Executor Status" --> Master
+    Worker2 -- "Executor Status" --> Master
+    Worker3 -- "Executor Status" --> Master
+    Worker4 -- "Executor Status" --> Master
+    Worker1 <-- "Storage" --> Hadoop
+    Worker2 <-- "Storage" --> Hadoop
+    Worker3 <-- "Storage" --> Hadoop
+    Worker4 <-- "Storage" --> Hadoop
+
+    %% --- Style Definitions ---
+    classDef spark stroke:#ffc107,stroke-width:2px;
+    classDef hadoop stroke:#f9f,stroke-width:2px;
+    classDef client stroke:#dfd,stroke-width:2px;
+
+    class Master,Worker1,Worker2,Worker3,Worker4 spark;
+    class Hadooop hadoop;
+    class Client client;

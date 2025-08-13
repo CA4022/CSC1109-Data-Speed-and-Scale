@@ -39,6 +39,10 @@ kept stateless, which is essential to the fault-tolerance and performance of sto
 And, of course, a separate client node on the same network that we can use as an ingress point into
 our cluster.
 
+```mermaid
+--8<-- "lab4/topology.mmd"
+```
+
 This project will be managed by a tool called maven. Similar to the `uv` package manager we used
 [back in Lab 1](../lab1/index.md#running-code-on-hadoop-via-mrjob), maven is a **project package
 manager but for java**. We will be using this as it allows us to coordinate and manage the pulling
@@ -72,7 +76,7 @@ other bolts, causing data to propagate through the graph in a dataflow. These da
 graph of self-contained, stateless nodes are fundamentally easier to reason about than other
 distributed structures (e.g: MapReduce), allowing for easier optimisation and maintenance. This
 makes apache storm a powerful tool for creating very large, highly concurrent data processing
-topologies.
+**topologies**.
 
 # What is a Topology? #
 
@@ -90,6 +94,16 @@ passed around in an infinite loop and that processing for any given piece of dat
 end. This well-defined, loop-free structure allows the Storm scheduler to effectively partition the
 graph and distribute its components across a cluster of machines, enabling massive parallelism and
 fault-tolerance.
+
+> NOTE: It is important to remember that although the originate from the same concept (the
+> **shape** of a network of interconnected nodes and their relationships) the Storm **execution**
+> topology is completely distinct from the **cluster** topology.
+>
+> - **Execution Topology**: describes a network of separate, interconnected **Java objects**
+> - **Cluster Topology**: describes a network of separate, interconnected **computers**
+>
+> In the context of Apache Storm, the unqualified term "topology" is generally assumed to mean an
+> execution topology unless otherwise specified.
 
 # Your first Storm Topology - Wordcount #
 
@@ -241,6 +255,12 @@ creates a graph from our bolts and spout, then submits that topology to the stor
 
 ```java title="src/main/java/com/csc1104/lab/WordCountTopology.java"
 --8<-- "lab4/src/WordCountTopology.java"
+```
+
+This object constructs the following execution topology DAG.
+
+```mermaid
+--8<-- "lab4/dag.mmd"
 ```
 
 # Building and Running our Topology

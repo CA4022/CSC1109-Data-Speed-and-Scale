@@ -65,14 +65,20 @@ custom container images for your HPC clusters for efficiency and security.
 Once your docker compose stack finishes deploying, you can view the deployed containers by running
 `docker ps`. This should show you 8 active hadoop nodes in your locally deployed cluster.
 
-- lab-namenode-1
-- lab-datanode-1
-- lab-datanode-2
-- lab-datanode-3
-- lab-datanode-3
-- lab-resourcemanager-1
-- lab-nodemanager-1
-- lab-client-1
+=== "Node List"
+    - lab-namenode-1
+    - lab-datanode-1
+    - lab-datanode-2
+    - lab-datanode-3
+    - lab-datanode-3
+    - lab-resourcemanager-1
+    - lab-nodemanager-1
+    - lab-client-1
+
+=== "Cluster Topology Diagram"
+    ```mermaid
+    --8<-- "lab1/topology.mmd"
+    ```
 
 ??? EXAMPLE
 

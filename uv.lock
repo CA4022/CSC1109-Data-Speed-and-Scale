@@ -171,6 +171,7 @@ dependencies = [
     { name = "mkdocs-material" },
     { name = "mkdocs-mermaid2-plugin" },
     { name = "mkdocs-minify-plugin" },
+    { name = "mkdocs-panzoom-plugin" },
     { name = "mkdocs-section-index" },
     { name = "mkdocs-spellcheck", extra = ["all"] },
     { name = "pymarkdownlnt" },
@@ -195,6 +196,7 @@ requires-dist = [
     { name = "mkdocs-material", specifier = ">=9.6.14" },
     { name = "mkdocs-mermaid2-plugin", specifier = ">=1.2.1" },
     { name = "mkdocs-minify-plugin", specifier = ">=0.8.0" },
+    { name = "mkdocs-panzoom-plugin", specifier = ">=0.3.0" },
     { name = "mkdocs-section-index", specifier = ">=0.3.10" },
     { name = "mkdocs-spellcheck", extras = ["all"], specifier = ">=1.1.1" },
     { name = "pymarkdownlnt", specifier = ">=0.9.30" },
@@ -659,6 +661,19 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/52/67/fe4b77e7a8ae7628392e28b14122588beaf6078b53eb91c7ed000fd158ac/mkdocs-minify-plugin-0.8.0.tar.gz", hash = "sha256:bc11b78b8120d79e817308e2b11539d790d21445eb63df831e393f76e52e753d", size = 8366, upload_time = "2024-01-29T16:11:32.982Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/1b/cd/2e8d0d92421916e2ea4ff97f10a544a9bd5588eb747556701c983581df13/mkdocs_minify_plugin-0.8.0-py3-none-any.whl", hash = "sha256:5fba1a3f7bd9a2142c9954a6559a57e946587b21f133165ece30ea145c66aee6", size = 6723, upload_time = "2024-01-29T16:11:31.851Z" },
+]
+
+[[package]]
+name = "mkdocs-panzoom-plugin"
+version = "0.3.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "beautifulsoup4" },
+    { name = "mkdocs" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/89/5a/601d022eebad1d0111300c5f29b55544f85d0402a97a72299f19c7667543/mkdocs_panzoom_plugin-0.3.0.tar.gz", hash = "sha256:a1bda63405a4566d6d7b2711a9a80fd498d081a86ef54e12718847a4630fe363", size = 21862, upload_time = "2025-07-31T11:21:18.551Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ec/57/815b0d1d9138bebcb6a0623c794f75b9cf98a31cc3b943885881c8175594/mkdocs_panzoom_plugin-0.3.0-py3-none-any.whl", hash = "sha256:e8f7921903d9e3ef9746304bb29a9f90cedbb00b9892b47891c32fce08434ae8", size = 22059, upload_time = "2025-07-31T11:21:17.383Z" },
 ]
 
 [[package]]

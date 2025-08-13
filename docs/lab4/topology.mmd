@@ -1,0 +1,39 @@
+graph TD
+    subgraph "User Interaction"
+        Client("lab-client-1")
+    end
+
+    subgraph "Storm Cluster"
+        direction TB
+        Nimbus("lab-nimbus-1")
+        Zookeeper("lab-zookeeper-1")
+
+        subgraph "Supervisor Nodes"
+            direction TB
+            Supervisor1("lab-supervisor-1")
+            Supervisor2("lab-supervisor-2")
+            Supervisor3("lab-supervisor-3")
+            Supervisor4("lab-supervisor-4")
+        end
+    end
+
+    %% --- Connections ---
+
+    %% Storm Topology Flow
+    Client -- "Submit Topology" --> Nimbus
+    Nimbus <-- "Cluster Coordination" --> Zookeeper
+    Nimbus -- "Task Delegation" --> Supervisor1
+    Nimbus -- "Task Delegation" --> Supervisor2
+    Nimbus -- "Task Delegation" --> Supervisor3
+    Nimbus -- "Task Delegation" --> Supervisor4
+    Supervisor1 -- "State Updates" --> Zookeeper
+    Supervisor2 -- "State Updates" --> Zookeeper
+    Supervisor3 -- "State Updates" --> Zookeeper
+    Supervisor4 -- "State Updates" --> Zookeeper
+
+    %% Style Definitions
+    classDef storm stroke:#ff7f0e,stroke-width:2px;
+    classDef client stroke:#dfd,stroke-width:2px;
+
+    class Nimbus,Zookeeper,Supervisor1,Supervisor2,Supervisor3,Supervisor4 storm;
+    class Client client;

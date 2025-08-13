@@ -34,6 +34,10 @@ NOTE: Once deployed, the Spark master WebUI will become available at
 [http://127.0.0.1:8000/](http://127.0.0.1:8000/) and the Hadoop namenode UI will become available
 at [http://127.0.0.1:9870/](http://127.0.0.1:9870/) as in other labs that use Hadoop.
 
+```mermaid
+--8<-- "lab5/topology.mmd"
+```
+
 ## What is Spark? &nbsp; ##
 
 So far, we have explored the evolution of distributed HPC systems and found many powerful
@@ -93,6 +97,10 @@ fine-grained control over the flow of data. In addition, each RDD is immutable a
 inputs or other RDDs). Because all operations on RDDs are required to be deterministic, this
 combination of lineage and immutability ensures that RDDs are extremely resilient and can be
 readily rebuilt in the event of loss or corruption of data.
+
+```mermaid
+--8<-- "lab5/rdd.mmd"
+```
 
 #### Distributed Acyclic Graphs ####
 

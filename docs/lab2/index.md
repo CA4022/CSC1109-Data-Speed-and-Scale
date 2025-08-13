@@ -39,9 +39,15 @@ If you examine the stack we just deployed, you will see the familiar structure o
 HDFS/MapReduce cluster from lab 1. However, you will also see 3 new nodes that comprise the Hive
 query engine:
 
-- lab-hiveserver-1
-- lab-metastore-1
-- lab-postgres-1
+=== "Node List"
+    - lab-hiveserver-1
+    - lab-metastore-1
+    - lab-postgres-1
+
+=== "Cluster Topology Diagram"
+    ```mermaid
+    --8<-- "lab2/topology.mmd"
+    ```
 
 ### Hiveserver ###
 

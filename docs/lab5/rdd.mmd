@@ -1,0 +1,61 @@
+graph TD
+    subgraph "Spark Cluster"
+        direction TB
+        Master("spark-master")
+
+        subgraph "Worker Nodes"
+            direction LR
+            Worker1("spark-worker-1")
+            Worker2("spark-worker-2")
+            Worker3("spark-worker-3")
+            Worker4("spark-worker-4")
+        end
+    end
+
+    subgraph "Data (RDDs)"
+        direction LR
+
+        subgraph "RDD 'A'"
+            direction LR
+            P1_A("Partition 1")
+            P2_A("Partition 2")
+            P3_A("Partition 3")
+            P4_A("Partition 4")
+        end
+
+        subgraph "RDD 'B'"
+            direction LR
+            P1_B("Partition 1")
+            P2_B("Partition 2")
+            P3_B("Partition 3")
+            P4_B("Partition 4")
+        end
+    end
+
+
+    %% --- Connections ---
+
+    %% RDD Distribution
+    Master -- "Manages Partitions" --> Worker1
+    Master -- "Manages Partitions" --> Worker2
+    Master -- "Manages Partitions" --> Worker3
+    Master -- "Manages Partitions" --> Worker4
+
+    Worker1 -- "Stores" --> P1_A
+    Worker2 -- "Stores" --> P2_A
+    Worker3 -- "Stores" --> P3_A
+    Worker4 -- "Stores" --> P4_A
+
+    %% Transformation and Lineage
+    P1_A -- "Maps Operation" --> P1_B
+    P2_A -- "Maps Operation" --> P2_B
+    P3_A -- "Maps Operation" --> P3_B
+    P4_A -- "Maps Operation" --> P4_B
+
+
+    %% Style Definitions
+    classDef spark stroke:#ffc107,stroke-width:2px;
+    classDef rdd stroke:#2ca02c,stroke-width:2px;
+
+    class Master,Worker1,Worker2,Worker3,Worker4 spark;
+    class P1_A,P2_A,P3_A,P4_A,P1_B,P2_B,P3_B,P4_B rdd;

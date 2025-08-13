@@ -1,0 +1,37 @@
+graph TD
+    subgraph "User Interaction"
+        Client("lab-client-1")
+    end
+
+    subgraph "Hive Services"
+        direction TB
+        Hiveserver("lab-hiveserver-1")
+        Metastore("lab-metastore-1")
+        MetastoreDB("lab-postgres-1")
+    end
+
+    subgraph "Hadoop Cluster"
+        Hadoop("HDFS / MapReduce")
+    end
+
+    %% --- Connections ---
+
+    %% Hive Query Flow
+    Client -- "Submit HiveQL Query" --> Hiveserver
+    Hiveserver -- "Request Schema" --> Metastore
+    Metastore -- "Fetch Metadata" --> MetastoreDB
+    MetastoreDB -- "Return Metadata" --> Metastore
+    Metastore -- "Return Schema" --> Hiveserver
+    Hiveserver -- "Compile & Submit Job" --> Hadoop
+    Hadoop -- "Return Job Results" --> Hiveserver
+    Hiveserver -- "Return Query Results" --> Client
+
+    %% Style Definitions
+    classDef hive stroke:#ffc107,stroke-width:2px;
+    classDef hadoop stroke:#f9f,stroke-width:2px;
+    classDef client stroke:#dfd,stroke-width:2px;
+
+    class Hiveserver,Metastore,MetastoreDB hive;
+    class Hadoop hadoop;
+    class Client client;
+
