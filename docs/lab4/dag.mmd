@@ -22,20 +22,8 @@ graph TD
     FileSpout --> SplitLineBolt3
     FileSpout --> SplitLineBolt4
     SplitLineBolt1 --> WordCountBolt1
-    SplitLineBolt1 --> WordCountBolt2
-    SplitLineBolt1 --> WordCountBolt3
-    SplitLineBolt1 --> WordCountBolt4
-    SplitLineBolt2 --> WordCountBolt1
     SplitLineBolt2 --> WordCountBolt2
-    SplitLineBolt2 --> WordCountBolt3
-    SplitLineBolt2 --> WordCountBolt4
-    SplitLineBolt3 --> WordCountBolt1
-    SplitLineBolt3 --> WordCountBolt2
     SplitLineBolt3 --> WordCountBolt3
-    SplitLineBolt3 --> WordCountBolt4
-    SplitLineBolt4 --> WordCountBolt1
-    SplitLineBolt4 --> WordCountBolt2
-    SplitLineBolt4 --> WordCountBolt3
     SplitLineBolt4 --> WordCountBolt4
     WordCountBolt1 --> ReportBolt
     WordCountBolt2 --> ReportBolt
