@@ -122,10 +122,6 @@ def run_docker_test(
             privileged=True,
         )
         output_log.append(f"Container '{container.id}' started.")
-        breakpoint()
-        import time
-
-        time.sleep(20)
 
         if init_commands_for_page:
             output_log.append("\n--- Executing Initialization Commands ---")
