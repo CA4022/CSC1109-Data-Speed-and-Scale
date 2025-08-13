@@ -309,58 +309,28 @@ plugins = {
         end,
     },
     {
-        "hrsh7th/nvim-cmp",
-        event = "InsertEnter",
+        "saghen/blink.cmp",
         dependencies = {
-            {
-                "L3MON4D3/LuaSnip",
-                build = (function()
-                    if vim.fn.has("win32") == 1 or vim.fn.executable("make") == 0 then
-                        return
-                    end
-                    return "make install_jsregexp"
-                end)(),
-            },
-            "saadparwaiz1/cmp_luasnip",
-            "hrsh7th/cmp-nvim-lsp",
-            "hrsh7th/cmp-path",
+            "rafamadriz/friendly-snippets",
         },
-        config = function()
-            local cmp = require("cmp")
-            local luasnip = require("luasnip")
-            luasnip.config.setup({})
-            cmp.setup({
-                snippet = {
-                    expand = function(args)
-                        luasnip.lsp_expand(args.body)
-                    end,
-                },
-                completion = { completeopt = "menu,menuone,noinsert" },
+        version = "1.*",
 
-                mapping = cmp.mapping.preset.insert({
-                    ["<M-n>"] = cmp.mapping.select_next_item(),
-                    ["<M-p>"] = cmp.mapping.select_prev_item(),
-                    ["<M-y>"] = cmp.mapping.confirm({ select = true }),
-                    ["<M-Space>"] = cmp.mapping.complete({}),
-                    ["<M-,>"] = cmp.mapping(function()
-                        if luasnip.expand_or_locally_jumpable() then
-                            luasnip.expand_or_jump()
-                        end
-                    end, { "i", "s" }),
-                    ["<M-.>"] = cmp.mapping(function()
-                        if luasnip.locally_jumpable(-1) then
-                            luasnip.jump(-1)
-                        end
-                    end, { "i", "s" }),
-                }),
-                sources = {
-                    { name = "nvim_lsp" },
-                    { name = "luasnip" },
-                    { name = "path" },
-                },
-            })
-        end,
+        opts = {
+            keymap = {
+                preset = "super-tab",
+            },
+            appearance = {
+                nerd_font_variant = "mono"
+            },
+            completion = { documentation = { auto_show = true } },
+            sources = {
+                default = { "lsp", "path", "snippets", "buffer" },
+            },
+            fuzzy = { implementation = "prefer_rust_with_warning" }
+        },
+        opts_extend = { "sources.default" }
     },
+    { "j-hui/fidget.nvim",    opts = {} },
     {
         "neovim/nvim-lspconfig",
         dependencies = {
@@ -426,11 +396,6 @@ plugins = {
                 end,
             })
             local capabilities = vim.lsp.protocol.make_client_capabilities()
-            capabilities = vim.tbl_deep_extend(
-                "force",
-                capabilities,
-                require("cmp_nvim_lsp").default_capabilities()
-            )
             local servers = {
                 lua_ls = {
                     settings = {
