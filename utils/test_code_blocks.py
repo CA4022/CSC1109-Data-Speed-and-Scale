@@ -3,7 +3,6 @@ import os
 import re
 import shlex
 import sys
-import time
 from pathlib import Path
 from typing import Iterator
 
