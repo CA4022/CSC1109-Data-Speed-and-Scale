@@ -63,8 +63,9 @@ jobs:
           sudo apt-get install -y make git gcc build-essential pkgconf libtool \
             libsystemd-dev libprotobuf-c-dev libcap-dev libseccomp-dev libyajl-dev \
             go-md2man autoconf python3 automake
-          git fetch https://github.com/containers/crun
+          git clone https://github.com/containers/crun
           cd crun
+          git pull
           ./autogen.sh
           ./configure
           make
