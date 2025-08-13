@@ -220,6 +220,8 @@ distributed system, we will be running it locally here for the sake of convenien
 to explore further and run your BEAM on a cluster, including the use of a distributed scheduler
 you can check out `Horde`s documentation [here](https://hexdocs.pm/horde/getting_started.html).
 
+![Elixir Scaling Ghidorah Meme](../assets/img/elixir-scaling.webp#center)
+
 ### Hello World ###
 
 ```elixir title="hello.ex"

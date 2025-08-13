@@ -18,3 +18,8 @@
     -webkit-mask-image: var(--md-admonition-icon--dataset);
     mask-image: var(--md-admonition-icon--dataset);
 }
+
+img[src*="#center"] {
+    display: block;
+    margin: 0 auto;
+}

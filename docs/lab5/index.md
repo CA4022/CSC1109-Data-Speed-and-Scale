@@ -195,6 +195,13 @@ important to note that the `Dataset` API is primarily available in JVM languages
 Java. In dynamically typed languages like Python, the `DataFrame` remains the primary high-level
 structured API.
 
+<figure markdown="span">
+    <img class="center", src="../assets/img/fireworks-spark.webp", alt="Apache Spark Fireworks"/>
+    <figcaption>Congratulations! You are now all caught up on the underlying systems of modern
+    distributed computing! Give yourself a clap on the back and lets start practically applying
+    that newly developed expertise!</figcaption>
+</figure>
+
 ## A Programming Polyglot Tour of Spark Examples ##
 
 In this section, we will walk you through running our familiar distributed word count on the Spark

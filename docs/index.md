@@ -301,3 +301,5 @@ before turning to ask your colleagues or supervisors for help! Debugging may be 
 computer scientists, but so is collaboration and knowing when to ask for help tackling a problem.
 We aim for these labs to act as environments for exploration, learning, and collaboration so we
 encourage both the discovery of and collaborative fixing of bugs.
+
+![XKCD 1739](https://imgs.xkcd.com/comics/fixing_problems.png#center)

@@ -4,6 +4,8 @@ title: "Bonus Lab 2: Honey Roast Ham 󰾡&nbsp;󱀆&nbsp;"
 
 {{ "# " ~ page.meta.title ~ " #" }}
 
+![XKCD 1563](https://imgs.xkcd.com/comics/synonym_movies.png#center)
+
 ## Hive and Pig on Movielens data ##
 
 For this Lab, we will use the MovieLens Small Dataset to examine the functions of Hive and Pig.

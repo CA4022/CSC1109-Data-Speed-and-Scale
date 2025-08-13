@@ -173,6 +173,8 @@ this kind of HDFS/YARN cluster to operate on many computers in concert, efficien
 massive computations on gigantic datasets. For this reason, this kind of HDFS/YARN setup is often
 deployed on supercomputers and high performance compute clusters.
 
+![Elephant Lineup with Hadoop Elephant](../assets/img/elephant-lineup-hadoop.webp)
+
 ## Adding a file to the HDFS Cluster ##
 
 To begin running computations on our cluster, we must first begin my adding files to its HDFS
