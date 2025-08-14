@@ -20,6 +20,12 @@ else:
     logger = get_plugin_logger("test_code_blocks")
 
 DOCS_DEV_MODE = os.environ.get("DOCS_DEV_MODE") == "1"
+PREFETCH_IMAGES = [  # Prefetching these speeds things up and fixes caching issues
+    "ghcr.io/amileo/csc1109-root",
+    "ghcr.io/amileo/csc1109-base",
+    "ghcr.io/amileo/csc1109-dind",
+    "ghcr.io/amileo/csc1109-dind-minimal",
+]
 CLIENT = None
 
 if not DOCS_DEV_MODE:
@@ -80,7 +86,7 @@ def run_docker_test(
     success = True
     output_log = []
 
-    docker_volumes_dict = {"/var/lib/docker": {"bind": "/var/lib/docker", "mode": "rw"}}
+    docker_volumes_dict = {"/var/lib/docker/": {"bind": "/var/lib/docker/", "mode": "rw"}}
     if volumes_config_for_page:
         for vol_item in volumes_config_for_page:
             host_path = Path(vol_item["host_path"]).resolve()
@@ -330,6 +336,11 @@ def main():
             tests_by_image.setdefault(image_for_block, []).append((lang, code, command_wrapper))
 
         if tests_by_image:
+            assert CLIENT is not None, (
+                "`CLIENT` should not be `None` but this should not be reachable either!"
+            )
+            for docker_image in PREFETCH_IMAGES:
+                CLIENT.images.pull(docker_image)
             for docker_image, code_blocks in tests_by_image.items():
                 n_blocks = len(code_blocks)
                 if n_blocks < 1:
