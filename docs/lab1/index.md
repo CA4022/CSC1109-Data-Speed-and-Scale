@@ -53,7 +53,7 @@ To deploy the Hadoop cluster defined in the `docker-compose.yaml` file simply ru
 command:
 
 ```sh { .test-block #ghcr.io/amileo/csc1109-lab1:latest }
-docker compose up -d
+docker compose up --build --pull -d
 ```
 
 IMPORTANT: The `-d` flag tells `docker compose` to start the stack as a daemon. Otherwise, you will

@@ -14,7 +14,7 @@ init_commands:
   - cp /lab/docs_src/*.java /lab/src/main/java/
   - cp /lab/docs_src/*.scala /lab/src/main/scala/
   - cp /lab/docs_src/*.py /lab/
-  - docker compose up -d
+  - docker compose up --build --pull -d
 ---
 
 {{ "# " ~ page.meta.title ~ " #" }}

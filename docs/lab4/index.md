@@ -8,7 +8,7 @@ volumes:
 init_commands:
   - mkdir /lab/src/main/resources/
   - cp /lab/src/main/com/csc1104/lab/splitline.py /lab/src/main/resources/splitline.py
-  - docker compose up -d
+  - docker compose up --build --pull -d
 ---
 
 {{ "# " ~ page.meta.title ~ " #" }}
