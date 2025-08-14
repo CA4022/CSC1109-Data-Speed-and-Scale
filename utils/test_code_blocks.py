@@ -95,8 +95,9 @@ def run_docker_test(
 
     try:
         output_log.append(f"Ensuring Docker image '{docker_image}' is available...")
+        image_hash = None
         try:
-            CLIENT.images.pull(docker_image)
+            image_hash = CLIENT.images.pull(docker_image)
             output_log.append(f"Image '{docker_image}' pulled successfully (or already present).")
         except ImageNotFound:
             output_log.append(f"ERROR: Docker image '{docker_image}' not found.")
@@ -105,13 +106,18 @@ def run_docker_test(
             output_log.append(f"ERROR: Docker API error pulling image '{docker_image}': {e}")
             return False, "\n".join(output_log)
 
+        if image_hash is None:
+            msg = f"The image '{docker_image}' was not pulled, but the pull operation failed silently."
+            output_log.append(msg)
+            raise ImageNotFound(msg)
+
         container_name = (
             f"mkdocs-test-{page_path.stem.replace('/', '-')}-{Path(page_path).parent.name}-{shell}"
         )
         output_log.append(f"Starting container: {container_name} with shell {shell}")
 
         container = CLIENT.containers.run(
-            image=docker_image,
+            image=image_hash,
             name=container_name,
             detach=True,
             stdin_open=True,

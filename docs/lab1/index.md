@@ -15,9 +15,10 @@ This lab will teach you how to configure and deploy a containerised hadoop clust
 it to perform computations. As an introduction to programming a hadoop cluster we will start by
 writing a basic wordcount program, as illustrated in Part 2 of the lecture slides.
 
-To download the container for this lab, run the following command:
+To download the container for this lab and run it, execute the following commands:
 
 ```sh
+docker pull {{ page.meta.docker_test_image }}
 docker run --privileged --hostname lab1 -p 9870:9870 -it {{ page.meta.docker_test_image }}
 ```
 

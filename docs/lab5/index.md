@@ -22,9 +22,10 @@ init_commands:
 This lab will introduce the basics of Apache Spark, deploying a localised spark cluster, running a
 spark-shell, and executing spark code written in Java, Scala, and Python.
 
-To download the container for this lab, run the following command:
+To download the container for this lab and run it, execute the following commands:
 
 ```sh
+docker pull {{ page.meta.docker_test_image }}
 docker run --privileged --hostname lab5 -p 8000:8080 -p 9870:9870 -it {{ page.meta.docker_image }}
 ```
 

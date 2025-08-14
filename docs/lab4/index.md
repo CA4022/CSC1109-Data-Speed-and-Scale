@@ -15,9 +15,10 @@ init_commands:
 
 This lab asks you to try and set up a simple Apache Storm topology.
 
-To download the container for this lab, run the following command:
+To download the container for this lab and run it, execute the following commands:
 
 ```sh
+docker pull {{ page.meta.docker_test_image }}
 docker run --privileged --hostname lab4 -p 8000:8080 -it {{ page.meta.docker_image }}
 ```
 
