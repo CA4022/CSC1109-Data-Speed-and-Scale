@@ -286,7 +286,7 @@ tools to help you use the CLI more effectively. These include some drop-in moder
 common GNU coreutils and tools to help users navigate unfamiliar aspects of the environment. For
 example, a cheatsheet can be displayed for (most) commands using the `tldr` command. e.g:
 
-```sh { .test-block #ghcr.io/amileo/csc1109-base:latest }
+```sh
 tldr compgen
 ```
 
