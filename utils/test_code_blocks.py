@@ -21,10 +21,10 @@ else:
 
 DOCS_DEV_MODE = os.environ.get("DOCS_DEV_MODE") == "1"
 PREFETCH_IMAGES = [  # Prefetching these speeds things up and fixes caching issues
-    "ghcr.io/amileo/csc1109-root",
-    "ghcr.io/amileo/csc1109-base",
-    "ghcr.io/amileo/csc1109-dind",
-    "ghcr.io/amileo/csc1109-dind-minimal",
+    "ghcr.io/amileo/csc1109-base-root:latest",
+    "ghcr.io/amileo/csc1109-base:latest",
+    "ghcr.io/amileo/csc1109-dind:latest",
+    "ghcr.io/amileo/csc1109-dind-minimal:latest",
 ]
 CLIENT = None
 
