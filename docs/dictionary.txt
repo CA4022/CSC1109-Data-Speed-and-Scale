@@ -18,6 +18,7 @@ coreutils
 csv
 ctrl
 customisable
+dask
 dataflow
 dataflows
 dataframe
