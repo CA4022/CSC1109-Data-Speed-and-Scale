@@ -205,10 +205,10 @@ structured API.
 
 INFO: Spark has greatly influenced many later tools that use a similar execution model in modern
 big data handling. Most notably, much of the data science community has recently been gradually
-moving from Spark towards distributed engines that are somewhat easier to progam for such as
-"Dask", which works similarly to Spark but is designed from the ground-up with python programming
+adopting distributed engines that are somewhat easier to progam for such as
+"Dask". Dask works similarly to Spark but is designed from the ground-up with python programming
 in mind. Despite this, Spark remains the primary pillar of the ecosystem, and offers a level of
-reliability and resilience that more user friendly tools like Dask simply can't replicate.
+reliability, resilience and production readiness that younger, user friendly tools like Dask can't yet match.
 
 ## A Programming Polyglot Tour of Spark Examples ##
 
