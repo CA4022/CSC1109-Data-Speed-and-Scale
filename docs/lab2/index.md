@@ -19,7 +19,7 @@ to demonstrate and get hands-on experience with distributed computing, we will b
 To download the container for this lab and run it, execute the following commands:
 
 ```sh
-docker pull {{ page.meta.docker_test_image }}
+docker pull {{ page.meta.docker_image }}
 docker run --privileged --hostname lab2 -p 9870:9870 -p 10000:10000 -p 10002:10002 -it {{ page.meta.docker_image }}
 ```
 

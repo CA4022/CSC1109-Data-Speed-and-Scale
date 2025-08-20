@@ -24,7 +24,7 @@ bonus lab, we invite you to take a brief foray into the other main branch of dis
 To download the container for this lab and run it, execute the following commands:
 
 ```sh
-docker pull {{ page.meta.docker_test_image }}
+docker pull {{ page.meta.docker_image }}
 docker run --hostname bonus3 --network host -it {{ page.meta.docker_image }}
 ```
 

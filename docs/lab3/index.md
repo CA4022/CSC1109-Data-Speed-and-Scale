@@ -10,7 +10,7 @@ This lab covers the basics of Apache Pig with examples.
 To download the container for this lab and run it, execute the following commands:
 
 ```sh
-docker pull {{ page.meta.docker_test_image }}
+docker pull {{ page.meta.docker_image }}
 docker run --privileged --hostname lab3 -p 9870:9870 -p 19888:19888 -it {{ page.meta.docker_image }}
 ```
 

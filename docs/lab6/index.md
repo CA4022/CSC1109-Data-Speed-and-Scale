@@ -17,7 +17,7 @@ this point to solve these big data ML problems yourself! 
 To download the container for this lab and run it, execute the following commands:
 
 ```sh
-docker pull {{ page.meta.docker_test_image }}
+docker pull {{ page.meta.docker_image }}
 docker run --privileged --hostname lab6 -v image-cache:/var/lib/docker -p 8000:8080 -p 4040:4040 -p 8000:8000 -p 8888:8888 -p 9870:9870 {{ page.meta.docker_image }}
 ```
 
