@@ -1,6 +1,6 @@
 ---
 title: "Lab 3: Pig"
-docker_image: ghcr.io/amileo/csc1109-lab3:latest
+docker_image: ghcr.io/ca4022/csc1109-lab3:latest
 ---
 
 {{ "# " ~ page.meta.title ~ " #" }}

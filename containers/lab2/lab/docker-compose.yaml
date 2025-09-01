@@ -120,7 +120,7 @@ services:
       - "10000:10000"
 
   client:
-    image: ghcr.io/amileo/csc1109-lab2-client
+    image: ghcr.io/ca4022/csc1109-lab2-client
     hostname: client
     depends_on:
       - namenode

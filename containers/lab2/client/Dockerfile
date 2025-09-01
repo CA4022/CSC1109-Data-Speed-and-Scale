@@ -1,4 +1,4 @@
-FROM ghcr.io/amileo/csc1109-base
+FROM ghcr.io/ca4022/csc1109-base
 
 RUN groupadd hive && \
     groupadd hadoop && \

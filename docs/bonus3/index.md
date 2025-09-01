@@ -1,6 +1,6 @@
 ---
 title: "Bonus Lab 3: To BEAM, or not to BEAM 󰓉&nbsp;&nbsp;"
-docker_image: ghcr.io/amileo/csc1109-bonus3:latest
+docker_image: ghcr.io/ca4022/csc1109-bonus3:latest
 volumes:
 - host_path: ./docs/bonus3/src/
   container_path: /lab/src/
@@ -269,7 +269,7 @@ processing the input to stdio. We can use this to demonstrate simple concurrency
 `iex` shell you can time any function using the `:timer.tc` function. You can then run the
 following to see concurrency in action:
 
-```elixir { .test-block #ghcr.io/amileo/csc1109-bonus3:latest }
+```elixir { .test-block #ghcr.io/ca4022/csc1109-bonus3:latest }
 # The following line maps our `run` function onto the numbers 1 to 5 synchronously
 :timer.tc(fn -> Enum.map(1..5, &Lab.Slow.run/1) end) # this should take >5s
 # Instead, this line runs maps `run` in concurrent processes, taking <5s
@@ -359,7 +359,7 @@ at you immediately.
 
 To perform our usual test word count, we can simply run:
 
-```elixir { .test-block #ghcr.io/amileo/csc1109-bonus3:latest }
+```elixir { .test-block #ghcr.io/ca4022/csc1109-bonus3:latest }
 Lab.WordCount.count_words({:file, "data/Word_count.txt", "out.txt"})
 ```
 

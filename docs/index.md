@@ -188,7 +188,7 @@ To do this, you can follow the instructions below.
     > modify the command like this:
     >
     > ```sh
-    > docker run --cpus="4.0" --memory="8g" --privileged --hostname csc1109-base -it ghcr.io/amileo/csc1109-base:latest
+    > docker run --cpus="4.0" --memory="8g" --privileged --hostname csc1109-base -it ghcr.io/ca4022/csc1109-base:latest
     > ```
     >
     > We recommend allocating **at least 4 CPUs and 8GB of memory** for the labs.
@@ -210,7 +210,7 @@ to test the lab CSC1109 environment without any lab-specific tools or data being
 you can do so by running the following command:
 
 ```sh
-docker run --hostname csc1109-base -it ghcr.io/amileo/csc1109-base:latest
+docker run --hostname csc1109-base -it ghcr.io/ca4022/csc1109-base:latest
 ```
 
 ### Operating System ###

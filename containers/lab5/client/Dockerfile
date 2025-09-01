@@ -1,4 +1,4 @@
-FROM ghcr.io/amileo/csc1109-base
+FROM ghcr.io/ca4022/csc1109-base
 
 COPY --from=docker.io/library/spark:4.0.0-scala2.13-java17-python3-ubuntu /opt/ /opt/
 COPY --from=docker.io/apache/hadoop:3.4.1 /opt/hadoop/ /opt/hadoop/

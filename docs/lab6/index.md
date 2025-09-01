@@ -1,6 +1,6 @@
 ---
 title: "Lab 6: Machine Learning with Spark"
-docker_image: ghcr.io/amileo/csc1109-lab6:latest
+docker_image: ghcr.io/ca4022/csc1109-lab6:latest
 ---
 
 {{ "# " ~ page.meta.title ~ " #" }}

@@ -1,4 +1,4 @@
-FROM ghcr.io/amileo/csc1109-base:latest AS base
+FROM ghcr.io/ca4022/csc1109-base:latest AS base
 
 ARG BASE_DOCKER_VERSION
 ARG BASE_COMPOSE_VERSION

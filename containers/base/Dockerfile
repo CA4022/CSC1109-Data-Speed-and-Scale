@@ -1,4 +1,4 @@
-FROM ghcr.io/amileo/csc1109-base-root:latest AS student-environment
+FROM ghcr.io/ca4022/csc1109-base-root:latest AS student-environment
 
 ARG BASE_GCC_VERSION
 ARG BASE_BASH_VERSION

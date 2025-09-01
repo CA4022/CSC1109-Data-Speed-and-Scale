@@ -1,6 +1,6 @@
 ---
 title: "Lab 5: Spark"
-docker_image: ghcr.io/amileo/csc1109-lab5:latest
+docker_image: ghcr.io/ca4022/csc1109-lab5:latest
 volumes:
 - host_path: ./docs/lab5/src/
   container_path: /lab/docs_src/
@@ -234,13 +234,13 @@ source file to it:
 
 Once this source file has been created, we can compile it by running maven, as usual.
 
-```sh { .test-block #ghcr.io/amileo/csc1109-lab5:latest }
+```sh { .test-block #ghcr.io/ca4022/csc1109-lab5:latest }
 mvn package
 ```
 
 The package can then be submitted to the Spark cluster to run using the following command.
 
-```sh { .test-block #ghcr.io/amileo/csc1109-lab5:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
+```sh { .test-block #ghcr.io/ca4022/csc1109-lab5:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
 spark-submit --class WordCountJava --master spark://spark-master:7077 target/lab-1.0.0.jar hdfs://namenode/data/Word_count.txt hdfs://namonode/output/java/
 ```
 
@@ -347,14 +347,14 @@ handling. Since maven is already configured to build our Scala files too, lets c
 
 Then, we simply rebuild the package using maven.
 
-```sh { .test-block #ghcr.io/amileo/csc1109-lab5:latest }
+```sh { .test-block #ghcr.io/ca4022/csc1109-lab5:latest }
 mvn package
 ```
 
 Our jar file has now been recompiled to include our new Scala `WordCountRDD` class. We then submit
 this class as before.
 
-```sh { .test-block #ghcr.io/amileo/csc1109-lab5:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
+```sh { .test-block #ghcr.io/ca4022/csc1109-lab5:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
 spark-submit --class WordCountRDD --master spark://spark-master:7077 target/lab-1.0.0.jar hdfs://namenode/data/Word_count.txt hdfs://namonode/output/scala-rdd/
 ```
 
@@ -372,13 +372,13 @@ and reliable word count than that in the previous section by using `Dataset`s as
 
 Then, as before, we simply rebuild the package using maven.
 
-```sh { .test-block #ghcr.io/amileo/csc1109-lab5:latest }
+```sh { .test-block #ghcr.io/ca4022/csc1109-lab5:latest }
 mvn package
 ```
 
 And we can resubmit the same job using this `WordCountDS` class.
 
-```sh { .test-block #ghcr.io/amileo/csc1109-lab5:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
+```sh { .test-block #ghcr.io/ca4022/csc1109-lab5:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
 spark-submit --class WordCountDS --master spark://spark-master:7077 target/lab-1.0.0.jar hdfs://namenode/data/Word_count.txt hdfs://namonode/output/scala-ds/
 ```
 
@@ -461,7 +461,7 @@ SparkContext for different groups of functionalities.
 We can use `spark-submit` to submit this `pyspark` script similarly to how we used it for direct,
 JVM objects interacting with Spark.
 
-```sh { .test-block #ghcr.io/amileo/csc1109-lab5:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
+```sh { .test-block #ghcr.io/ca4022/csc1109-lab5:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
 uv run spark-submit --master spark://spark-master:7077 WordCountPythonRDD.py hdfs://namenode/data/Word_count.txt hdfs://namonode/output/python-rdd/
 ```
 
@@ -487,7 +487,7 @@ more optimized execution DAG for common operations.
 
 Similar to in our previous example, we can simply submit this via the `spark-submit` program.
 
-```sh { .test-block #ghcr.io/amileo/csc1109-lab5:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
+```sh { .test-block #ghcr.io/ca4022/csc1109-lab5:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
 uv run spark-submit --master spark://spark-master:7077 WordCountPythonRDD.py hdfs://namenode/data/Word_count.txt hdfs://namonode/output/python-df/
 ```
 

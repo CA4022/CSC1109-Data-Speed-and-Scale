@@ -1,4 +1,4 @@
-FROM ghcr.io/amileo/csc1109-dind:latest AS lab4-environment
+FROM ghcr.io/ca4022/csc1109-dind:latest AS lab4-environment
 
 COPY --from=docker.io/library/storm:2.8.1-jre17 /apache-storm/ /apache-storm/
 

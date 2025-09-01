@@ -1,6 +1,6 @@
 ---
 title: "Lab 4: Storm"
-docker_image: ghcr.io/amileo/csc1109-lab4:latest
+docker_image: ghcr.io/ca4022/csc1109-lab4:latest
 volumes:
 - host_path: ./docs/lab4/src/
   container_path: /lab/src/main/com/csc1104/lab/
@@ -270,7 +270,7 @@ With the `WordCountTopology` created, we can now return to the top level of our 
 Here, we can rely on maven to pull our dependencies, build our classes, and compile the `jar` file
 for our storm topology. To do this, we simply need to run:
 
-```sh { .test-block #ghcr.io/amileo/csc1109-lab4:latest }
+```sh { .test-block #ghcr.io/ca4022/csc1109-lab4:latest }
 mvn package
 ```
 
@@ -297,14 +297,14 @@ docker compose exec -it client default_shell
 And once inside the client, we tell the storm cluster to run our topology on the
 `data/Word_count.txt` file.
 
-```sh { .test-block #ghcr.io/amileo/csc1109-lab4:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
+```sh { .test-block #ghcr.io/ca4022/csc1109-lab4:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
 storm jar target/lab-1.0.0-jar-with-dependencies.jar com.csc1104.lab.WordCountTopology /lab/data/Word_count.txt /lab/out.txt
 ```
 
 Once the topology has been submitted, you should be able to see it in the active topologies list
 for the storm cluster by running:
 
-```sh { .test-block #ghcr.io/amileo/csc1109-lab4:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
+```sh { .test-block #ghcr.io/ca4022/csc1109-lab4:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
 storm list
 ```
 

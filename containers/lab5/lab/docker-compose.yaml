@@ -62,7 +62,7 @@ services:
       replicas: 4
 
   client:
-    image: ghcr.io/amileo/csc1109-lab5-client
+    image: ghcr.io/ca4022/csc1109-lab5-client
     environment:
       - SHELL=${SHELL}
       - HADOOP_HOME=${HADOOP_HOME}

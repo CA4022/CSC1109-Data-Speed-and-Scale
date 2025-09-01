@@ -1,6 +1,6 @@
 ---
 title: "Lab 2: Hive"
-docker_image: ghcr.io/amileo/csc1109-lab2:latest
+docker_image: ghcr.io/ca4022/csc1109-lab2:latest
 volumes:
 - host_path: ./docs/lab2/src/
   container_path: /lab/src/
@@ -30,7 +30,7 @@ the `docker-compose.yaml` file and `config` directories between Lab 1 and this l
 
 Once inside the lab container, you can deploy the cluster for this lab by running:
 
-```sh { .test-block #ghcr.io/amileo/csc1109-lab2:latest }
+```sh { .test-block #ghcr.io/ca4022/csc1109-lab2:latest }
 docker compose up --build --pull -d
 ```
 
@@ -106,7 +106,7 @@ demonstrate this at `data/iris.csv`(1). First though, we must move the file to o
 1. The iris dataset is a commonly used csv table for demonstrating data analysis tools. In data
 science, it could be described as the "Hello World" of datasets.
 
-```sh { .test-block #ghcr.io/amileo/csc1109-lab2:latest }
+```sh { .test-block #ghcr.io/ca4022/csc1109-lab2:latest }
 hdfs dfs -mkdir -p /user/hive/data/
 hdfs dfs -put /lab/data/iris.csv /user/hive/iris.csv
 ```
