@@ -1,0 +1,21 @@
+name: Trigger Read the Docs Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/**'
+
+jobs:
+  trigger-rtd-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Read the Docs Build
+        run: |
+          curl -X POST \
+               -d "token=${{ secrets.RTD_WEBHOOK_TOKEN }}" \
+               -d "branches=${{ github.ref_name }}" \
+               "${{ secrets.RTD_WEBHOOK_URL }}"
