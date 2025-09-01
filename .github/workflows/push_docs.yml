@@ -5,17 +5,16 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'docs/**'
 
 jobs:
-  trigger-rtd-build:
+  build-docs:
     runs-on: ubuntu-latest
 
     steps:
       - name: Trigger Read the Docs Build
         run: |
-          curl --verbose -X POST \
-               -d "token=${{ secrets.RTD_WEBHOOK_TOKEN }}" \
-               -d "branches=${{ github.ref_name }}" \
+          curl -X POST \
+               -H "Content-Type: application/json" \
+               --fail \
+               -d '{"token": "${{ secrets.RTD_WEBHOOK_TOKEN }}", "branches": ["${{ github.ref_name }}"]}' \
                "${{ secrets.RTD_WEBHOOK_URL }}"
