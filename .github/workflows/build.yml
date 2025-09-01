@@ -36,7 +36,8 @@ jobs:
       - name: Define image name and tag
         id: meta
         run: |
-          REPO_URL="ghcr.io/${{ tolower(github.repository_owner) }}"
+          REPO_OWNER_LOWER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          REPO_URL="ghcr.io/$REPO_OWNER_LOWER"
           echo "REPO_URL=$REPO_URL" >> $GITHUB_ENV
           VERSION_TAG=$(just get_tag ${{ inputs.path }})
           LATEST_TAG="$(just get_image_name ${{ inputs.path }}):latest"
