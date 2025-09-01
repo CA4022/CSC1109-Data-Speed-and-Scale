@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: Trigger Read the Docs Build
         run: |
-          curl -X POST \
+          curl --fail --verbose -X POST \
                -d "token=${{ secrets.RTD_WEBHOOK_TOKEN }}" \
                -d "branches=${{ github.ref_name }}" \
                "${{ secrets.RTD_WEBHOOK_URL }}"
