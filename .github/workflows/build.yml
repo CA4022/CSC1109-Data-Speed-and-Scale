@@ -30,7 +30,7 @@ jobs:
       - name: Set container environment
         run: |
           echo "CONTAINER_ENV=docker" >> $GITHUB_ENV
-          echo "OWNER_LOWER=${{ github.repository_owner,, }}" >> $GITHUB_ENV
+          echo "OWNER_LOWER=$(echo github.repository_owner | tr "[:upper:]" "[:lower:]")" >> $GITHUB_ENV
 
       - name: Enable Docker buildkit
         run: echo "DOCKER_BUILDKIT=1" >> $GITHUB_ENV
