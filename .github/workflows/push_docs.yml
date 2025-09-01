@@ -16,6 +16,6 @@ jobs:
       - name: Trigger Read the Docs Build
         run: |
           curl --verbose -X POST \
-               -d "token=${{ secrets.RTD_WEBHOOK_TOKEN }}" \
-               -d "branches=['latest',]" \
+               -H "Content-Type: application/json" \
+               -d "{token: ${{ secrets.RTD_WEBHOOK_TOKEN }}, branches: [\"latest\"]}" \
                "${{ secrets.RTD_WEBHOOK_URL }}"
