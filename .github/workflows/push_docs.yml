@@ -17,5 +17,5 @@ jobs:
         run: |
           curl --verbose -X POST \
                -H "Content-Type: application/json" \
-               -d "{\"token\": ${{ secrets.RTD_WEBHOOK_TOKEN }}, \"branches\": [\"latest\"]}" \
+               -d "{\"token\": \"${{ secrets.RTD_WEBHOOK_TOKEN }}\", \"branches\": [\"latest\"]}" \
                "${{ secrets.RTD_WEBHOOK_URL }}"
