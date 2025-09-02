@@ -14,8 +14,8 @@ jobs:
 
     steps:
       - name: Trigger Read the Docs Build
-        run: |
-          curl --verbose -X POST \
-               -H "Content-Type: application/json" \
-               -d "{\"token\": \"${{ secrets.RTD_WEBHOOK_TOKEN }}\", \"branches\": [\"latest\"]}" \
-               "${{ secrets.RTD_WEBHOOK_URL }}"
+        uses: joelwmale/webhook-action@master
+        with:
+          url: ${{ secrets.RTD_WEBHOOK_URL }}
+          body: '{"token": "${{ secrets.RTD_WEBHOOK_TOKEN }}", "default_branch": "main", "branches": "main"}'
+          github_event_payload: false
