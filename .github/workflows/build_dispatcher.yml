@@ -512,6 +512,7 @@ jobs:
   build-bonus3:
     needs:
       - determine-changes
+      - build-base
     if: >-
       always() &&
       needs.determine-changes.outputs.bonus3-changed == 'true'
