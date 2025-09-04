@@ -86,7 +86,7 @@ def run_docker_test(
     success = True
     output_log = []
 
-    docker_volumes_dict = {"/var/lib/docker/": {"bind": "/var/lib/docker/", "mode": "rw"}}
+    docker_volumes_dict = {}  # {"/var/lib/docker/": {"bind": "/var/lib/docker/", "mode": "rw"}}
     if volumes_config_for_page:
         for vol_item in volumes_config_for_page:
             host_path = Path(vol_item["host_path"]).resolve()
