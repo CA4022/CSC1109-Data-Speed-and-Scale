@@ -1,5 +1,10 @@
 # CSC1109 - Data Speed and Scale
 
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/CA4022/CSC1109-Data-Speed-and-Scale/build_dispatcher.yml)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/CA4022/CSC1109-Data-Speed-and-Scale/push_docs.yml?label=push%20docs)
+![Read the Docs](https://img.shields.io/readthedocs/csc1109)
+
+
 ## Overview
 
 This repository contains the materials for DCU's CSC1109 laboratory module covering the topic of
