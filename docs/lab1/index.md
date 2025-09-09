@@ -53,7 +53,7 @@ To deploy the Hadoop cluster defined in the `docker-compose.yaml` file simply ru
 command:
 
 ```sh { .test-block #ghcr.io/ca4022/csc1109-lab1:latest }
-docker compose up --build --pull -d
+docker compose up -d
 ```
 
 IMPORTANT: The `-d` flag tells `docker compose` to start the stack as a daemon. Otherwise, you will
@@ -155,8 +155,8 @@ Its job is to manage the resources of that single machine.
 
 When the ResourceManager allocates a container on a machine, it is the NodeManager on that
 machine that physically launches the container and monitors its resource usage (CPU/RAM). The
-NodeManager takes its direct orders on what code to run inside the container from the application
-s ApplicationMaster. It does not analyse jobs or delegate tasks itself; it is an executor that
+NodeManager takes its direct orders on what code to run inside the container from the application's
+ApplicationMaster. It does not analyse jobs or delegate tasks itself; it is an executor that
 simply manages containers on its local machine.
 
 ### Client ###
@@ -262,6 +262,10 @@ start this computation, you can run the following command:
 hadoop jar wordcount.jar WordCount hdfs://namenode/lab/data/Word_count.txt hdfs://namenode/lab/data/output
 ```
 
+INFO: Similar to the HDFS WebUI, you can connect to the WebUI for your ResourceManager at any time
+by opening your browser and navigating to the URL [http://localhost:8088](http://localhost:8088).
+This allows you to track the status of various MapReduce jobs across your YARN cluster.
+
 TIP: If you want to test this on even bigger text files you can find many, many plaintext public
 domain books to download at [Project Gutenberg](https://gutenberg.org). For example, you could
 download "The Fairy-Faith in Celtic Countries by W. Y. Evans-Wentz" by running:
@@ -344,8 +348,8 @@ us to run this word count via our Hadoop cluster would be the following:
 >? NOTE: This python code makes heavy use of "type hinting". Unlike in static languages like java,
 > these type hints do not create hard, statically checked boundaries on which types a function can
 > accept. They are, however, considered good practice in modern high performance python code as
-> they allow for: LSP usage, self documenting code, ahead of time static analysis, optimisations
-> (in certain cases, e.g: when using JIT libraries such as `numba`).
+> they allow for: LSP usage, self documenting code, ahead of time static analysis, and
+> optimisations (in certain cases, e.g: when using JIT libraries such as `numba`).
 
 Once this file has been created, we can test the `mrcount.py` script by running it on a local file:
 
@@ -357,12 +361,11 @@ Once we are confident it works, we can then reconnect to the client and run the 
 Hadoop cluster.
 
 ```sh
-docker compose exec -w /lab/ client bash
+docker compose exec -w /lab/ client default_shell
 ```
 
 ```sh { .test-block #ghcr.io/ca4022/csc1109-lab1:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
-sudo pip install mrjob
-python mrcount.py -r hadoop hdfs://namenode/lab/data/Word_count.txt --output-dir hdfs://namenode/lab/data/output_mrjob
+uv run python mrcount.py -r hadoop hdfs://namenode/lab/data/Word_count.txt --output-dir hdfs://namenode/lab/data/output_mrjob
 ```
 
 If we then retrieve the `output_mrjob` directory similar to how we retrieved the outputs in the
