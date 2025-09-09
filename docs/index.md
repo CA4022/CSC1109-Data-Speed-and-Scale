@@ -213,7 +213,7 @@ to test the lab CSC1109 environment without any lab-specific tools or data being
 you can do so by running the following command:
 
 ```sh
-docker run --privileged --hostname csc1109-base -it ghcr.io/ca4022/csc1109-base:latest
+docker run --privileged --hostname csc1109-base -v lab_cache:/var/lib/docker/overlay2/ -it ghcr.io/ca4022/csc1109-base:latest
 ```
 
 NOTE: The docker GUI can only be used to deploy containers from the `DockerHub` repository. Since
@@ -228,6 +228,10 @@ The options and arguments for this command do the following:
 - **`--hostname csc1109-base`** names sets the hostname inside the container. This is helpful
     because it puts a consistent name in the prompt so we know which container we are inside at any
     given time.
+- **`-v lab_cache:/var/lib/docker/overlay2/`** tells docker to create a persistent volume and mount
+    it at the path `/var/lib/docker/overlay2` inside the container. This volume will be used to
+    cache images between labs, speeding up our deployments and giving us more time to focus on
+    experiments.
 - **`-i`** tells docker to run the container in interactive mode
 - **`-t`** tells docker to allocate a pseudo-tty to use for interaction
 - **`ghcr.io/ca4022/csc1109-base:latest`** is the container we want to run. In this case:
@@ -316,7 +320,7 @@ common GNU coreutils and tools to help users navigate unfamiliar aspects of the 
 example, a cheatsheet can be displayed for (most) commands using the `tldr` command. e.g:
 
 ```sh
-tldr compgen
+tldr docker
 ```
 
 ## Oops, I Broke It! &nbsp; ##

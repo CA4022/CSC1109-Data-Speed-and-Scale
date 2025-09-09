@@ -19,7 +19,7 @@ To download the container for this lab and run it, execute the following command
 
 ```sh
 docker pull {{ page.meta.docker_image }}
-docker run --rm --privileged --hostname lab1 -v lab1:/lab/ -p 9870:9870 -p 8088:8088 -it {{ page.meta.docker_image }}
+docker run --rm --privileged --hostname lab1 -v lab1:/lab/ -v lab_cache:/var/lib/docker/overlay2/ -p 9870:9870 -p 8088:8088 -it {{ page.meta.docker_image }}
 ```
 
 ## Deploying a Hadoop cluster ##
