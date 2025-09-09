@@ -91,6 +91,9 @@ proceed. If not, please follow the installation instructions for your operating 
     Docker Desktop includes the Docker Engine, the `docker` command-line interface (CLI), and other
     tools in a single application.
 
+    NOTE: When you first open the docker GUI it will prompt you to sign in to dockerhub. This is
+    optional and you can simply click "skip" to use the GUI without signing in.
+
 === "&nbsp; Linux"
 
     For Linux distributions, it is recommended to install the Docker Engine from Docker's official
@@ -147,12 +150,12 @@ To do this, you can follow the instructions below.
 
     For Windows and MacOS, resource limits are managed through the Docker Desktop graphical interface.
 
-    >? DANGER: **Allocate Sufficient Resources to Docker**
+    >? DANGER: **Allocate Sufficient Resources to Docker (only if using Hyper-V)**
     >
     > Data processing frameworks like Spark and Hadoop can be very resource-intensive. By default,
-    > Docker Desktop limits the amount of CPU and memory (RAM) it can use, which is often too low for
-    > big data tasks. Insufficient resources can cause your programs to fail with cryptic errors
-    > that are difficult to debug.
+    > when using the Hyper-V virtualisation backend Docker Desktop limits the amount of CPU and
+    > memory (RAM) it can use, which is often too low for big data tasks. Insufficient resources
+    > can cause your programs to fail with cryptic errors that are difficult to debug.
     >
     > Before proceeding, you **must** configure Docker to provide more resources.
     >
@@ -210,8 +213,34 @@ to test the lab CSC1109 environment without any lab-specific tools or data being
 you can do so by running the following command:
 
 ```sh
-docker run --hostname csc1109-base -it ghcr.io/ca4022/csc1109-base:latest
+docker run --privileged --hostname csc1109-base -it ghcr.io/ca4022/csc1109-base:latest
 ```
+
+NOTE: The docker GUI can only be used to deploy containers from the `DockerHub` repository. Since
+this container is in the `GHCR`, you must deploy this container via the terminal using the command
+above.
+
+The options and arguments for this command do the following:
+
+- **`docker run`** tells the docker engine to download and run the given container
+- **`--privileged`** tells docker to give the container admin privileges. This is essential, as the
+    container needs admin privileges to run the nested docker daemon that will simulate cluster
+- **`--hostname csc1109-base`** names sets the hostname inside the container. This is helpful
+    because it puts a consistent name in the prompt so we know which container we are inside at any
+    given time.
+- **`-i`** tells docker to run the container in interactive mode
+- **`-t`** tells docker to allocate a pseudo-tty to use for interaction
+- **`ghcr.io/ca4022/csc1109-base:latest`** is the container we want to run. In this case:
+    - **`ghcr.io`**: It is in the github container repository (GHCR)
+    - **`ca4022`**: It is owned by the user “ca4022”
+    - **`csc1109-base`**: the container is named “csc1109-base”
+    - **`latest`**: we specifically want the most recent version of the container
+
+When we run a container using the `-it` flag, that container will automatically close when
+the pipe to the host is closed. This also closes all processes inside that container. In this
+example, that will occur when we type `exit`. In situations where we do not run the container
+in interactive mode (e.g: [lab 6](./lab6/index.md)) the container will continue running until we
+run the `docker stop` command.
 
 ### Operating System ###
 

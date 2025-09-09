@@ -56,6 +56,11 @@ command:
 docker compose up -d
 ```
 
+NOTE: The command `docker compose up` is distinct from `docker run`. The `run` command is used to
+start a single container. The `docker compose` tool on the other hand is used to deploy multiple
+containers at once according to a recipe called a "compose file". The default location it will
+look for a compose file is `./docker-compose.yaml`.
+
 IMPORTANT: The `-d` flag tells `docker compose` to start the stack as a daemon. Otherwise, you will
 be trapped in a non-interactive shell. If this happens, interrupt `docker compose` using ++ctrl+c++
 
@@ -71,7 +76,7 @@ Once your docker compose stack finishes deploying, you can view the deployed con
     - lab-datanode-1
     - lab-datanode-2
     - lab-datanode-3
-    - lab-datanode-3
+    - lab-datanode-4
     - lab-resourcemanager-1
     - lab-nodemanager-1
     - lab-client-1
