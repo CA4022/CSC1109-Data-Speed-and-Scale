@@ -3,18 +3,18 @@ export LANG=en_US.UTF-8
 export STARSHIP_CONFIG="$HOME/.config/starship/bash.toml"
 
 case $- in
-  *i*) source ~/.local/share/blesh/ble.sh --noattach;;
+  *i*) USER=$(id -un); USER=${USER:-root} USER=$USER source ~/.local/share/blesh/ble.sh --noattach;;
     *) return;;
 esac
 
 eval "$(fzf --bash)"
-export OSH="~/.oh-my-bash"
+export OSH="$HOME/.oh-my-bash"
 
 completions=(git docker docker-compose maven ssh)
 aliases=(general docker ls)
 plugins=(colored-man-pages fzf git)
 
-source "$OSH"/oh-my-bash.sh
+source "$OSH/oh-my-bash.sh"
 
 # Set terminal env variables
 export COLORTERM="truecolor"
