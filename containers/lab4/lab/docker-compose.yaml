@@ -59,5 +59,6 @@ services:
       - ./config/storm-client.yaml:/apache-storm/conf/storm.yaml
     environment:
       - SHELL=${SHELL}
+      - EDITOR=${EDITOR}
     stdin_open: true
     tty: true

@@ -19,6 +19,7 @@ services:
       - HADOOP_HOME=${HADOOP_HOME}
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
       - ENSURE_NAMENODE_DIR=/tmp/hadoop-root/dfs/name
+      - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
 
   datanode:
     <<: *hadoop-common-config
@@ -26,6 +27,7 @@ services:
     environment:
       - HADOOP_HOME=${HADOOP_HOME}
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
+      - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
     deploy:
       mode: replicated
       replicas: 4
@@ -39,6 +41,7 @@ services:
     environment:
       - HADOOP_HOME=${HADOOP_HOME}
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
+      - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
 
   nodemanager:
     <<: *hadoop-common-config
@@ -46,6 +49,7 @@ services:
     environment:
       - HADOOP_HOME=${HADOOP_HOME}
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
+      - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
 
   client:
     image: ghcr.io/ca4022/csc1109-lab1-client
@@ -61,7 +65,9 @@ services:
       - ./config/:${HADOOP_HOME}/etc/hadoop
     environment:
       - SHELL=${SHELL}
+      - EDITOR=${EDITOR}
       - HADOOP_HOME=${HADOOP_HOME}
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
+      - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
     stdin_open: true
     tty: true

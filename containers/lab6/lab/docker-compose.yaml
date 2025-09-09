@@ -25,6 +25,7 @@ services:
     environment:
       - HADOOP_HOME=${HADOOP_HOME}
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
+      - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
       - ENSURE_NAMENODE_DIR=/tmp/hadoop-root/dfs/name
 
   datanode:
@@ -33,6 +34,7 @@ services:
     environment:
       - HADOOP_HOME=${HADOOP_HOME}
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
+      - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
     deploy:
       mode: replicated
       replicas: 4
@@ -43,6 +45,7 @@ services:
     environment:
       - HADOOP_HOME=${HADOOP_HOME}
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
+      - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
     ports:
       - "8080:8080"
 
@@ -52,6 +55,7 @@ services:
     environment:
       - HADOOP_HOME=${HADOOP_HOME}
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
+      - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
     depends_on:
       - spark-master
     links:
@@ -66,6 +70,7 @@ services:
       - SHELL=bash
       - HADOOP_HOME=${HADOOP_HOME}
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
+      - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
     ports:
       - 8888:8888
     depends_on:

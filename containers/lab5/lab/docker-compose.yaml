@@ -26,6 +26,7 @@ services:
       - HADOOP_HOME=${HADOOP_HOME}
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
       - ENSURE_NAMENODE_DIR=/tmp/hadoop-root/dfs/name
+      - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
 
   datanode:
     <<: *hadoop-common-config
@@ -33,6 +34,7 @@ services:
     environment:
       - HADOOP_HOME=${HADOOP_HOME}
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
+      - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
     deploy:
       mode: replicated
       replicas: 4
@@ -43,6 +45,7 @@ services:
     environment:
       - HADOOP_HOME=${HADOOP_HOME}
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
+      - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
     ports:
       - "7077:7077"
       - "8080:8080"
@@ -53,6 +56,7 @@ services:
     environment:
       - HADOOP_HOME=${HADOOP_HOME}
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
+      - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
     depends_on:
       - spark-master
     links:
@@ -65,8 +69,10 @@ services:
     image: ghcr.io/ca4022/csc1109-lab5-client
     environment:
       - SHELL=${SHELL}
+      - EDITOR=${EDITOR}
       - HADOOP_HOME=${HADOOP_HOME}
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
+      - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
     depends_on:
       - spark-master
     links:

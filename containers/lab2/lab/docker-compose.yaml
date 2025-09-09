@@ -10,6 +10,7 @@ x-hadoop-common-config:
   environment:
     - HADOOP_HOME=${HADOOP_HOME}
     - HADOOP_USER_NAME=${HADOOP_USER_NAME}
+    - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
 
 x-hive-common-config:
   &hive-common-config
@@ -31,6 +32,7 @@ services:
       - HADOOP_HOME=${HADOOP_HOME}
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
       - ENSURE_NAMENODE_DIR=/tmp/hadoop-root/dfs/name
+      - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
     healthcheck:
       test: ["CMD-SHELL", "hdfs dfsadmin -safemode get | grep 'Safe mode is OFF'"]
       interval: 10s
@@ -77,6 +79,7 @@ services:
     environment:
       - HADOOP_HOME=${HADOOP_HOME}
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
+      - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
       - HIVE_USER_NAME=${HIVE_USER_NAME}
       - HIVE_HOME=${HIVE_HOME}
     depends_on:
@@ -93,6 +96,7 @@ services:
     environment:
       - HADOOP_HOME=${HADOOP_HOME}
       - HADOOP_USER_NAME=${HIVE_USER_NAME}
+      - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
       - HIVE_HOME=${HIVE_HOME}
       - METASTORE_PORT=9083
     depends_on:
@@ -111,6 +115,7 @@ services:
       - HADOOP_HOME=${HADOOP_HOME}
       - HADOOP_USER_NAME=${HIVE_USER_NAME}
       - HADOOP_CLASSPATH=/opt/tez/*:/opt/tez/lib/*:/opt/hadoop/etc/hadoop:/opt/hadoop/share/hadoop/common/lib/*:/opt/hadoop/share/hadoop/common/*:/opt/hadoop/share/hadoop/hdfs:/opt/hadoop/share/hadoop/hdfs/lib/*:/opt/hadoop/share/hadoop/hdfs/*:/opt/hadoop/share/hadoop/mapreduce/*:/opt/hadoop/share/hadoop/yarn:/opt/hadoop/share/hadoop/yarn/lib/*:/opt/hadoop/share/hadoop/yarn/*
+      - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
       - HIVE_HOME=${HIVE_HOME}
       - HIVESERVER2_PID_DIR=/tmp/hive
     depends_on:
@@ -136,8 +141,10 @@ services:
       - ./config:${HIVE_HOME}/conf
     environment:
       - SHELL=${SHELL}
+      - EDITOR=${EDITOR}
       - HADOOP_HOME=${HADOOP_HOME}
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
+      - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
       - HIVE_HOME=${HIVE_HOME}
       - HIVE_USER_NAME=${HIVE_USER_NAME}
     stdin_open: true
