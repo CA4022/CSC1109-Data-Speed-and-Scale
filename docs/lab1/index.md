@@ -22,7 +22,7 @@ docker pull {{ page.meta.docker_image }}
 docker run --rm --privileged --hostname lab1 -v lab1:/lab/ -v lab_cache:/var/lib/docker/overlay2/ -p 9870:9870 -p 8088:8088 -it {{ page.meta.docker_image }}
 ```
 
-## Deploying a Hadoop cluster ##
+## Running your first Hadoop program ##
 
 Once inside the test environment, you will be in the "/lab/" directory, which contains the
 following files:
@@ -48,6 +48,46 @@ lab.
 single file, as specified in [PEP 621](https://peps.python.org/pep-0621/)
 5. Lockfiles are common in modern projects managed by package managers. They pin every package in
 the project to a specific version, ensuring reproducibility.
+
+To begin our experiments, let us begin by locally running some prebuilt Hadoop programs kindly
+provided by the Apache project (Hadoop's maintainers). These can be found in the `share/hadoop/`
+directory of `$HADOOP_HOME`. Inside this directory, we can see directories containing `.jar` files
+for interacting with Hadoop clusters. Since we are specifically interested in the `MapReduce`
+computational model, we will begin by playing with the examples from the `mapreduce` directory.
+We can see a list of the provided `MapReduce` examples by telling hadoop to run the
+`hadoop-mapreduce-examples` jar as follows:
+
+```sh
+hadoop jar $HADOOP_HOME/share/hadoop/mapreduce/hadoop-mapreduce-examples-*.jar
+```
+
+For any of these provided programs, we can see their arguments by simply providing that program's
+name as an argument and we can run it by providing the arguments the program requires as the
+subsequent arguments. For example, we can run a `wordcount` from the examples as follows:
+
+```sh
+hadoop jar $HADOOP_HOME/share/hadoop/mapreduce/hadoop-mapreduce-examples-*.jar wordcount data/Word_count.txt data/outputs/example/
+```
+
+You should now be able to see an `outputs/example` directory in your `data` directory. Inside that
+directory should be a file called `_SUCCESS` if the operation was successful, along with a file
+called `part-r-000000`. You can view this file by running:
+
+```sh
+cat outputs/example/part-r-00000
+```
+
+This should show a count of the occurrences of every unique word in the test file.
+
+Running a word count can obviously be useful and we have successfully achieved that but: couldn't
+we simply have done this with a script? Of course we could, but this is merely a starting point to
+demonstrate basic interactions with a Hadoop system. Later we will be implementing our own version
+of the word count algorithm, and will be executing it on a distributed cluster. The goal will be to
+teach you how to write your own custom programs and execute them on massive, distributed systems of
+tens, hundreds, and even thousands of separate machines! However, before that we will need to
+understand how a Hadoop cluster works, and we will need a cluster on which to execute our code.
+
+## Deploying a Hadoop cluster ##
 
 To deploy the Hadoop cluster defined in the `docker-compose.yaml` file simply run the following
 command:
@@ -250,9 +290,8 @@ TIP: Run `edit WordCount.java` to create a new empty source code file you can ed
 --8<-- "lab1/src/WordCount.java"
 ```
 
-With this java source file created, the next step is to connect to the `client` node again. Once
-you inside the client node you can compile `WordCount.java` on the hadoop cluster using javac and
-the `jar` bytecode packager by running:
+You can compile `WordCount.java` on the hadoop cluster using javac and the `jar` bytecode packager
+by running:
 
 ```sh { .test-block #ghcr.io/ca4022/csc1109-lab1:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
 hadoop com.sun.tools.javac.Main WordCount.java
@@ -260,11 +299,21 @@ jar cf wordcount.jar WordCount*.class
 ```
 
 By running `ls`, you should now see the file `wordcount.jar` present in the working directory. This
-file contains the `ApplicationMaster` object that the YARN framework will run on our cluster. To
-start this computation, you can run the following command:
+file contains the `ApplicationMaster` object that the YARN framework will run on our cluster. With
+this .jar file created, we can first test that it works by executing it locally similar to how we
+ran the example wordcount at the beginning of this lab.
+
+```sh { .test-block #ghcr.io/ca4022/csc1109-lab1:latest }
+hadoop jar wordcount.jar WordCount data/Word_count.txt data/outputs/local
+```
+
+Once we have confirmed that our wordcount program is running successfully in a local environment,
+we can then easily execute that wordcount as a distributed program across our entire cluster. To do
+this, we can connect to the `client` node again and dispatch the program to the cluster. To start
+this computation, you can run the following command:
 
 ```sh { .test-block #ghcr.io/ca4022/csc1109-lab1:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
-hadoop jar wordcount.jar WordCount hdfs://namenode/lab/data/Word_count.txt hdfs://namenode/lab/data/output
+hadoop jar wordcount.jar WordCount hdfs://namenode/lab/data/Word_count.txt hdfs://namenode/lab/data/outputs/distributed
 ```
 
 INFO: Similar to the HDFS WebUI, you can connect to the WebUI for your ResourceManager at any time
@@ -277,25 +326,25 @@ download "The Fairy-Faith in Celtic Countries by W. Y. Evans-Wentz" by running:
 `wget https://gutenberg.org/ebooks/34853.txt.utf-8`
 
 Once the Hadoop cluster has finished running the `wordcount.jar` object on the cluster it will
-have placed an output folder at the `./output/` directory on the HDFS cluster. To retrieve
-this folder from `hdfs://namenode/lab/data/output` run the following command.
+have placed an output folder at the `./outputs/distributed` directory on the HDFS cluster. To
+retrieve this folder from `hdfs://namenode/lab/data/outputs/distributed` run the following command.
 
 ```sh { .test-block #ghcr.io/ca4022/csc1109-lab1:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
-hdfs dfs -get hdfs://namenode/lab/data/output
+hdfs dfs -get hdfs://namenode/lab/data/outputs/distributed
 ```
 
-At this point, you can `exit` the client node. You should now be able to see a folder called
-`./output` in your working directory. Inside that directory should be a file called `_SUCCESS` if
-the operation was successful, along with a file called `part-r-000000`. You can view this file by
-running:
+This should fetch the directory from the Hadoop cluster and place it in our local directory, which
+can be confirmed by checking the contents of the `data/outputs/distributed` directory. If the file
+has successfully been retriever, then at this point you can `exit` the client node. Since the
+`/lab/` directory of the client and the host are shared, the results will be accessible from the
+`lab1` host container.
 
-```sh
-cat output/part-r-00000
-```
-
-This should show a count of the occurrences of every unique word in the test file. If you can see
-this, you have just performed your first computation on a Hadoop cluster! This is a key milestone on
-any computer scientist's journey towards mastering high performance computing.
+As with previous MapReduce results, we should see a file named `_SUCCESS` in the
+`data/outputs/distributed` directory. We can confirm the results of the wordcount by using `cat`
+to check the contents of the `part*` file (or files). If the results are as expected then:
+congratulations! You have just performed your first computation on a Hadoop cluster! This is a key
+milestone on any computer scientist's journey towards mastering distributed, high performance
+computing.
 
 ## Running code on hadoop via MRJob ##
 
