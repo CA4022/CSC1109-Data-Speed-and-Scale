@@ -51,8 +51,7 @@ ENV PATH="/usr/local/bin:$PATH"
 FROM core-dependencies AS student-environment
 
 # Removing locale data after install shaves ~250MB off final image size
-RUN zypper --non-interactive rm busybox-less && \
-    zypper --non-interactive install zsh fish hashdeep starship make wget git glow lsd fd \
+RUN zypper --non-interactive install zsh fish hashdeep starship make wget git glow lsd fd \
         fd-bash-completion ripgrep ripgrep-bash-completion tealdeer tealdeer-bash-completion \
         symbols-only-nerd-fonts vim docker-bash-completion && \
     zypper clean --all && \
