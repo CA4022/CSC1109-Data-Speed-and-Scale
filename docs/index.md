@@ -59,6 +59,12 @@ For these labs, the host computer must have a working docker engine installed an
 Generally, working within docker is done via the command line. Because of this, we recommend for
 students to have a command line environment they are comfortable working within configured.
 
+>? WARNING: For Windows users, please be aware that its legacy shells ("command prompt" and
+> "powershell") lack some features that are necessary for smoothly interacting with this lab. For
+> this reason, we recommend for Windows users to use more modern terminal emulators such as the
+> ["Windows Terminal"](https://github.com/microsoft/terminal) application (available from the
+> Windows app store).
+
 >? TIP: As an optional extra quality-of-life feature the lab environment includes CLI symbols
 > rendered via the popular `nerdfonts` glyph library. For the best possible experience in the CLI
 > you may want to consider installing [one of these fonts](https://www.nerdfonts.com/font-downloads).
