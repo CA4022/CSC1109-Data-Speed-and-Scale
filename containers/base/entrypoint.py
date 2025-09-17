@@ -193,7 +193,7 @@ async def main():
         "\x1b[32m\033[0m Please choose your preferred shell environment:",
         [
             ("fish", "\x1b[31m󰈺\033[0m", "fish"),
-            ("bash", "", "bash"),
+            ("bash", "", "brush-hl"),
             ("zshell", "", "zsh"),
             ("nushell", "\x1b[32m❯\033[0m", "nu"),
         ],

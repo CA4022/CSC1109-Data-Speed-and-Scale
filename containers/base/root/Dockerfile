@@ -52,7 +52,7 @@ FROM core-dependencies AS student-environment
 
 # Removing locale data after install shaves ~250MB off final image size
 RUN zypper --non-interactive rm busybox-less && \
-    zypper --non-interactive install zsh fish hashdeep starship make wget gawk glow lsd fd \
+    zypper --non-interactive install zsh fish hashdeep starship make wget git glow lsd fd \
         fd-bash-completion ripgrep ripgrep-bash-completion tealdeer tealdeer-bash-completion \
         symbols-only-nerd-fonts vim docker-bash-completion && \
     zypper clean --all && \
@@ -61,17 +61,14 @@ RUN zypper --non-interactive rm busybox-less && \
 # Required for emacs XDG runtime issue
 RUN mkdir -p /run/user/0
 
-# Set up blesh for bash shell
-WORKDIR /root
-RUN git clone https://github.com/akinomyoga/ble.sh.git blesh
-WORKDIR /root/blesh
-RUN make install
-WORKDIR /root/
+# Set up brush as more modern bash shell
+RUN wget https://github.com/reubeno/brush/releases/download/brush-shell-v0.2.23/brush-x86_64-unknown-linux-gnu.tar.gz && \
+    tar -xzf brush-x86_64-unknown-linux-gnu.tar.gz && \
+    rm brush-x86_64-unknown-linux-gnu.tar.gz && \
+    mv brush /usr/bin/brush
 
 # Clean up blesh folder and set up zsh shell
-RUN rm -r blesh && \
-    bash -c "$(wget https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh -O -)" "" --unattended && \
-    sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" && \
+RUN sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" && \
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting && \
     git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
 
@@ -87,7 +84,6 @@ COPY ./.config/nvim/test.sh /test/base/editor_tests/micro_test.sh
 RUN chmod -R +x /test/
 
 COPY .bashrc .bashrc
-COPY .blerc .blerc
 COPY .zshrc .zshrc
 COPY .config/starship .config/starship
 COPY .config/glow .config/glow

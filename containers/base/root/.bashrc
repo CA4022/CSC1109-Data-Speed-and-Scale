@@ -1,22 +1,5 @@
-# Add env variables that blesh expects
-export LANG=en_US.UTF-8
-export STARSHIP_CONFIG="$HOME/.config/starship/bash.toml"
-
-case $- in
-  *i*) USER=$(id -un); USER=${USER:-root} USER=$USER source ~/.local/share/blesh/ble.sh --noattach;;
-    *) return;;
-esac
-
-eval "$(fzf --bash)"
-export OSH="$HOME/.oh-my-bash"
-
-completions=(git docker docker-compose maven ssh)
-aliases=(general docker ls)
-plugins=(colored-man-pages fzf git)
-
-source "$OSH/oh-my-bash.sh"
-
 # Set terminal env variables
+export STARSHIP_CONFIG="$HOME/.config/starship/bash.toml"
 export COLORTERM="truecolor"
 export MANPAGER="bat -l man -p "
 
@@ -29,4 +12,5 @@ alias find="fd"
 
 eval "$(starship init bash)"
 
-[[ ! ${BLE_VERSION-} ]] || ble-attach
+[[ $PS1 && -f /usr/share/bash-completion/bash_completion ]] && \
+    . /usr/share/bash-completion/bash_completion
