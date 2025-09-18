@@ -65,16 +65,15 @@ RUN mkdir -p /run/user/0
 
 WORKDIR /root/
 
-# Set up brush as more modern bash shell
+# Set up modern shell features
 RUN wget https://github.com/reubeno/brush/releases/download/brush-shell-v0.2.23/brush-x86_64-unknown-linux-gnu.tar.gz && \
     tar -xzf brush-x86_64-unknown-linux-gnu.tar.gz && \
     rm brush-x86_64-unknown-linux-gnu.tar.gz && \
     mv brush /usr/bin/brush && \
     rm LICENSE && \
-    rm THIRD_PARTY_LICENSES.html
-
-# Clean up blesh folder and set up zsh shell
-RUN sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" && \
+    rm THIRD_PARTY_LICENSES.html && \
+    rm -r bin && \
+    sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" && \
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting && \
     git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
 
