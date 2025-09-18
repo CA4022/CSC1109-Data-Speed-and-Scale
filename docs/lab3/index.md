@@ -45,8 +45,9 @@ Hadoop cluster defined in `core-site.xml` and the associated config files.
 QUESTION: By now you should be fully equipped to do this same operation on your Hadoop cluster
 without the need for a walkthrough. Can you figure it out?
 
-WARNING: if you run pig on mapreduce, you need to make sure the input file is on HDFS, e.g: using
-`hdfs://namenode:9870/<path_to_input_file>`
+WARNING: if you run pig on mapreduce, you need to make sure the input file is on HDFS. Once you
+connect to pig from your client node it will automatically treat the HDFS cluster filesystem as if
+it were your local filesystem.
 
 ### CSV Handling ###
 

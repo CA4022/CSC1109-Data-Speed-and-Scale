@@ -69,6 +69,7 @@ services:
     command: ["sleep", "infinity"]
     volumes:
       - .:/lab/
+      - /opt/hadoop/:${HADOOP_HOME}
       - ./config/:${HADOOP_HOME}/etc/hadoop
       - /opt/pig/:/opt/pig/
     environment:
