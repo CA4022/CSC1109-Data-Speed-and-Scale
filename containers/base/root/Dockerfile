@@ -51,6 +51,7 @@ ENV PATH="/usr/local/bin:$PATH"
 FROM core-dependencies AS student-environment
 
 # Removing locale data after install shaves ~250MB off final image size
+# Mkdir required for emacs XDG runtime issue
 RUN if zypper search -x -i "busybox-less" >/dev/null 2>&1; then \
         zypper --non-interactive rm busybox-less; \
     fi && \
@@ -60,10 +61,8 @@ RUN if zypper search -x -i "busybox-less" >/dev/null 2>&1; then \
     zypper clean --all && \
     wget -O /usr/bin/tldr https://github.com/tealdeer-rs/tealdeer/releases/download/v1.7.2/tealdeer-linux-x86_64-musl && \
     chmod +x /usr/bin/tldr && \
+    mkdir -p /run/user/0 && \
     find /usr/share/locale -maxdepth 1 -mindepth 1 ! -name 'en_US' -exec rm -rf {} +
-
-# Required for emacs XDG runtime issue
-RUN mkdir -p /run/user/0
 
 WORKDIR /root/
 
