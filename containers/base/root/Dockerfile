@@ -63,11 +63,15 @@ RUN if zypper search -x -i "busybox-less" >/dev/null 2>&1; then \
 # Required for emacs XDG runtime issue
 RUN mkdir -p /run/user/0
 
+WORKDIR /root/
+
 # Set up brush as more modern bash shell
 RUN wget https://github.com/reubeno/brush/releases/download/brush-shell-v0.2.23/brush-x86_64-unknown-linux-gnu.tar.gz && \
     tar -xzf brush-x86_64-unknown-linux-gnu.tar.gz && \
     rm brush-x86_64-unknown-linux-gnu.tar.gz && \
-    mv brush /usr/bin/brush
+    mv brush /usr/bin/brush && \
+    rm LICENSE && \
+    rm THIRD_PARTY_LICENSES.html
 
 # Clean up blesh folder and set up zsh shell
 RUN sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" && \
