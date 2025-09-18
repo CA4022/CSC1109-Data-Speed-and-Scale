@@ -55,9 +55,11 @@ RUN if zypper search -x -i "busybox-less" >/dev/null 2>&1; then \
         zypper --non-interactive rm busybox-less; \
     fi && \
     zypper --non-interactive install zsh fish hashdeep starship make wget git glow lsd fd \
-        fd-bash-completion ripgrep ripgrep-bash-completion tealdeer tealdeer-bash-completion \
+        fd-bash-completion ripgrep ripgrep-bash-completion tealdeer-bash-completion \
         symbols-only-nerd-fonts vim docker-bash-completion && \
     zypper clean --all && \
+    wget -O /usr/bin/tldr https://github.com/tealdeer-rs/tealdeer/releases/download/v1.7.2/tealdeer-linux-x86_64-musl && \
+    chmod +x /usr/bin/tldr && \
     find /usr/share/locale -maxdepth 1 -mindepth 1 ! -name 'en_US' -exec rm -rf {} +
 
 # Required for emacs XDG runtime issue
@@ -93,6 +95,7 @@ COPY .zshrc .zshrc
 COPY .config/starship .config/starship
 COPY .config/glow .config/glow
 COPY .config/tealdeer .config/tealdeer
+COPY .local/share/tealdeer/pages/csc1109.page.md .local/share/tealdeer/pages/csc1109.page.md
 COPY .config/fish .config/fish
 COPY .config/nushell .config/nushell
 
