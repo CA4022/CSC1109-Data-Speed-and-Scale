@@ -56,8 +56,8 @@ into a single dataset. To do so, run the PigLatin commands below, one by one fro
 observe what is contained in `d`, `e`, `f` and `G` after each dump.
 
 QUESTION: The output of `DUMP G` can tell us a lot about how pig handles schema on the fly. Take
-some time to examine and reflect upon the results you get here. What do you interesting things do
-you notice about this output?
+some time to examine and reflect upon the results you get here. What interesting things do you
+notice about this output?
 
 ```pig
 --8<-- "lab3/src/merge_csv.pig"
