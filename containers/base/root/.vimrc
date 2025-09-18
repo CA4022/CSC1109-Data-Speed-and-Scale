@@ -15,6 +15,8 @@ Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-commentary'
 Plug 'jiangmiao/auto-pairs'
 Plug 'mhinz/vim-startify'
+Plug 'sheerun/vim-polyglot'
+Plug 'uiiaoo/java-syntax.vim'
 call plug#end()
 syntax on
 set number

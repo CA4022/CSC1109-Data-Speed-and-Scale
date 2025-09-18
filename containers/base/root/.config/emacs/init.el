@@ -92,6 +92,11 @@
 (use-package crux
   :straight t)
 
+;; Language Support
+(use-package scala-mode)
+(use-package elixir-mode)
+(use-package yaml-mode)
+
 ;; Language Server Protocol (LSP) support
 (use-package eglot
   :straight t)
