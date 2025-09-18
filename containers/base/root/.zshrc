@@ -1,5 +1,6 @@
 export USER=$(whoami)
 export LANG=en_US.UTF-8
+export TERM="xterm-256color"
 export COLORTERM="truecolor"
 export MANPAGER="bat -l man -p"
 export STARSHIP_CONFIG="$HOME/.config/starship/zsh.toml"

@@ -1,4 +1,5 @@
 set -x LANG en_US.UTF-8
+set -x TERM "xterm-256color"
 set -x COLORTERM "truecolor"
 set -x MANPAGER "bat -l man -p"
 set -x STARSHIP_CONFIG "$HOME/.config/starship/fish.toml"
