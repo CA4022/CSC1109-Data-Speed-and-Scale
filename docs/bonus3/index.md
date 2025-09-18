@@ -70,6 +70,7 @@ in this model on a local scale become gaping chasms that are extraordinarily dif
     system for addressing and locating processes that is independent of the physical machine they
     are currently running on.
 
+<div class="annotate" markdown>
 Many different models for distributed process parallelism have been developed over the years
 attempting to scale familiar, local process concurrency patterns(1), each finding varying degrees of
 success. However, similar to how the distributed DAG model emerged as the most reliable and
@@ -92,7 +93,7 @@ Erlang BEAM, which underpins many of the highest volume distributed systems you 
 with regularly such as telecoms switching systems (including much of the world's mobile and fixed
 telephony infrastructure), online gaming platforms, livestreaming platforms (e.g: Twitch), and
 messaging services like WhatsApp and Discord.
-{ .annotate }
+</div>
 
 1. For example: the "fork-join" model, "producer-consumer" model, or the "scheduler-executor"
     model.
@@ -219,7 +220,7 @@ feel right at home using this language.
 NOTE: Since the BEAM distributes work in the same way whether it is running locally or on a
 distributed system, we will be running it locally here for the sake of convenience. If you wish
 to explore further and run your BEAM on a cluster, including the use of a distributed scheduler
-you can check out `Horde`s documentation [here](https://hexdocs.pm/horde/getting_started.html).
+you can check out `Horde`'s documentation [here](https://hexdocs.pm/horde/getting_started.html).
 
 ![Elixir Scaling Ghidorah Meme](../assets/img/elixir-scaling.webp#center)
 
@@ -365,7 +366,7 @@ Lab.WordCount.count_words({:file, "data/Word_count.txt", "out.txt"})
 
 QUESTION: As a final challenge: can you get this running on a true, distributed cluster? Even by
 simply connecting 2 laptops or making a BEAM cluster with your friend next to you? It is
-surprisingly easy to do using `iex`s `--sname` flag. You may need to run the container with the
+surprisingly easy to do using `iex`'s `--sname` flag. You may need to run the container with the
 network in `host` mode though to bypass docker's builtin network isolation!
 
 ## Further Reading & Examples &nbsp; ##
