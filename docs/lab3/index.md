@@ -14,10 +14,6 @@ docker pull {{ page.meta.docker_image }}
 docker run --rm --privileged --hostname lab3 -v lab3:/lab/ -v lab_cache:/var/lib/docker/overlay2/ -p 9870:9870 -p 19888:19888 -it {{ page.meta.docker_image }}
 ```
 
-NOTE: If you look at the `docker-compose.yaml` for this lab, our usual HDFS cluster has an added
-`historyserver` node this time. This node serves to log statistics about MapReduce jobs, which pig
-uses to report the results of jobs.
-
 ## What is Pig? 󱀆&nbsp; ##
 
 In our previous lab we discovered Apache Hive, a higher-level abstraction over HDFS/MR intended to

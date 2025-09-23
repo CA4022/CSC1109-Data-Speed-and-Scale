@@ -23,6 +23,10 @@ docker pull {{ page.meta.docker_image }}
 docker run --rm --privileged --hostname lab2 -v lab2:/lab/ -v lab_cache:/var/lib/docker/overlay2/ -p 9870:9870 -p 10000:10000 -p 10002:10002 -it {{ page.meta.docker_image }}
 ```
 
+NOTE: If you look at the `docker-compose.yaml` for this lab, our usual HDFS cluster has an added
+`historyserver` node this time. This node serves to log statistics about MapReduce jobs, which hive
+uses to register newly deployed jobs, record their progress, and log the results of jobs.
+
 INFO: Adding a Hive server to our Hadoop cluster requires us to bootstrap a few directories in our
 HDFS and add some xml files to configure the hive nodes appropriately. This is not a difficult
 process but is important to be aware of! You can see how this is done by examining the changes to
@@ -93,6 +97,11 @@ command:
 !connect jdbc:hive2://hiveserver:10000
 ```
 
+WARNING: In many resources on the usage of Hive, you will see references to "Hive CLI" vs
+`beeline`. These resources are out of date, and as of 2025 the "Hive CLI" is considered
+[deprecated](https://hive.apache.org/docs/latest/user/replacing-the-implementation-of-hive-cli-using-beeline/).
+Take care to ensure whatever resources you use as reference are for **`beeline`** specifically.
+
 This will prompt the user to enter a username and password to connect to the Hive. For the purposes
 of this demonstration, the username and password here have both been set to "hive".
 
@@ -107,8 +116,8 @@ demonstrate this at `data/iris.csv`(1). First though, we must move the file to o
 science, it could be described as the "Hello World" of datasets.
 
 ```sh { .test-block #ghcr.io/ca4022/csc1109-lab2:latest }
-hdfs dfs -mkdir -p /user/hive/data/
-hdfs dfs -put /lab/data/iris.csv /user/hive/iris.csv
+hdfs dfs -chown -R hive /user/hive/data/
+hdfs dfs -put /lab/data/iris.csv /user/hive/data/iris.csv
 ```
 
 Then, we can simply create a table, and read in that file.
@@ -121,13 +130,20 @@ This moves the csv file to the hive cluster's data warehouse and parses it as a 
 view the head of the table, we can see the data we expect.
 
 ```sql
---8<-- "lab2/src/create_table.sql"
+--8<-- "lab2/src/table_head.sql"
 ```
 
-At this point we have created a SQL table containing our dataset, that is decentrally stored across
-a number of nodes and where queries on that table will run across the entire cluster. From here, we
+NOTE: The `LOAD INTO TABLE` operation here moves the file from its original location on the HDFS
+cluster into hive's "data warehouse".
+
+At this point we have created a SQL queyable table containing our dataset, that is decentrally
+stored across a number of nodes and where queries on that table will run across the entire cluster. From here, we
 can treat it as any other common, familiar SQL table while reaping the benefits of running on a
-HDFS/MapReduce cluster.
+HDFS/MapReduce cluster. For example:
+
+```sql
+--8<-- "lab2/src/table_queries.sql"
+```
 
 ## Further Reading & Examples &nbsp; ##
 
@@ -140,26 +156,19 @@ computations.
 
 The most important pages in the Apache Hive documentation an be found here:
 
-- [Getting Started with Running Hive](https://cwiki.apache.org/confluence/display/Hive/GettingStarted#GettingStarted-RunningHiveCLI)
 - [Hive Data Definition Language](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DDL)
 - [Hive Data Manipulation Language](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DML#LanguageManualDML-HiveDataManipulationLanguage)
 - [Hive Select queries](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+Select)
+- [How to install and run Hive](https://cwiki.apache.org/confluence/display/Hive/GettingStarted#GettingStarted-RunningHiveCLI)
 
 ### Examples ###
 
 Examples of how to create, load, and query data with Hive:
 
-- [Simple example queries (from step 15.)](https://www.java-success.com/10-setting-getting-started-hive-mac/)
-- [More query examples](https://datapeaker.com/en/big--data/hive-queries-15-basic-hive-queries-for-data-engineers/)
+- [Hive Query examples](https://datapeaker.com/en/big--data/hive-queries-15-basic-hive-queries-for-data-engineers/)
 - [Hive Join examples](https://www.sparkcodehub.com/hive/mastering-hive-joins)
 - [Hive Sampling examples](https://dwgeek.com/hive-table-sampling-concept-and-example.html/)
 - [Hive Subqueries examples](https://dwgeek.com/apache-hive-correlated-subquery-and-its-restrictions.html/)
-
-Create your own tables and load data from a file you have created or downloaded, then
-practice some queries.
-
-- [Example: load csv file in Hive table](https://sparkbyexamples.com/apache-hive/hive-load-csv-file-into-table/)
-- [Example: load data into tables](https://www.geeksforgeeks.org/hive-load-data-into-table/)
 
 You can find more query examples and SQL cheat-sheet
 [here](https://hortonworks.com/blog/hive-cheat-sheet-for-sql-users/)
@@ -168,5 +177,6 @@ Check manual on Loop for HiveQL basics with examples.
 
 ### Additional tutorials ###
 
+- [Apache Hive: Tutorial](https://hive.apache.org/docs/latest/user/tutorial/)
 - [Hive tutorial for beginners](https://www.guru99.com/hive-tutorials.html)
 - [Hive tutorial and refresher](https://www.analyticsvidhya.com/blog/2020/12/15-basic-and-highly-used-hive-queries-that-all-data-engineers-must-know/)

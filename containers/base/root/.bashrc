@@ -1,4 +1,5 @@
 # Set terminal env variables
+export USER=$(whoami)
 export STARSHIP_CONFIG="$HOME/.config/starship/bash.toml"
 export TERM="xterm-256color"
 export COLORTERM="truecolor"

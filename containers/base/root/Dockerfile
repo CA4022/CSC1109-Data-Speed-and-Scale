@@ -91,6 +91,7 @@ COPY ./.config/nvim/test.sh /test/base/editor_tests/micro_test.sh
 RUN chmod -R +x /test/
 
 COPY .bashrc .bashrc
+COPY .brushrc .brushrc
 COPY .zshrc .zshrc
 COPY .config/starship .config/starship
 COPY .config/glow .config/glow
