@@ -18,8 +18,7 @@ ARG BASE_GIT_VERSION
 ARG BASE_DOCKER_VERSION
 ARG BASE_COMPOSE_VERSION
 
-RUN zypper --non-interactive refresh && \
-    zypper --non-interactive rm docker
+RUN zypper --non-interactive refresh
 
 FROM base AS core-dependencies
 
