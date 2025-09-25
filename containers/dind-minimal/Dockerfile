@@ -22,8 +22,7 @@ RUN zypper --non-interactive --gpg-auto-import-keys refresh && \
         bash-${BASE_BASH_VERSION} \
         podman-${BASE_PODMAN_VERSION} \
         podman-docker-${BASE_PODMAN_VERSION} \
-        python311-podman-compose-${BASE_COMPOSE_VERSION} \
-        fuse-overlayfs && \
+        python311-podman-compose-${BASE_COMPOSE_VERSION} && \
     zypper clean --all
 
 COPY test.sh /test/test.sh
