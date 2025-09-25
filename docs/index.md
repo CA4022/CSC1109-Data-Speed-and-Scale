@@ -146,6 +146,17 @@ proceed. If not, please follow the installation instructions for your operating 
     >? TIP: Alternatively, you can install **Docker Desktop for Linux**, which provides a graphical
     > user interface and integrates with your desktop environment. You can find the installation
     > instructions [here](https://docs.docker.com/desktop/install/linux-install/).
+
+=== "󰙨&nbsp; On Lab Computers"
+
+    Info on how to set up docker on the lab computers provided can be found in the shared drives at
+    the folder `D:\\Public\wsl`. Please consult the `README` files here for the most up-to-date
+    info on installing docker on lab computers.
+
+    >? TIP: If you choose to use a lab computer we strongly advise for you to use the
+    > `docker export` command to save your lab containers to cloud storage (e.g: Google Drive).
+    > Storage on lab machines is on a pre-machine basis, so if you wish to continue your work on
+    > a different machine having an export of your project so far is essential.
 <!-- pyml enable MD046 -->
 
 In addition to installation, you may also need to increase the resources available to docker to
