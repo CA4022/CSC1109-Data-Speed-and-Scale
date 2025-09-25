@@ -181,12 +181,13 @@ class ShellSelector(Selector):
 
 
 async def main():
-    has_docker = shutil.which("docker") is not None
-    daemon_startup = (
-        asyncio.create_task(start_daemon("dockerd", "docker info", "/var/log/dockerd.log"))
-        if has_docker
-        else None
-    )
+    daemon_startup = None
+    # has_docker = shutil.which("docker") is not None
+    # daemon_startup = (
+    #     asyncio.create_task(start_daemon("dockerd", "docker info", "/var/log/dockerd.log"))
+    #     if has_docker
+    #     else None
+    # )
 
     selector = ShellSelector(
         "Shell",
@@ -216,7 +217,7 @@ async def main():
         await selector.select()
         print(SPLASH)
         display_markdown(["~/CSC1109.md", "/lab/lab.md"])
-        if daemon_startup:
+        if daemon_startup is not None:
             await daemon_startup
         selector.start()
 
