@@ -110,6 +110,7 @@ of this demonstration, the username and password here have both been set to "hiv
 Once we are deployed and connected to our hive cluster, running distributed queries is as simple
 as running some basic SQL commands. The lab environment includes a test file we can use to quickly
 demonstrate this at `data/iris.csv`(1). First though, we must move the file to our HDFS cluster.
+To do this we must exit `beeline` and move the files as we have previously done.
 { .annotate }
 
 1. The iris dataset is a commonly used csv table for demonstrating data analysis tools. In data
@@ -120,7 +121,10 @@ hdfs dfs -chown -R hive /user/hive/data/
 hdfs dfs -put /lab/data/iris.csv /user/hive/data/iris.csv
 ```
 
-Then, we can simply create a table, and read in that file.
+TIP: You can also run these commands without exiting `beeline` by prepending them with `!sh`.
+
+Then, we can simply reconnect to our hive server in `beeline`, create a table, and read in that
+file.
 
 ```sql
 --8<-- "lab2/src/create_table.sql"
