@@ -32,8 +32,7 @@ ARG BASE_COMPOSE_VERSION
 
 # These are the core packages for the environment. They are installed in their own stage
 # as they are expected to change infrequently.
-RUN zypper --non-interactive addrepo "https://download.opensuse.org/repositories/Virtualization:containers/${BASE_OPENSUSE_VERSION}/Virtualization:containers.repo" && \
-    zypper --non-interactive addrepo "https://download.opensuse.org/repositories/shells:fish:release:4/${BASE_OPENSUSE_VERSION}/shells:fish:release:4.repo" && \
+RUN zypper --non-interactive addrepo "https://download.opensuse.org/repositories/shells:fish:release:4/${BASE_OPENSUSE_VERSION}/shells:fish:release:4.repo" && \
     zypper --non-interactive --gpg-auto-import-keys refresh && \
     zypper --non-interactive install \
         git-${BASE_GIT_VERSION} \
