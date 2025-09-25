@@ -57,7 +57,7 @@ RUN if zypper search -x -i "busybox-less" >/dev/null 2>&1; then \
     fi && \
     zypper --non-interactive install zsh fish hashdeep starship make wget git glow lsd fd \
         fd-bash-completion ripgrep ripgrep-bash-completion tealdeer-bash-completion \
-        symbols-only-nerd-fonts vim docker-bash-completion && \
+        symbols-only-nerd-fonts vim && \
     zypper clean --all && \
     wget -O /usr/bin/tldr https://github.com/tealdeer-rs/tealdeer/releases/download/v1.7.2/tealdeer-linux-x86_64-musl && \
     chmod +x /usr/bin/tldr && \
