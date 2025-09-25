@@ -4,7 +4,7 @@ FROM docker.io/opensuse/leap:${BASE_OPENSUSE_VERSION} AS base
 
 ARG BASE_OPENSUSE_VERSION
 ARG BASE_BASH_VERSION
-ARG BASE_DOCKER_VERSION
+ARG BASE_PODMAN_VERSION
 ARG BASE_COMPOSE_VERSION
 
 RUN zypper --non-interactive refresh
@@ -13,15 +13,14 @@ FROM base AS dind-minimal
 
 ARG BASE_OPENSUSE_VERSION
 ARG BASE_BASH_VERSION
-ARG BASE_DOCKER_VERSION
+ARG BASE_PODMAN_VERSION
 ARG BASE_COMPOSE_VERSION
 
-RUN zypper --non-interactive addrepo "https://download.opensuse.org/repositories/Virtualization:containers/${BASE_OPENSUSE_VERSION}/Virtualization:containers.repo" && \
-    zypper --non-interactive --gpg-auto-import-keys refresh && \
+RUN zypper --non-interactive --gpg-auto-import-keys refresh && \
     zypper --non-interactive install \
         bash-${BASE_BASH_VERSION} \
-        docker-${BASE_DOCKER_VERSION} \
-        docker-compose-${BASE_COMPOSE_VERSION} \
+        podman-${BASE_PODMAN_VERSION} \
+        podman-compose-${BASE_COMPOSE_VERSION} \
         fuse-overlayfs && \
     zypper clean --all
 
