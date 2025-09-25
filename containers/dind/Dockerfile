@@ -13,7 +13,7 @@ RUN zypper --non-interactive addrepo https://download.opensuse.org/repositories/
         podman-${BASE_PODMAN_VERSION} \
         podman-docker-${BASE_PODMAN_VERSION} \
         python311-podman-compose-${BASE_COMPOSE_VERSION} \
-        fuse-overlayfs \
-        iptables && \
-    zypper clean --all
+        fuse-overlayfs && \
+    zypper clean --all && \
+    touch /etc/containers/nodocker
 
