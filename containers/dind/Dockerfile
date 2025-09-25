@@ -5,6 +5,7 @@ ARG BASE_PODMAN_VERSION
 ARG BASE_COMPOSE_VERSION
 
 COPY ./storage.conf /etc/containers/storage.conf
+COPY ./containers.conf /etc/containers/containers.conf
 
 RUN zypper --non-interactive addrepo https://download.opensuse.org/repositories/Virtualization:containers/${BASE_OPENSUSE_VERSION}/Virtualization:containers.repo && \
     zypper --non-interactive --gpg-auto-import-keys refresh && \
@@ -12,6 +13,7 @@ RUN zypper --non-interactive addrepo https://download.opensuse.org/repositories/
         podman-${BASE_PODMAN_VERSION} \
         podman-docker-${BASE_PODMAN_VERSION} \
         python311-podman-compose-${BASE_COMPOSE_VERSION} \
-        fuse-overlayfs && \
+        fuse-overlayfs \
+        iptables && \
     zypper clean --all
 
