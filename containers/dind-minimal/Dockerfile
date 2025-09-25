@@ -20,7 +20,8 @@ RUN zypper --non-interactive --gpg-auto-import-keys refresh && \
     zypper --non-interactive install \
         bash-${BASE_BASH_VERSION} \
         podman-${BASE_PODMAN_VERSION} \
-        podman-compose-${BASE_COMPOSE_VERSION} \
+        podman-docker \
+        python311-podman-compose-${BASE_COMPOSE_VERSION} \
         fuse-overlayfs && \
     zypper clean --all
 

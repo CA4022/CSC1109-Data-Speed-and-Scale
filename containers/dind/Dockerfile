@@ -8,6 +8,7 @@ COPY ./storage.conf /etc/containers/storage.conf
 RUN zypper --non-interactive refresh && \
     zypper --non-interactive install \
         podman-${BASE_PODMAN_VERSION} \
-        podman-compose-${BASE_COMPOSE_VERSION} && \
+        podman-docker \
+        python311-podman-compose-${BASE_COMPOSE_VERSION} && \
     zypper clean --all
 
