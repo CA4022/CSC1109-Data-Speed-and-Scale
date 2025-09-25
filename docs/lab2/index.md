@@ -35,7 +35,7 @@ the `docker-compose.yaml` file and `config` directories between Lab 1 and this l
 Once inside the lab container, you can deploy the cluster for this lab by running:
 
 ```sh { .test-block #ghcr.io/ca4022/csc1109-lab2:latest }
-docker compose up -d
+docker compose up -d --force-recreate
 ```
 
 ## Anatomy of a Hive cluster ##
