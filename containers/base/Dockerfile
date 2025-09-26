@@ -5,6 +5,7 @@ ARG BASE_BASH_VERSION
 ARG BASE_GIT_VERSION
 
 RUN zypper --non-interactive install \
+        nftables \
         python312 \
         wget \
         man \
