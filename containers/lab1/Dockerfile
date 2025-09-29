@@ -12,5 +12,5 @@ RUN chown -R 1000 /lab/ && \
     chown -R $HADOOP_USER_NAME $HADOOP_HOME
 
 USER $HADOOP_USER_NAME
-RUN uv sync && chmod -R 777 /lab/.venv
+RUN uv sync && chown -R 1000 /lab/.venv && chmod -R 777 /lab/.venv
 USER root
