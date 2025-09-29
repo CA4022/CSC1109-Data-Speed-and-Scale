@@ -27,4 +27,8 @@
         <name>yarn.log-aggregation-enable</name>
         <value>true</value>
     </property>
+    <property>
+        <name>yarn.resourcemanager.webapp.address</name>
+        <value>0.0.0.0:8088</value>
+    </property>
 </configuration>

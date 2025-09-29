@@ -29,9 +29,9 @@ in the CLI for this lab.
 Once the stack is deployed, it will bind the following ports on your host
 machine:
 
-- 8000: [Spark WebUI](http://localhost:8000/)
-- 8888: [Jupyter Notebook](http://localhost:8888/lab)
-- 9870: [Hadoop WebUI](http://localhost:9870/)
+- 8000: [Spark WebUI](http://0.0.0.0:8000/)
+- 8888: [Jupyter Notebook](http://0.0.0.0:8888/lab)
+- 9870: [Hadoop WebUI](http://0.0.0.0:9870/)
 
 Connecting to the jupyter notebook will drop you in a full interactive coding environment from
 which you can easily explore your data and test/develop your model. This environment will allow you

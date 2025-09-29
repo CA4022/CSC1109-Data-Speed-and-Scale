@@ -11,4 +11,8 @@
       <name>dfs.webhdfs.enabled</name>
       <value>true</value>
     </property>
+    <property>
+        <name>dfs.namenode.http-address</name>
+        <value>0.0.0.0:9870</value>
+    </property>
 </configuration>

@@ -238,7 +238,7 @@ hdfs fsck /
 ```
 
 INFO: You can connect to a WebUI for your cluster at any time by opening your browser and
-navigating to the URL [http://localhost:9870](http://localhost:9870). This is another way to check
+navigating to the URL [http://0.0.0.0:9870](http://0.0.0.0:9870). This is another way to check
 your cluster status.
 
 Once we have confirmed that the cluster is healthy, we can create a directory and put our example
@@ -317,7 +317,7 @@ hadoop jar wordcount.jar WordCount hdfs://namenode/lab/data/Word_count.txt hdfs:
 ```
 
 INFO: Similar to the HDFS WebUI, you can connect to the WebUI for your ResourceManager at any time
-by opening your browser and navigating to the URL [http://localhost:8088](http://localhost:8088).
+by opening your browser and navigating to the URL [http://0.0.0.0:8088](http://0.0.0.0:8088).
 This allows you to track the status of various MapReduce jobs across your YARN cluster.
 
 TIP: If you want to test this on even bigger text files you can find many, many plaintext public
