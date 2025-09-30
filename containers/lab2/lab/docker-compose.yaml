@@ -44,6 +44,9 @@ services:
     deploy:
       mode: replicated
       replicas: 4
+    depends_on:
+      namenode:
+        condition: service_healthy
 
   resourcemanager:
     <<: *hadoop-common-config
@@ -51,10 +54,15 @@ services:
     command: ["yarn", "resourcemanager"]
     ports:
       - 8088:8088
+    depends_on:
+      namenode:
+        condition: service_healthy
 
   nodemanager:
     <<: *hadoop-common-config
     command: ["yarn", "nodemanager"]
+    depends_on:
+      - resourcemanager
 
   historyserver:
     <<: *hadoop-common-config
@@ -67,6 +75,9 @@ services:
       - HADOOP_HOME=${HADOOP_HOME}
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
       - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
+    depends_on:
+      namenode:
+        condition: service_healthy
 
   postgres:
     image: docker.io/library/postgres:17.5
@@ -112,8 +123,6 @@ services:
       - HIVE_HOME=${HIVE_HOME}
       - METASTORE_PORT=9083
     depends_on:
-      postgres:
-        condition: service_started
       hive-init:
         condition: service_completed_successfully
     ports:
@@ -130,8 +139,6 @@ services:
       - HIVE_HOME=${HIVE_HOME}
       - HIVESERVER2_PID_DIR=/tmp/hive
     depends_on:
-      hive-init:
-        condition: service_completed_successfully
       metastore:
         condition: service_started
       namenode:
@@ -143,9 +150,12 @@ services:
     image: ghcr.io/ca4022/csc1109-lab2-client
     hostname: client
     depends_on:
-      - namenode
-      - resourcemanager
-      - hiveserver
+      namenode:
+        condition: service_healthy
+      resourcemanager:
+        condition: service_started
+      hiveserver:
+        condition: service_started
     command: sleep infinity
     working_dir: /lab/
     volumes:

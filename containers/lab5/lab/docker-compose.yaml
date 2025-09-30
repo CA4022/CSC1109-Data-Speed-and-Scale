@@ -1,15 +1,13 @@
 version: "3.8"
 
-x-hadoop-common-config:
-  &hadoop-common-config
+x-hadoop-common-config: &hadoop-common-config
   image: ${HADOOP_RUNNER_IMAGE}:${HADOOP_RUNNER_VERSION}
   volumes:
     - .:/lab/
     - /opt/hadoop/:${HADOOP_HOME}
     - ./config/:${HADOOP_HOME}/etc/hadoop
 
-x-spark-common-config:
-  &spark-common-config
+x-spark-common-config: &spark-common-config
   image: ${SPARK_IMAGE}:${SPARK_VERSION}
   volumes:
     - /lab/:/opt/spark/work-dir/
@@ -27,6 +25,12 @@ services:
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
       - ENSURE_NAMENODE_DIR=/tmp/hadoop-root/dfs/name
       - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
+    healthcheck:
+      test:
+        ["CMD-SHELL", "hdfs dfsadmin -safemode get | grep 'Safe mode is OFF'"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   datanode:
     <<: *hadoop-common-config
@@ -38,6 +42,9 @@ services:
     deploy:
       mode: replicated
       replicas: 4
+    depends_on:
+      namenode:
+        condition: service_healthy
 
   spark-master:
     <<: *spark-common-config
@@ -74,7 +81,10 @@ services:
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
       - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
     depends_on:
-      - spark-master
+      namenode:
+        condition: service_healthy
+      spark-master:
+        condition: service_started
     links:
       - spark-master
     command: sleep infinity

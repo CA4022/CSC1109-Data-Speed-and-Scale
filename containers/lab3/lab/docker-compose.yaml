@@ -1,7 +1,6 @@
 version: "3.8"
 
-x-hadoop-common-config:
-  &hadoop-common-config
+x-hadoop-common-config: &hadoop-common-config
   image: ${HADOOP_RUNNER_IMAGE}:${HADOOP_RUNNER_VERSION}
   volumes:
     - .:/lab/
@@ -31,6 +30,9 @@ services:
     deploy:
       mode: replicated
       replicas: 4
+    depends_on:
+      namenode:
+        condition: service_healthy
 
   resourcemanager:
     <<: *hadoop-common-config
@@ -42,6 +44,9 @@ services:
       - HADOOP_HOME=${HADOOP_HOME}
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
       - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
+    depends_on:
+      namenode:
+        condition: service_healthy
 
   nodemanager:
     <<: *hadoop-common-config
@@ -50,6 +55,8 @@ services:
       - HADOOP_HOME=${HADOOP_HOME}
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
       - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
+    depends_on:
+      - resourcemanager
 
   historyserver:
     <<: *hadoop-common-config
@@ -62,10 +69,20 @@ services:
       - HADOOP_HOME=${HADOOP_HOME}
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
       - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
+    depends_on:
+      namenode:
+        condition: service_healthy
 
   client:
     image: ghcr.io/ca4022/csc1109-lab3-client
     hostname: client
+    depends_on:
+      namenode:
+        condition: service_healthy
+      resourcemanager:
+        condition: service_started
+      hiveserver:
+        condition: service_started
     command: ["sleep", "infinity"]
     volumes:
       - .:/lab/
@@ -79,8 +96,5 @@ services:
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
       - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
       - PIG_HOME=${PIG_HOME}
-    depends_on:
-      - namenode
-      - resourcemanager
     stdin_open: true
     tty: true
