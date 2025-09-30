@@ -130,6 +130,8 @@ services:
       - HIVE_HOME=${HIVE_HOME}
       - HIVESERVER2_PID_DIR=/tmp/hive
     depends_on:
+      hive-init:
+        condition: service_completed_successfully
       metastore:
         condition: service_started
       namenode:
