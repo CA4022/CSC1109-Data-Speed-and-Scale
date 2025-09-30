@@ -291,7 +291,7 @@ This will build our `jar` file in the `target` directory. We then need to connec
 node, as usual:
 
 ```sh
-docker compose exec -it client default_shell
+docker compose exec client default_shell
 ```
 
 And once inside the client, we tell the storm cluster to run our topology on the

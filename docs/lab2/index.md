@@ -85,7 +85,7 @@ As with most operations on a HPC cluster, it is good practice to connect to a sp
 instead of directly to a server node. To connect to the client node run:
 
 ```sh
-docker compose exec -it client default_shell
+docker compose exec client default_shell
 ```
 
 Once inside the client container, we need to open the REPL for running Hive commands. This REPL is
