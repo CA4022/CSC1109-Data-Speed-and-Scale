@@ -262,12 +262,12 @@ only a single node. To spread the data across all 4 nodes, we can run the follow
 check the block locations again:
 
 ```sh { .test-block #ghcr.io/ca4022/csc1109-lab1:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
-hdfs dfs -setrep 4 /lab/data/Word_count.txt
+hdfs dfs -setrep 2 /lab/data/Word_count.txt
 hdfs fsck /lab/data/Word_count.txt -files -blocks -locations
 ```
 
-Now, you should be able to see that the average block replication for the file is 4.0, illustrating
-that the file has been replicated 4 times across the entire cluster. With the data spread across the
+Now, you should be able to see that the average block replication for the file is 2.0, illustrating
+that the file has been replicated 2 times across the entire cluster. With the data spread across the
 cluster, we can next move on to performing computations on that data through our cluster. Run
 `exit` to disconnect from the client node and return to your host lab environment.
 
