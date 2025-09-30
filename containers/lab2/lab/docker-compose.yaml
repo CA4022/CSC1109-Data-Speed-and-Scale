@@ -130,8 +130,10 @@ services:
       - HIVE_HOME=${HIVE_HOME}
       - HIVESERVER2_PID_DIR=/tmp/hive
     depends_on:
-      - metastore
-      - namenode
+      metastore:
+        condition: service_started
+      namenode:
+        condition: service_healthy
     ports:
       - "10000:10000"
 
