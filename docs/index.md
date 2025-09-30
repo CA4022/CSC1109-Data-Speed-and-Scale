@@ -65,9 +65,12 @@ students to have a command line environment they are comfortable working within 
 > ["Windows Terminal"](https://github.com/microsoft/terminal) application (available from the
 > Windows app store).
 
->? TIP: As an optional extra quality-of-life feature the lab environment includes CLI symbols
-> rendered via the popular `nerdfonts` glyph library. For the best possible experience in the CLI
-> you may want to consider installing [one of these fonts](https://www.nerdfonts.com/font-downloads).
+>? TIP: As an optional (but **strongly** advised) extra quality-of-life feature the lab environment
+> includes CLI symbols rendered via the popular `nerdfonts` glyph library. For the best possible
+> experience in the CLI you may want to consider installing
+> [one of these fonts](https://www.nerdfonts.com/font-downloads). Do not forget to enable the font
+> in your terminal settings after installing the font. These symbols are extremely helpful to us
+> when we need to quickly confirm your current shell environment when debugging in the lab.
 
 ### Docker Setup ###
 
