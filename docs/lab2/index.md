@@ -117,7 +117,7 @@ To do this we must exit `beeline` and move the files as we have previously done.
 science, it could be described as the "Hello World" of datasets.
 
 ```sh { .test-block #ghcr.io/ca4022/csc1109-lab2:latest }
-hdfs dfs -mkdir /user/hive/data/
+hdfs dfs -mkdir -p /user/hive/data/
 hdfs dfs -chown -R hive /user/hive/data/
 hdfs dfs -put /lab/data/iris.csv /user/hive/data/iris.csv
 ```
