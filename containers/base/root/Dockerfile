@@ -56,10 +56,20 @@ RUN if zypper search -x -i "busybox-less" >/dev/null 2>&1; then \
     fi && \
     zypper --non-interactive install zsh fish hashdeep starship make wget git glow lsd fd \
         fd-bash-completion ripgrep ripgrep-bash-completion tealdeer-bash-completion \
-        symbols-only-nerd-fonts vim && \
+        symbols-only-nerd-fonts unzip vim && \
     zypper clean --all && \
     wget -O /usr/bin/tldr https://github.com/tealdeer-rs/tealdeer/releases/download/v1.7.2/tealdeer-linux-x86_64-musl && \
     chmod +x /usr/bin/tldr && \
+    wget -O yazi.zip https://github.com/sxyazi/yazi/releases/download/v25.5.31/yazi-x86_64-unknown-linux-musl.zip && \
+    unzip yazi.zip && \
+    mv yazi/yazi /usr/local/bin/yazi && \
+    mv yazi/ya /usr/local/bin/ya && \
+    rm -r yazi/ && \
+    rm yazi/zip && \
+    wget -O zellij.tar.gz wget https://github.com/zellij-org/zellij/releases/download/v0.43.1/zellij-no-web-x86_64-unknown-linux-musl.tar.gz && \
+    tar -xzf zellij.tar.gz && \
+    mv zellij /usr/local/bin/zellij && \
+    rm zellij.tar.gz && \
     mkdir -p /run/user/0 && \
     find /usr/share/locale -maxdepth 1 -mindepth 1 ! -name 'en_US' -exec rm -rf {} +
 

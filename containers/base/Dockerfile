@@ -12,6 +12,7 @@ RUN zypper --non-interactive install \
         maven \
         java-17-openjdk-devel \
         scala && \
+    rpm -qa 'python311*' | xargs -r zypper rm --clean-deps && \
     zypper clean --all
 
 COPY --from=ghcr.io/astral-sh/uv:0.7.13 /uv /uvx /bin/
