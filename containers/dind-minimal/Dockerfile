@@ -24,10 +24,12 @@ RUN zypper --non-interactive addrepo https://download.opensuse.org/repositories/
         bash-${BASE_BASH_VERSION} \
         podman-${BASE_PODMAN_VERSION} \
         podman-docker-${BASE_PODMAN_VERSION} \
-        python311-podman-compose-${BASE_COMPOSE_VERSION} \
         fuse-overlayfs \
         nftables && \
     zypper clean --all && \
+    curl -o /usr/local/bin/podman-compose https://raw.githubusercontent.com/containers/podman-compose/refs/tags/${BASE_PODMAN_VERSION}/podman_compose.py && \
+    sed -i -e '1s|^#!/usr/bin/env python3$|#!/usr/bin/env python3.12|' /usr/local/bin/podman-compose && \
+    chmod +x /usr/local/bin/podman-compose && \
     touch /etc/containers/nodocker
 
 COPY test.sh /test/test.sh
