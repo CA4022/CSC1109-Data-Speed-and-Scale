@@ -17,6 +17,9 @@ ARG BASE_COMPOSE_VERSION
 
 COPY ./storage.conf /etc/containers/storage.conf
 COPY ./containers.conf /etc/containers/containers.conf
+COPY --from=ghcr.io/astral-sh/uv:0.7.13 /uv /uvx /bin/
+
+ENV PATH="/root/.local/bin:/usr/local/bin:$PATH"
 
 RUN zypper --non-interactive addrepo https://download.opensuse.org/repositories/Virtualization:containers/${BASE_OPENSUSE_VERSION}/Virtualization:containers.repo && \
     zypper --non-interactive --gpg-auto-import-keys refresh && \
@@ -27,9 +30,7 @@ RUN zypper --non-interactive addrepo https://download.opensuse.org/repositories/
         fuse-overlayfs \
         nftables && \
     zypper clean --all && \
-    curl -o /usr/local/bin/podman-compose https://raw.githubusercontent.com/containers/podman-compose/refs/tags/${BASE_PODMAN_VERSION}/podman_compose.py && \
-    sed -i -e '1s|^#!/usr/bin/env python3$|#!/usr/bin/env python3.12|' /usr/local/bin/podman-compose && \
-    chmod +x /usr/local/bin/podman-compose && \
+    uv tool install podman-compose==${BASE_COMPOSE_VERSION} && \
     touch /etc/containers/nodocker
 
 COPY test.sh /test/test.sh

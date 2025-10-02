@@ -43,7 +43,7 @@ RUN zypper --non-interactive addrepo "https://download.opensuse.org/repositories
 
 ENV LANG="en_US.UTF-8"
 ENV LC_ALL="en_US.UTF-8"
-ENV PATH="/usr/local/bin:$PATH"
+ENV PATH="/root/.local/bin:/usr/local/bin:$PATH"
 
 # Add the non-essential user-friendly tools and configurations for students.
 # Separated from core because these components are more likely to change.
