@@ -61,12 +61,11 @@ RUN if zypper search -x -i "busybox-less" >/dev/null 2>&1; then \
     wget -O /usr/bin/tldr https://github.com/tealdeer-rs/tealdeer/releases/download/v1.7.2/tealdeer-linux-x86_64-musl && \
     chmod +x /usr/bin/tldr && \
     wget -O yazi.zip https://github.com/sxyazi/yazi/releases/download/v25.5.31/yazi-x86_64-unknown-linux-musl.zip && \
-    unzip yazi.zip && \
-    mv yazi/yazi /usr/local/bin/yazi && \
-    mv yazi/ya /usr/local/bin/ya && \
-    rm -r yazi/ && \
-    rm yazi/zip && \
-    wget -O zellij.tar.gz wget https://github.com/zellij-org/zellij/releases/download/v0.43.1/zellij-no-web-x86_64-unknown-linux-musl.tar.gz && \
+    unzip -j yazi.zip */ya */yazi && \
+    mv yazi /usr/local/bin/yazi && \
+    mv ya /usr/local/bin/ya && \
+    rm yazi.zip && \
+    wget -O zellij.tar.gz https://github.com/zellij-org/zellij/releases/download/v0.43.1/zellij-no-web-x86_64-unknown-linux-musl.tar.gz && \
     tar -xzf zellij.tar.gz && \
     mv zellij /usr/local/bin/zellij && \
     rm zellij.tar.gz && \
