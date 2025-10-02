@@ -6,7 +6,7 @@ on:
     branches:
       - main
     paths:
-      - 'containers/**'
+      - "containers/**"
 
 jobs:
   determine-changes:
@@ -117,8 +117,8 @@ jobs:
           dind_changed = str_to_bool("${{ steps.filter.outputs.dind }}") or base_changed
           github_output["dind-changed"] = dind_changed
 
-          dind_changed = str_to_bool("${{ steps.filter.outputs.dind-minimal }}")
-          github_output["dind-minimal-changed"] = dind_changed
+          dind_minimal_changed = str_to_bool("${{ steps.filter.outputs.dind-minimal }}")
+          github_output["dind-minimal-changed"] = dind_minimal_changed
 
           # Consolidate lab change logic
           lab_changes = {
@@ -135,7 +135,7 @@ jobs:
               "lab5-client-changed": str_to_bool("${{ steps.filter.outputs.lab5-client }}") or base_changed,
               "lab5-changed": str_to_bool("${{ steps.filter.outputs.lab5 }}") or dind_changed,
               "lab6-client-changed": str_to_bool("${{ steps.filter.outputs.lab6-client }}") or base_changed,
-              "lab6-changed": str_to_bool("${{ steps.filter.outputs.lab6 }}") or dind_changed,
+              "lab6-changed": str_to_bool("${{ steps.filter.outputs.lab6 }}") or dind_minimal_changed,
               "bonus3-changed": str_to_bool("${{ steps.filter.outputs.bonus3 }}") or base_changed,
             }.items()
           }
@@ -148,7 +148,7 @@ jobs:
   build-base-root-config-bat:
     needs: determine-changes
     if: needs.determine-changes.outputs.base-root-config-bat == 'true'
-    name: 'Build base-root-config-bat container'
+    name: "Build base-root-config-bat container"
     permissions:
       contents: read
       packages: write
@@ -160,7 +160,7 @@ jobs:
   build-base-root-config-glamour:
     needs: determine-changes
     if: needs.determine-changes.outputs.base-root-config-glamour == 'true'
-    name: 'Build base-root-config-glamour container'
+    name: "Build base-root-config-glamour container"
     permissions:
       contents: read
       packages: write
@@ -172,7 +172,7 @@ jobs:
   build-base-root-config-micro:
     needs: determine-changes
     if: needs.determine-changes.outputs.base-root-config-micro == 'true'
-    name: 'Build base-root-config-micro container'
+    name: "Build base-root-config-micro container"
     permissions:
       contents: read
       packages: write
@@ -184,7 +184,7 @@ jobs:
   build-base-root-config-emacs:
     needs: determine-changes
     if: needs.determine-changes.outputs.base-root-config-emacs == 'true'
-    name: 'Build base-root-config-emacs container'
+    name: "Build base-root-config-emacs container"
     permissions:
       contents: read
       packages: write
@@ -196,7 +196,7 @@ jobs:
   build-base-root-config-nvim:
     needs: determine-changes
     if: needs.determine-changes.outputs.base-root-config-nvim == 'true'
-    name: 'Build base-root-config-nvim container'
+    name: "Build base-root-config-nvim container"
     permissions:
       contents: read
       packages: write
@@ -218,36 +218,36 @@ jobs:
     outputs:
       build-base-root: ${{ steps.consolidate-base-root-config.outputs.build-base-root }}
     steps:
-    - name: Consolidate Root Config Build Statuses
-      id: consolidate-base-root-config
-      shell: python
-      run: |
-        import os
+      - name: Consolidate Root Config Build Statuses
+        id: consolidate-base-root-config
+        shell: python
+        run: |
+          import os
 
-        github_output = {}
-        str_to_bool = {"true": True, "false": False}.get
-        bool_to_str = {True: "true", False: "false"}.get
-        status_to_bool = ("success", "skipped").__contains__
+          github_output = {}
+          str_to_bool = {"true": True, "false": False}.get
+          bool_to_str = {True: "true", False: "false"}.get
+          status_to_bool = ("success", "skipped").__contains__
 
-        conditions = [
-            str_to_bool("${{ needs.determine-changes.outputs.base-root-changed }}"), # base_root_changed
-            status_to_bool("${{ needs.build-base-root-config-bat.result }}"), # config_bat_result
-            status_to_bool("${{ needs.build-base-root-config-glamour.result }}"), # config_glamour_result
-            status_to_bool("${{ needs.build-base-root-config-micro.result }}"), # config_micro_result
-            status_to_bool("${{ needs.build-base-root-config-emacs.result }}"), # config_emacs_result
-            status_to_bool("${{ needs.build-base-root-config-nvim.result }}"), # config_nvim_result
-        ]
+          conditions = [
+              str_to_bool("${{ needs.determine-changes.outputs.base-root-changed }}"), # base_root_changed
+              status_to_bool("${{ needs.build-base-root-config-bat.result }}"), # config_bat_result
+              status_to_bool("${{ needs.build-base-root-config-glamour.result }}"), # config_glamour_result
+              status_to_bool("${{ needs.build-base-root-config-micro.result }}"), # config_micro_result
+              status_to_bool("${{ needs.build-base-root-config-emacs.result }}"), # config_emacs_result
+              status_to_bool("${{ needs.build-base-root-config-nvim.result }}"), # config_nvim_result
+          ]
 
-        github_output["build-base-root"] = all(conditions)
+          github_output["build-base-root"] = all(conditions)
 
-        with open(os.environ["GITHUB_OUTPUT"], "a") as output_file:
-            for k, v in github_output.items():
-                output_file.write(f"{k}={bool_to_str(v)}\n")
+          with open(os.environ["GITHUB_OUTPUT"], "a") as output_file:
+              for k, v in github_output.items():
+                  output_file.write(f"{k}={bool_to_str(v)}\n")
 
   build-base-root:
     needs: base-root-config
     if: always() && needs.base-root-config.outputs.build-base-root == 'true'
-    name: 'Build base-root container'
+    name: "Build base-root container"
     permissions:
       contents: read
       packages: write
@@ -264,7 +264,7 @@ jobs:
       always() &&
       needs.determine-changes.outputs.base-changed == 'true' &&
       needs.build-base-root.result != 'failure'
-    name: 'Build base container'
+    name: "Build base container"
     permissions:
       contents: read
       packages: write
@@ -281,7 +281,7 @@ jobs:
       always() &&
       needs.determine-changes.outputs.dind-changed == 'true' &&
       needs.build-base.result != 'failure'
-    name: 'Build dind container'
+    name: "Build dind container"
     permissions:
       contents: read
       packages: write
@@ -296,7 +296,7 @@ jobs:
     if: >-
       always() &&
       needs.determine-changes.outputs.dind-minimal-changed == 'true'
-    name: 'Build dind-minimal container'
+    name: "Build dind-minimal container"
     permissions:
       contents: read
       packages: write
@@ -304,7 +304,6 @@ jobs:
     with:
       path: containers/dind-minimal/
     secrets: inherit
-
 
   build-lab1-client:
     needs:
@@ -314,7 +313,7 @@ jobs:
       always() &&
       needs.determine-changes.outputs.lab1-client-changed == 'true' &&
       needs.build-base.result != 'failure'
-    name: 'Build lab1 client container'
+    name: "Build lab1 client container"
     permissions:
       contents: read
       packages: write
@@ -331,7 +330,7 @@ jobs:
       always() &&
       needs.determine-changes.outputs.lab1-changed == 'true' &&
       needs.build-dind.result != 'failure'
-    name: 'Build lab1 container'
+    name: "Build lab1 container"
     permissions:
       contents: read
       packages: write
@@ -348,7 +347,7 @@ jobs:
       always() &&
       needs.determine-changes.outputs.lab2-client-changed == 'true' &&
       needs.build-base.result != 'failure'
-    name: 'Build lab2 client container'
+    name: "Build lab2 client container"
     permissions:
       contents: read
       packages: write
@@ -365,7 +364,7 @@ jobs:
       always() &&
       needs.determine-changes.outputs.lab2-changed == 'true' &&
       needs.build-dind.result != 'failure'
-    name: 'Build lab2 container'
+    name: "Build lab2 container"
     permissions:
       contents: read
       packages: write
@@ -382,7 +381,7 @@ jobs:
       always() &&
       needs.determine-changes.outputs.lab3-client-changed == 'true' &&
       needs.build-base.result != 'failure'
-    name: 'Build lab3 client container'
+    name: "Build lab3 client container"
     permissions:
       contents: read
       packages: write
@@ -399,7 +398,7 @@ jobs:
       always() &&
       needs.determine-changes.outputs.lab3-changed == 'true' &&
       needs.build-dind.result != 'failure'
-    name: 'Build lab3 container'
+    name: "Build lab3 container"
     permissions:
       contents: read
       packages: write
@@ -416,7 +415,7 @@ jobs:
       always() &&
       needs.determine-changes.outputs.lab4-client-changed == 'true' &&
       needs.build-base.result != 'failure'
-    name: 'Build lab4 client container'
+    name: "Build lab4 client container"
     permissions:
       contents: read
       packages: write
@@ -433,7 +432,7 @@ jobs:
       always() &&
       needs.determine-changes.outputs.lab4-changed == 'true' &&
       needs.build-dind.result != 'failure'
-    name: 'Build lab4 container'
+    name: "Build lab4 container"
     permissions:
       contents: read
       packages: write
@@ -450,7 +449,7 @@ jobs:
       always() &&
       needs.determine-changes.outputs.lab5-client-changed == 'true' &&
       needs.build-base.result != 'failure'
-    name: 'Build lab5 client container'
+    name: "Build lab5 client container"
     permissions:
       contents: read
       packages: write
@@ -467,7 +466,7 @@ jobs:
       always() &&
       needs.determine-changes.outputs.lab5-changed == 'true' &&
       needs.build-dind.result != 'failure'
-    name: 'Build lab5 container'
+    name: "Build lab5 container"
     permissions:
       contents: read
       packages: write
@@ -482,7 +481,7 @@ jobs:
     if: >-
       always() &&
       needs.determine-changes.outputs.lab6-client-changed == 'true'
-    name: 'Build lab6 client container'
+    name: "Build lab6 client container"
     permissions:
       contents: read
       packages: write
@@ -499,7 +498,7 @@ jobs:
       always() &&
       needs.determine-changes.outputs.lab6-changed == 'true' &&
       needs.build-dind.result != 'failure'
-    name: 'Build lab6 container'
+    name: "Build lab6 container"
     permissions:
       contents: read
       packages: write
@@ -508,7 +507,6 @@ jobs:
       path: containers/lab6/
     secrets: inherit
 
-
   build-bonus3:
     needs:
       - determine-changes
@@ -516,7 +514,7 @@ jobs:
     if: >-
       always() &&
       needs.determine-changes.outputs.bonus3-changed == 'true'
-    name: 'Build bonus3 container'
+    name: "Build bonus3 container"
     permissions:
       contents: read
       packages: write
@@ -524,4 +522,3 @@ jobs:
     with:
       path: containers/bonus3
     secrets: inherit
-
