@@ -2,14 +2,14 @@ name: Test Documentation
 
 on:
   workflow_dispatch:
-  workflow_run:
-    workflows: ["Build Dispatcher"]
-    branches: [main]
-    types:
-      - completed
-    paths:
-      - 'containers/**'
-      - 'docs/**'
+  # workflow_run:
+  #   workflows: ["Build Dispatcher"]
+  #   branches: [main]
+  #   types:
+  #     - completed
+  #   paths:
+  #     - 'containers/**'
+  #     - 'docs/**'
 
 jobs:
   test-docs:
@@ -24,9 +24,9 @@ jobs:
         #     container our environments should be predictably the same
         # os: [ubuntu-latest, macos-latest, windows-latest]
         config:
-          - { runtime: 'docker', oci: 'default', name: 'docker' }
-          - { runtime: 'podman', oci: 'runc',    name: 'podman-runc' }
-          - { runtime: 'podman', oci: 'crun',    name: 'podman-crun' }
+          - { runtime: "docker", oci: "default", name: "docker" }
+          - { runtime: "podman", oci: "runc", name: "podman-runc" }
+          - { runtime: "podman", oci: "crun", name: "podman-crun" }
 
     name: Test Docs (${{ matrix.os }} | ${{ matrix.config.name }})
     runs-on: ${{ matrix.os }}
