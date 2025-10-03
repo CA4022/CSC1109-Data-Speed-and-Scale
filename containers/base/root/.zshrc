@@ -1,4 +1,5 @@
 export USER=$(whoami)
+export HOME=$(realpath ~)
 export LANG=en_US.UTF-8
 export TERM="xterm-256color"
 export COLORTERM="truecolor"

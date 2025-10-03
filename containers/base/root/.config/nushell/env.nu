@@ -66,6 +66,7 @@ $env.config.color_config = {
 }
 
 $env.USER = (whoami | str trim)
+$env.HOME = (realpath ~)
 $env.LANG = "en_US.UTF-8"
 $env.TERM = "xterm-256color"
 $env.COLORTERM = "truecolor"

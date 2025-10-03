@@ -1,3 +1,5 @@
+set -x USER=$(whoami)
+set -x HOME=$(realpath ~)
 set -x LANG en_US.UTF-8
 set -x TERM "xterm-256color"
 set -x COLORTERM "truecolor"
