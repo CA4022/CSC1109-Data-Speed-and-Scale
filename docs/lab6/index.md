@@ -18,7 +18,7 @@ To download the container for this lab and run it, execute the following command
 
 ```sh
 docker pull {{ page.meta.docker_image }}
-docker run --rm --privileged --systemd=true --hostname lab6 -v lab6:/lab/ -v lab_cache:/run/containers/ -p 8000:8080 -p 4040:4040 -p 8000:8000 -p 8888:8888 -p 9870:9870 {{ page.meta.docker_image }}
+docker run --rm --privileged --systemd=true --hostname lab6 -v lab6:/lab/ -v lab_cache:/var/containers/cache/ -p 8000:8080 -p 4040:4040 -p 8000:8000 -p 8888:8888 -p 9870:9870 {{ page.meta.docker_image }}
 ```
 
 This will automatically deploy the stack without forking it as a daemon, as we will not be working

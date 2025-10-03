@@ -11,7 +11,7 @@ To download the container for this lab and run it, execute the following command
 
 ```sh
 docker pull {{ page.meta.docker_image }}
-docker run --rm --privileged --systemd=true --hostname lab3 -v lab3:/lab/ -v lab_cache:/run/containers/ -p 9870:9870 -p 19888:19888 -it {{ page.meta.docker_image }}
+docker run --rm --privileged --systemd=true --hostname lab3 -v lab3:/lab/ -v lab_cache:/var/containers/cache/ -p 9870:9870 -p 19888:19888 -it {{ page.meta.docker_image }}
 ```
 
 ## What is Pig? 󱀆&nbsp; ##

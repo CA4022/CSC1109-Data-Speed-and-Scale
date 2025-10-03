@@ -32,9 +32,9 @@ RUN zypper --non-interactive addrepo https://download.opensuse.org/repositories/
     zypper clean --all && \
     uv tool install podman-compose==${BASE_COMPOSE_VERSION} && \
     touch /etc/containers/nodocker && \
-    mkdir -p /var/containers/storage && \
-    mkdir -p /var/containers/graph && \
-    mkdir -p /var/containers/image-tmp
+    mkdir -p /var/containers/cache/storage && \
+    mkdir -p /var/containers/cache/graph && \
+    mkdir -p /var/containers/tmp/image
 
 COPY test.sh /test/test.sh
 RUN chmod +x /test/test.sh
