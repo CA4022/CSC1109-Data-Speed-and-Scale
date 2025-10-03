@@ -26,7 +26,7 @@ To download the container for this lab and run it, execute the following command
 
 ```sh
 docker pull {{ page.meta.docker_image }}
-docker run --rm --privileged --hostname lab5 -v lab5:/lab/ -v lab_cache:/run/containers/ -p 8000:8080 -p 9870:9870 -it {{ page.meta.docker_image }}
+docker run --rm --privileged --systemd=true --hostname lab5 -v lab5:/lab/ -v lab_cache:/run/containers/ -p 8000:8080 -p 9870:9870 -it {{ page.meta.docker_image }}
 ```
 
 If you have already started the lab and wish to resume it after exiting, you can do so by running:
