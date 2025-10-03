@@ -15,4 +15,7 @@ RUN zypper --non-interactive addrepo https://download.opensuse.org/repositories/
         fuse-overlayfs && \
     zypper clean --all && \
     uv tool install podman-compose==${BASE_COMPOSE_VERSION} && \
-    touch /etc/containers/nodocker
+    touch /etc/containers/nodocker && \
+    mkdir -p /var/containers/storage && \
+    mkdir -p /var/containers/graph && \
+    mkdir -p /var/containers/image-tmp
