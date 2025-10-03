@@ -1,0 +1,17 @@
+[Unit]
+Description=Interactive Shell and Editor Selector
+After=multi-user.target
+
+[Service]
+ExecStart=/entrypoint.py
+WorkingDirectory=/lab
+Type=idle
+StandardInput=tty
+StandardOutput=tty
+StandardError=tty
+TTYPath=/dev/console
+Restart=no
+ExecStopPost=/usr/bin/systemctl --force --force poweroff
+
+[Install]
+WantedBy=multi-user.target

@@ -4,7 +4,8 @@ ARG BASE_GCC_VERSION
 ARG BASE_BASH_VERSION
 ARG BASE_GIT_VERSION
 
-RUN zypper --non-interactive install \
+RUN zypper --non-interactive install --no-recommends systemd && \
+    zypper --non-interactive install \
         nftables \
         python312 \
         wget \
@@ -38,5 +39,19 @@ ENV JAVA_HOME=/usr/lib64/jvm/java-17-openjdk-17
 COPY ./lab/ /lab/
 COPY ./bin/ /bin/
 COPY entrypoint.py /entrypoint.py
-RUN chmod +x /entrypoint.py
-CMD ["/entrypoint.py"]
+COPY entrypoint.service /etc/systemd/system/entrypoint.service
+
+RUN systemctl mask \
+        getty@.service \
+        serial-getty@.service \
+        getty.target \
+        proc-sys-fs-binfmt_misc.automount \
+        sys-kernel-debug.mount \
+        sys-kernel-tracing.mount \
+        sys-kernel-config.mount && \
+    systemctl enable entrypoint.service && \
+    chmod +x /entrypoint.py
+
+STOPSIGNAL SIGRTMIN+3
+
+CMD ["/usr/sbin/init"]
