@@ -5,7 +5,7 @@ After=multi-user.target
 [Service]
 ExecStart=/entrypoint.py
 WorkingDirectory=/lab
-EnvironmentFile=/opt/container_env
+EnvironmentFile=/env
 Type=idle
 StandardInput=tty
 StandardOutput=tty

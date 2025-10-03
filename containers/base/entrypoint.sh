@@ -1,4 +1,4 @@
 #!/bin/bash
 
-printenv > /opt/container_env
+printenv > /env
 exec /sbin/init
