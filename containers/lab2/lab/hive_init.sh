@@ -1,12 +1,17 @@
 #!/bin/bash
 set -e
 
+sleep 5
+
 # --- Metastore Schema Initialization ---
-if schematool -info -dbType postgres 2>&1 | grep -q 'Metastore schema version'; then
-  echo "Metastore schema already initialized."
+echo "--- Metastore Schema Initialization ---"
+
+if ! $HIVE_HOME/bin/schematool -info -dbType postgres >/dev/null 2>&1; then
+  echo "Metastore schema not found or in an inconsistent state. Initializing..."
+  $HIVE_HOME/bin/schematool -initSchema -dbType postgres
+  echo "Metastore schema initialization successful."
 else
-  echo "Metastore schema not initialized; initializing..."
-  schematool -initSchema -dbType postgres
+  echo "Metastore schema already initialized. Skipping."
 fi
 
 echo "--- HDFS Initialization ---"
@@ -48,4 +53,4 @@ hdfs dfs -chmod -R 777 hdfs://namenode/user/$HIVE_USER_NAME/warehouse
 echo "Ensuring '$HIVE_USER_NAME' user owns hdfs://namenode/user/$HIVE_USER_NAME..."
 hdfs dfs -chown -R $HIVE_USER_NAME:$HIVE_USER_NAME hdfs://namenode/user/$HIVE_USER_NAME
 
-echo "HDFS initialization complete."
+echo "Initialization complete."
