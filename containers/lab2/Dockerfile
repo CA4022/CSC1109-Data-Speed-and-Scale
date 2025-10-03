@@ -1,4 +1,4 @@
-FROM ghcr.io/ca4022/csc1109-dind:latest AS lab1-environment
+FROM ghcr.io/ca4022/csc1109-dind:latest AS lab2-environment
 
 COPY --from=docker.io/apache/hadoop:3.4.1 /opt/hadoop/ /opt/hadoop/
 COPY --from=docker.io/apache/hive:4.0.1 /opt/hive/ /opt/hive/
