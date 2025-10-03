@@ -26,8 +26,7 @@ services:
       - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
       - ENSURE_NAMENODE_DIR=/tmp/hadoop-root/dfs/name
     healthcheck:
-      test:
-        ["CMD-SHELL", "hdfs dfsadmin -safemode get | grep 'Safe mode is OFF'"]
+      test: ["CMD", "curl", "-f", "http://namenode:9870"]
       interval: 10s
       timeout: 5s
       retries: 5
