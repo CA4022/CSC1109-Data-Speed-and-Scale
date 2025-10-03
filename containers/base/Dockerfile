@@ -38,10 +38,12 @@ ENV JAVA_HOME=/usr/lib64/jvm/java-17-openjdk-17
 # Copy lab specific files and set entrypoint running
 COPY ./lab/ /lab/
 COPY ./bin/ /bin/
+COPY entrypoint.sh /entrypoint.sh
 COPY entrypoint.py /entrypoint.py
 COPY entrypoint.service /etc/systemd/system/entrypoint.service
 
-RUN systemctl mask \
+RUN chmod +x /entrypoint.sh && \
+    systemctl mask \
         getty@.service \
         serial-getty@.service \
         getty.target \
@@ -54,4 +56,4 @@ RUN systemctl mask \
 
 STOPSIGNAL SIGRTMIN+3
 
-CMD ["/usr/sbin/init"]
+CMD ["/entrypoint.sh"]
