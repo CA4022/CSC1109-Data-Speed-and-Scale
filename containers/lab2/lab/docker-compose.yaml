@@ -76,10 +76,6 @@ services:
     ports:
       - "19888:19888"
       - "10020:10020"
-    environment:
-      - HADOOP_HOME=${HADOOP_HOME}
-      - HADOOP_USER_NAME=${HADOOP_USER_NAME}
-      - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
     depends_on:
       namenode:
         condition: service_started
@@ -138,7 +134,6 @@ services:
     environment:
       - HADOOP_HOME=${HADOOP_HOME}
       - HADOOP_USER_NAME=${HIVE_USER_NAME}
-      - HADOOP_CLASSPATH=/opt/tez/*:/opt/tez/lib/*:/opt/hadoop/etc/hadoop:/opt/hadoop/share/hadoop/common/lib/*:/opt/hadoop/share/hadoop/common/*:/opt/hadoop/share/hadoop/hdfs:/opt/hadoop/share/hadoop/hdfs/lib/*:/opt/hadoop/share/hadoop/hdfs/*:/opt/hadoop/share/hadoop/mapreduce/*:/opt/hadoop/share/hadoop/yarn:/opt/hadoop/share/hadoop/yarn/lib/*:/opt/hadoop/share/hadoop/yarn/*
       - HIVE_HOME=${HIVE_HOME}
       - HIVESERVER2_PID_DIR=/tmp/hive
     depends_on:

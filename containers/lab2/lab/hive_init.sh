@@ -23,7 +23,7 @@ if ! hdfs dfs -test -d hdfs://namenode/tmp; then
 else
   echo "Directory hdfs://namenode/tmp already exists."
 fi
-hdfs dfs -chmod -R 777 hdfs://namenode/tmp
+hdfs dfs -chmod -R 1777 hdfs://namenode/tmp
 
 if ! hdfs dfs -test -d hdfs://namenode/tmp/hive; then
   echo "Directory hdfs://namenode/tmp/hive not found, creating..."
@@ -31,7 +31,7 @@ if ! hdfs dfs -test -d hdfs://namenode/tmp/hive; then
 else
   echo "Directory hdfs://namenode/tmp/hive already exists."
 fi
-hdfs dfs -chmod -R 777 hdfs://namenode/tmp/hive
+hdfs dfs -chmod -R 1777 hdfs://namenode/tmp/hive
 
 if ! hdfs dfs -test -d hdfs://namenode/tmp/yarn; then
   echo "Directory hdfs://namenode/tmp/yarn not found, creating..."
@@ -39,7 +39,7 @@ if ! hdfs dfs -test -d hdfs://namenode/tmp/yarn; then
 else
   echo "Directory hdfs://namenode/tmp/yarn already exists."
 fi
-hdfs dfs -chmod -R 777 hdfs://namenode/tmp/yarn
+hdfs dfs -chmod -R 1777 hdfs://namenode/tmp/yarn
 
 if ! hdfs dfs -test -d hdfs://namenode/user/$HIVE_USER_NAME/warehouse; then
   echo "Directory hdfs://namenode/user/$HIVE_USER_NAME/warehouse not found, creating..."
@@ -47,7 +47,7 @@ if ! hdfs dfs -test -d hdfs://namenode/user/$HIVE_USER_NAME/warehouse; then
 else
   echo "Directory hdfs://namenode/user/$HIVE_USER_NAME/warehouse already exists."
 fi
-hdfs dfs -chmod -R 777 hdfs://namenode/user/$HIVE_USER_NAME/warehouse
+hdfs dfs -chmod -R 1777 hdfs://namenode/user/$HIVE_USER_NAME/warehouse
 
 # --- Set ownership ---
 echo "Ensuring '$HIVE_USER_NAME' user owns hdfs://namenode/user/$HIVE_USER_NAME..."
