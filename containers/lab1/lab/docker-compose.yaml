@@ -6,6 +6,10 @@ x-hadoop-common-config: &hadoop-common-config
     - .:/lab/
     - /opt/hadoop/:${HADOOP_HOME}
     - ./config/:${HADOOP_HOME}/etc/hadoop
+  environment:
+    - HADOOP_HOME=${HADOOP_HOME}
+    - HADOOP_USER_NAME=${HADOOP_USER_NAME}
+    - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
 
 services:
   namenode:
@@ -28,10 +32,6 @@ services:
   datanode:
     <<: *hadoop-common-config
     command: ["hdfs", "datanode"]
-    environment:
-      - HADOOP_HOME=${HADOOP_HOME}
-      - HADOOP_USER_NAME=${HADOOP_USER_NAME}
-      - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
     deploy:
       mode: replicated
       replicas: 4
@@ -45,10 +45,6 @@ services:
     command: ["yarn", "resourcemanager"]
     ports:
       - 8088:8088
-    environment:
-      - HADOOP_HOME=${HADOOP_HOME}
-      - HADOOP_USER_NAME=${HADOOP_USER_NAME}
-      - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
     depends_on:
       namenode:
         condition: service_healthy
@@ -61,10 +57,6 @@ services:
   nodemanager:
     <<: *hadoop-common-config
     command: ["yarn", "nodemanager"]
-    environment:
-      - HADOOP_HOME=${HADOOP_HOME}
-      - HADOOP_USER_NAME=${HADOOP_USER_NAME}
-      - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
     depends_on:
       resourcemanager:
         condition: service_healthy
