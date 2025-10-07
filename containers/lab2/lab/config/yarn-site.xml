@@ -28,6 +28,10 @@
         <value>true</value>
     </property>
     <property>
+        <name>yarn.nodemanager.remote-app-log-dir</name>
+        <value>hdfs://namenode/tmp/logs</value>
+    </property>
+    <property>
         <name>yarn.resourcemanager.webapp.address</name>
         <value>0.0.0.0:8088</value>
     </property>

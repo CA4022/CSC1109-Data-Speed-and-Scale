@@ -41,6 +41,14 @@ else
 fi
 hdfs dfs -chmod -R 1777 hdfs://namenode/tmp/yarn
 
+if ! hdfs dfs -test -d hdfs://namenode/tmp/logs; then
+  echo "Directory hdfs://namenode/tmp/logs not found, creating..."
+  hdfs dfs -mkdir -p hdfs://namenode/tmp/logs
+else
+  echo "Directory hdfs://namenode/tmp/logs already exists."
+fi
+hdfs dfs -chmod -R 1777 hdfs://namenode/tmp/logs
+
 if ! hdfs dfs -test -d hdfs://namenode/user/$HIVE_USER_NAME/warehouse; then
   echo "Directory hdfs://namenode/user/$HIVE_USER_NAME/warehouse not found, creating..."
   hdfs dfs -mkdir -p hdfs://namenode/user/$HIVE_USER_NAME/warehouse

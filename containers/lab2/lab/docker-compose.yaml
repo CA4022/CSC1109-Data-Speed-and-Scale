@@ -81,7 +81,7 @@ services:
         condition: service_started
 
   postgres:
-    image: docker.io/library/postgres:17.5
+    image: docker.io/library/postgres:12.22
     hostname: postgres
     environment:
       POSTGRES_DB: metastore
@@ -90,7 +90,11 @@ services:
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      test:
+        [
+          "CMD-SHELL",
+          "PGPASSWORD=$${POSTGRES_PASSWORD} psql -h localhost -U $${POSTGRES_USER} -d $${POSTGRES_DB} -c 'SELECT 1'",
+        ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -116,7 +120,7 @@ services:
     entrypoint: hive --skiphadoopversion --skiphbasecp --service metastore
     environment:
       - HADOOP_HOME=${HADOOP_HOME}
-      - HADOOP_USER_NAME=${HIVE_USER_NAME}
+      - HADOOP_USER_NAME=${HADOOP_USER_NAME}
       - HIVE_HOME=${HIVE_HOME}
       - METASTORE_PORT=9083
     depends_on:
@@ -133,7 +137,7 @@ services:
     entrypoint: hive --skiphadoopversion --skiphbasecp --service hiveserver2
     environment:
       - HADOOP_HOME=${HADOOP_HOME}
-      - HADOOP_USER_NAME=${HIVE_USER_NAME}
+      - HADOOP_USER_NAME=${HADOOP_USER_NAME}
       - HIVE_HOME=${HIVE_HOME}
       - HIVESERVER2_PID_DIR=/tmp/hive
     depends_on:
