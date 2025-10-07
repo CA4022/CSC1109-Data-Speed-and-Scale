@@ -92,8 +92,6 @@ services:
         condition: service_healthy
       resourcemanager:
         condition: service_started
-      hiveserver:
-        condition: service_started
     command: ["sleep", "infinity"]
     volumes:
       - .:/lab/
