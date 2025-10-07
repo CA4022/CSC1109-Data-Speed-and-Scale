@@ -19,7 +19,7 @@ To download the container for this lab and run it, execute the following command
 
 ```sh
 docker pull {{ page.meta.docker_image }}
-docker run --rm --privileged --systemd=true --hostname lab4 -v lab4:/lab/ -v lab_cache:/var/containers/cache/ -p 8000:8080 -it {{ page.meta.docker_image }}
+docker run --rm --privileged --hostname lab4 -v lab4:/lab/ -v lab_cache:/var/containers/cache/ -p 8000:8080 -it {{ page.meta.docker_image }}
 ```
 
 Once the container has downloaded and initialised, deploy your docker compose stack. You can

@@ -233,7 +233,7 @@ to test the lab CSC1109 environment without any lab-specific tools or data being
 you can do so by running the following command:
 
 ```sh
-docker run --privileged --systemd=true --hostname csc1109-base -v lab_cache:/run/containers/ -it ghcr.io/ca4022/csc1109-base:latest
+docker run --privileged --hostname csc1109-base -v lab_cache:/run/containers/ -it ghcr.io/ca4022/csc1109-base:latest
 ```
 
 NOTE: The docker GUI can only be used to deploy containers from the `DockerHub` repository. Since
