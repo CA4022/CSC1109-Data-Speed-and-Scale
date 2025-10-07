@@ -17,11 +17,10 @@ docker run --rm --privileged --systemd=true --hostname lab3 -v lab3:/lab/ -v lab
 ## What is Pig? 󱀆&nbsp; ##
 
 In our previous lab we discovered Apache Hive, a higher-level abstraction over HDFS/MR intended to
-make cluster computing more convenient and accessible for less specialised programmers. You likely
-noticed though that although Hive is convenient to use, it is not convenient to set up. Apache Pig
-is an even more high-level way to orchestrate tasks on a HDFS/MR cluster. If Pig detects a hadoop
-config it will immediately connect to that config and use it to execute its queries. Queries in pig
-are made using a procedural SQL-like language called "pig latin". This language allows programmers
+make cluster computing more convenient and accessible for less specialised programmers. Apache Pig
+is another abstraction that allows you to orchestrate tasks on a HDFS/MR cluster. If Pig detects a hadoop
+config it will immediately connect to that config and use it to execute its instructions. Instructions in pig
+are made using a scripting-like language called "pig latin". This language allows programmers
 to easily interact with a HDFS/MR cluster and do simple analyses in a familiar, procedural way.
 
 ## Pig Examples ##
