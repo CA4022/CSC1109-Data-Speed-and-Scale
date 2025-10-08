@@ -4,6 +4,7 @@ on:
   workflow_call:
     inputs:
       path:
+        description: "The path to the directory containing the Dockerfile and build context."
         required: true
         type: string
 
@@ -33,7 +34,7 @@ jobs:
       - name: Enable Docker buildkit
         run: echo "DOCKER_BUILDKIT=1" >> $GITHUB_ENV
 
-      - name: Define image name and tag
+      - name: Define image name and tags
         id: meta
         run: |
           REPO_OWNER_LOWER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
@@ -50,12 +51,16 @@ jobs:
         continue-on-error: true
         run: |
           if docker manifest inspect ${{ env.VERSION_TAG_REMOTE }} > /dev/null; then
-            echo "Tag ${{ env.VERSION_TAG_REMOTE }} already exists."
+            echo "Tag ${{ env.VERSION_TAG_REMOTE }} already exists. Skipping build."
             echo "exists=true" >> $GITHUB_OUTPUT
           else
             echo "Tag ${{ env.VERSION_TAG_REMOTE }} does not exist. Proceeding to build."
             echo "exists=false" >> $GITHUB_OUTPUT
           fi
+
+      - name: Set up QEMU for multi-platform builds
+        if: steps.check_tag.outputs.exists == 'false'
+        uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
         if: steps.check_tag.outputs.exists == 'false'
@@ -69,17 +74,32 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build container image for testing
+      - name: Build container image for testing (native arch)
         if: steps.check_tag.outputs.exists == 'false'
         run: |
           just build ${{ inputs.path }}
 
-      - name: Test container image
+      - name: Test container image (native arch)
         if: steps.check_tag.outputs.exists == 'false'
         run: |
           just test ${{ inputs.path }}
 
-      - name: Tag and push container image to GHCR
+      - name: Build and push multi-platform image
         if: (steps.check_tag.outputs.exists == 'false') && success()
-        run: |
-          just publish ${{ env.REPO_URL }} ${{ inputs.path }}
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ inputs.path }}
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ${{ env.VERSION_TAG_REMOTE }}
+            ${{ env.LATEST_TAG_REMOTE }}
+          build-args: |
+            BASE_OPENSUSE_VERSION=${{ env.BASE_OPENSUSE_VERSION }}
+            BASE_PODMAN_VERSION=${{ env.BASE_PODMAN_VERSION }}
+            BASE_COMPOSE_VERSION=${{ env.BASE_COMPOSE_VERSION }}
+            BASE_BASH_VERSION=${{ env.BASE_BASH_VERSION }}
+            BASE_GIT_VERSION=${{ env.BASE_GIT_VERSION }}
+            BASE_GCC_VERSION=${{ env.BASE_GCC_VERSION }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
