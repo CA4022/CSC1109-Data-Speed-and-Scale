@@ -30,7 +30,8 @@ RUN zypper --non-interactive addrepo https://download.opensuse.org/repositories/
         podman-${BASE_PODMAN_VERSION} \
         podman-docker-${BASE_PODMAN_VERSION} \
         fuse-overlayfs \
-        nftables && \
+        nftables \
+        slirp4netns && \
     zypper clean --all && \
     uv tool install podman-compose==${BASE_COMPOSE_VERSION} && \
     chmod +x /entrypoint.sh && \
