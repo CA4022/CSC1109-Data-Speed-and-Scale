@@ -2,6 +2,7 @@ import shutil
 
 
 c = get_config()  # noqa
+c.ServerApp.ip = "0.0.0.0"
 c.IdentityProvider.token = ""
 c.ServerApp.password = ""
 c.ServerApp.allow_unauthenticated_access = True
