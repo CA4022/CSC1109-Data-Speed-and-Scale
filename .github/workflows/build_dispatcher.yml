@@ -141,7 +141,7 @@ jobs:
           sandbox_client_changed = any([*sandbox_component_outputs, sandbox_client_output])
           github_output["sandbox-client-changed"] = sandbox_client_changed
 
-          sandbox_changed = str_to_bool("${{ steps.filter.outputs.sandbox }}") or dind-minimal
+          sandbox_changed = str_to_bool("${{ steps.filter.outputs.sandbox }}") or dind_minimal_changed
           github_output["sandbox-changed"] = sandbox_changed
 
           # Consolidate lab change logic
