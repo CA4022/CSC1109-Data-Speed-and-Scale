@@ -137,11 +137,11 @@ jobs:
             "${{ steps.filter.outputs.sandbox-client-apache }}",
             "${{ steps.filter.outputs.sandbox-client-jupyter }}",
           )))
-          sandbox_client_output = str_to_bool("${{ steps.filter.outputs.base-root }}")
+          sandbox_client_output = str_to_bool("${{ steps.filter.outputs.sandbox-client }}")
           sandbox_client_changed = any([*sandbox_component_outputs, sandbox_client_output])
           github_output["sandbox-client-changed"] = sandbox_client_changed
 
-          sandbox_changed = str_to_bool("${{ steps.filter.outputs.sandbox }}") or sandbox_client_changed
+          sandbox_changed = str_to_bool("${{ steps.filter.outputs.sandbox }}") or dind-minimal
           github_output["sandbox-changed"] = sandbox_changed
 
           # Consolidate lab change logic
@@ -548,8 +548,7 @@ jobs:
     secrets: inherit
 
   build-sandbox-client-apache:
-    needs:
-      - determine-changes
+    needs: determine-changes
     if: needs.determine-changes.outputs.sandbox-client-apache == 'true'
     name: "Build sandbox-client-apache container"
     permissions:
@@ -561,8 +560,7 @@ jobs:
     secrets: inherit
 
   build-sandbox-client-jupyter:
-    needs:
-      - determine-changes
+    needs: determine-changes
     if: needs.determine-changes.outputs.sandbox-client-jupyter == 'true'
     name: "Build sandbox-client-jupyter container"
     permissions:
