@@ -158,8 +158,8 @@ jobs:
               "lab4-changed": str_to_bool("${{ steps.filter.outputs.lab4 }}") or dind_changed,
               "lab5-client-changed": str_to_bool("${{ steps.filter.outputs.lab5-client }}") or base_changed,
               "lab5-changed": str_to_bool("${{ steps.filter.outputs.lab5 }}") or dind_changed,
-              "lab6-client-changed": str_to_bool("${{ steps.filter.outputs.lab6-client }}") or base_changed,
-              "lab6-changed": str_to_bool("${{ steps.filter.outputs.lab6 }}") or dind_minimal_changed,
+              "lab6-client-changed": str_to_bool("${{ steps.filter.outputs.lab6-client }}") or sandbox_client_changed,
+              "lab6-changed": str_to_bool("${{ steps.filter.outputs.lab6 }}") or sandbox_changed,
               "bonus3-changed": str_to_bool("${{ steps.filter.outputs.bonus3 }}") or base_changed,
             }.items()
           }
@@ -502,9 +502,11 @@ jobs:
   build-lab6-client:
     needs:
       - determine-changes
+      - build-sandbox-client
     if: >-
       always() &&
-      needs.determine-changes.outputs.lab6-client-changed == 'true'
+      needs.determine-changes.outputs.lab6-client-changed == 'true' &&
+      needs.build-sandbox-client.result != 'failure'
     name: "Build lab6 client container"
     permissions:
       contents: read
@@ -517,11 +519,11 @@ jobs:
   build-lab6:
     needs:
       - determine-changes
-      - build-dind
+      - build-sandbox
     if: >-
       always() &&
       needs.determine-changes.outputs.lab6-changed == 'true' &&
-      needs.build-dind.result != 'failure'
+      needs.build-sandbox.result != 'failure'
     name: "Build lab6 container"
     permissions:
       contents: read
