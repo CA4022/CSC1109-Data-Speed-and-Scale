@@ -1,31 +1,31 @@
 FROM quay.io/jupyter/all-spark-notebook:java-17.0.15
 
-ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
-ENV HADOOP_HOME=/opt/hadoop
-ENV HADOOP_USER_NAME=hadoop
-ENV HIVE_HOME=/opt/hive
-ENV HIVE_USER_NAME=hive
-ENV PIG_HOME=/opt/pig/
-ENV LD_LIBRARY_PATH=$JAVA_HOME/lib/server:$LD_LIBRARY_PATH
-ENV PATH=/home/jovyan/.local/bin/:/opt/hadoop/bin/:/opt/hive/bin/:/opt/pig/bin/:${PATH}
+ENV JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64"
+ENV HADOOP_HOME="/opt/hadoop"
+ENV HADOOP_USER_NAME="hadoop"
+ENV HIVE_HOME="/opt/hive"
+ENV HIVE_USER_NAME="hive"
+ENV PIG_HOME="/opt/pig/"
+ENV LD_LIBRARY_PATH="$JAVA_HOME/lib/server:$LD_LIBRARY_PATH"
+ENV PATH="/home/jovyan/.local/bin/:/opt/hadoop/bin/:/opt/hive/bin/:/opt/pig/bin/:$PATH"
 
 COPY --from=docker.io/apache/hive:4.0.1 /opt/hive/ /opt/hive/
 
 COPY jupyter_server_config.py /home/jovyan/.jupyter/jupyter_server_config.py
 COPY user-settings /home/jovyan/.jupyter/lab/user-settings
+COPY ./spark-defaults.conf $SPARK_CONF_DIR/spark-defaults.conf
 COPY test /test
 
 USER root
 
-COPY ./spark-defaults.conf ${SPARK_CONF_DIR}/spark-defaults.conf
 RUN echo "3.10.*" > /opt/conda/conda-meta/pinned && \
+    groupadd hive && \
+    groupadd hadoop && \
+    usermod -aG hive,hadoop jovyan && \
     chown -R jovyan /home/jovyan/.jupyter/ && \
     mkdir -p /home/jovyan/.local/ && \
     chown -R jovyan /home/jovyan/.local/ && \
     chmod +x /test/test.sh && \
-    groupadd hive && \
-    groupadd hadoop && \
-    useradd -g hive -g hadoop -k /root/ -m jovyan && \
     wget https://downloads.apache.org/pig/pig-0.17.0/pig-0.17.0.tar.gz && \
     tar -xzf pig-0.17.0.tar.gz && \
     rm pig-0.17.0.tar.gz && \
