@@ -75,7 +75,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Free disk space 1
-        uses: jlumbroso/free-disk-space-action@main
+        uses: jlumbroso/free-disk-space@main
         with:
           free-space-in-mb: 30000
 
@@ -85,7 +85,7 @@ jobs:
           just build ${{ inputs.path }}
 
       - name: Free disk space 2
-        uses: jlumbroso/free-disk-space-action@main
+        uses: jlumbroso/free-disk-space@main
         with:
           free-space-in-mb: 30000
 
