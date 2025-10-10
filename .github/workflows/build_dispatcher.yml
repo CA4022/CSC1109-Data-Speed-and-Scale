@@ -34,6 +34,10 @@ jobs:
       lab6-client-changed: ${{ steps.consolidate.outputs.lab6-client-changed }}
       lab6-changed: ${{ steps.consolidate.outputs.lab6-changed }}
       bonus3-changed: ${{ steps.consolidate.outputs.bonus3-changed }}
+      sandbox-changed: ${{ steps.consolidate.outputs.sandbox-changed }}
+      sandbox-client-changed: ${{ steps.consolidate.outputs.sandbox-client-changed }}
+      sandbox-client-apache-changed: ${{ steps.consolidate.outputs.sandbox-client-apache-changed }}
+      sandbox-client-jupyter-changed: ${{ steps.consolidate.outputs.sandbox-client-jupyter-changed }}
 
     steps:
       - name: Checkout repository
@@ -88,6 +92,14 @@ jobs:
               - 'containers/lab6/**'
             bonus3:
               - 'containers/bonus3/**'
+            sandbox:
+              - 'containers/sandbox/**'
+            sandbox-client:
+              - 'containers/sandbox/client/**'
+            sandbox-client-apache:
+              - 'containers/sandbox/client/apache/**'
+            sandbox-client-jupyter:
+              - 'containers/sandbox/client/jupyter/**'
 
       - name: Consolidate change logic
         id: consolidate
@@ -119,6 +131,18 @@ jobs:
 
           dind_minimal_changed = str_to_bool("${{ steps.filter.outputs.dind-minimal }}")
           github_output["dind-minimal-changed"] = dind_minimal_changed
+
+          # Consolidate sandbox image logic similar to above
+          sandbox_component_outputs = list(map(str_to_bool, (
+            "${{ steps.filter.outputs.sandbox-client-apache }}",
+            "${{ steps.filter.outputs.sandbox-client-jupyter }}",
+          )))
+          sandbox_client_output = str_to_bool("${{ steps.filter.outputs.base-root }}")
+          sandbox_client_changed = any([*sandbox_component_outputs, sandbox_client_output])
+          github_output["sandbox-client-changed"] = sandbox_client_changed
+
+          sandbox_changed = str_to_bool("${{ steps.filter.outputs.sandbox }}") or sandbox_client_changed
+          github_output["sandbox-changed"] = sandbox_changed
 
           # Consolidate lab change logic
           lab_changes = {
@@ -521,4 +545,70 @@ jobs:
     uses: ./.github/workflows/build.yml
     with:
       path: containers/bonus3
+    secrets: inherit
+
+  build-sandbox-client-apache:
+    needs:
+      - determine-changes
+    if: >-
+      always() &&
+      needs.determine-changes.outputs.sandbox-client-apache-changed == 'true'
+    name: "Build sandbox-client-apache container"
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/build.yml
+    with:
+      path: containers/sandbox/client/apache
+    secrets: inherit
+
+  build-sandbox-client-jupyter:
+    needs:
+      - determine-changes
+    if: >-
+      always() &&
+      needs.determine-changes.outputs.sandbox-client-jupyter-changed == 'true'
+    name: "Build sandbox-client-jupyter container"
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/build.yml
+    with:
+      path: containers/sandbox/client/jupyter
+    secrets: inherit
+
+  build-sandbox-client:
+    needs:
+      - determine-changes
+      - build-sandbox-client-apache
+      - build-sandbox-client-jupyter
+    if: >-
+      always() &&
+      needs.determine-changes.outputs.sandbox-client-changed == 'true' &&
+      needs.build-sandbox-client-apache.result != 'failure' &&
+      needs.build-sandbox-client-jupyter.result != 'failure'
+    name: "Build sandbox client container"
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/build.yml
+    with:
+      path: containers/sandbox/client
+    secrets: inherit
+
+  build-sandbox:
+    needs:
+      - determine-changes
+      - build-dind-minimal
+    if: >-
+      always() &&
+      needs.determine-changes.outputs.sandbox-changed == 'true' &&
+      needs.build-dind-minimal.result != 'failure'
+    name: "Build sandbox container"
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/build.yml
+    with:
+      path: containers/sandbox
     secrets: inherit
