@@ -7,12 +7,12 @@ COPY test /test
 
 USER root
 
-RUN echo "3.10.*" > /opt/conda/conda-meta/pinned
+RUN chmod +x /test/test.sh && \
+    echo "3.10.*" > /opt/conda/conda-meta/pinned
 
 USER jovyan
 
-RUN chmod +x /test/test.sh && \
-    mamba update -n base --all --yes && \
+RUN mamba update -n base --all --yes && \
     mamba install -n base -y \
         python=3.10 \
         fsspec \
