@@ -16,6 +16,9 @@ jobs:
       packages: write
 
     steps:
+      - name: Free disk space
+        uses: jlumbroso/free-disk-space@main
+
       - name: Checkout repository
         uses: actions/checkout@v5
 
@@ -73,9 +76,6 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Free disk space 1
-        uses: jlumbroso/free-disk-space@main
 
       - name: Build container image for testing (native arch)
         if: steps.check_tag.outputs.exists == 'false'
