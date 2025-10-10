@@ -1,0 +1,8 @@
+{
+    "defaultConfig": {
+        "autoClosingBrackets": true,
+        "codeFolding": true,
+        "highlightActiveLine": true,
+        "highlightTrailingWhitespace": true
+    }
+}
