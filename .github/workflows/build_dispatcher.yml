@@ -34,10 +34,10 @@ jobs:
       lab6-client-changed: ${{ steps.consolidate.outputs.lab6-client-changed }}
       lab6-changed: ${{ steps.consolidate.outputs.lab6-changed }}
       bonus3-changed: ${{ steps.consolidate.outputs.bonus3-changed }}
-      sandbox-changed: ${{ steps.consolidate.outputs.sandbox-changed }}
+      sandbox-client-apache: ${{ steps.filter.outputs.sandbox-client-apache }}
+      sandbox-client-jupyter: ${{ steps.filter.outputs.sandbox-client-jupyter }}
       sandbox-client-changed: ${{ steps.consolidate.outputs.sandbox-client-changed }}
-      sandbox-client-apache-changed: ${{ steps.consolidate.outputs.sandbox-client-apache-changed }}
-      sandbox-client-jupyter-changed: ${{ steps.consolidate.outputs.sandbox-client-jupyter-changed }}
+      sandbox-changed: ${{ steps.consolidate.outputs.sandbox-changed }}
 
     steps:
       - name: Checkout repository
