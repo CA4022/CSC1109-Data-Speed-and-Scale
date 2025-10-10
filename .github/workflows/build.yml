@@ -76,8 +76,6 @@ jobs:
 
       - name: Free disk space 1
         uses: jlumbroso/free-disk-space@main
-        with:
-          free-space-in-mb: 30000
 
       - name: Build container image for testing (native arch)
         if: steps.check_tag.outputs.exists == 'false'
@@ -86,8 +84,6 @@ jobs:
 
       - name: Free disk space 2
         uses: jlumbroso/free-disk-space@main
-        with:
-          free-space-in-mb: 30000
 
       - name: Test container image (native arch)
         if: steps.check_tag.outputs.exists == 'false'
