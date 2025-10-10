@@ -17,6 +17,7 @@ RUN chmod +x /test/test.sh && \
 USER jovyan
 
 RUN mamba update -n base --all --yes && \
+    mamba clean --all --yes && \
     mamba install -n base -y \
         python=3.10 \
         fsspec \
