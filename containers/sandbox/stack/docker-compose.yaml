@@ -145,7 +145,7 @@ services:
       - "10000:10000"
 
   client:
-    image: ghcr.io/ca4022/csc1109-lab6-client
+    image: ghcr.io/ca4022/csc1109-sandbox-client
     environment:
       - SHELL=bash
       - HADOOP_HOME=${HADOOP_HOME}

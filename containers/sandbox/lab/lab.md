@@ -1,7 +1,13 @@
-## Lab 5 - Spark
+## CSC1109 Sandbox
 
-This lab will introduce the basics of Apache Spark, deploying a localised spark cluster, running a
-spark-shell, and executing spark code written in both Scala and Python.
+Welcome to the sandbox for the CSC1109 labs! This sandbox includes a full, integrated data science
+stack that makes all of the various technologies we will be learning about during the semester of
+lab work. These technologies include:
 
-> 󱝽 Note
-> A walkthrough of this lab is available [here](https://csc1109.readthedocs.io/lab5)
+- A hadoop cluster
+- A spark cluster
+- A hive cluster
+- A pig interpreter
+
+All configured to be interoperable and usable as part of a single, interactive notebook
+environment.
