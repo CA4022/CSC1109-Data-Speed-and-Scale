@@ -17,10 +17,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install just
-        uses: extractions/setup-just@v2
+        uses: extractions/setup-just@v3
 
       - name: Load .env file
         id: dotenv
@@ -86,7 +86,7 @@ jobs:
 
       - name: Build and push multi-platform image
         if: (steps.check_tag.outputs.exists == 'false') && success()
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ${{ inputs.path }}
           platforms: linux/amd64 # ,linux/arm64
