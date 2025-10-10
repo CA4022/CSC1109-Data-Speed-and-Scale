@@ -1,4 +1,4 @@
-FROM ghcr.io/ca4022/csc1109-sandbox-client-jupyter:latest AS sandbox-base
+FROM ghcr.io/ca4022/csc1109-sandbox-client-jupyter:latest AS sandbox-client-base
 
 ENV JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64"
 ENV HADOOP_HOME="/opt/hadoop"
