@@ -48,7 +48,7 @@ services:
       - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 2
     depends_on:
       namenode:
         condition: service_healthy
@@ -76,7 +76,7 @@ services:
       - spark-master
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 2
 
   postgres:
     image: docker.io/library/postgres:17.5
