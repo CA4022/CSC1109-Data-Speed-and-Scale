@@ -1,5 +1,7 @@
 FROM quay.io/jupyter/all-spark-notebook:java-17.0.15
 
+ENV PATH="/home/jovyan/.local/bin/:$PATH"
+
 COPY jupyter_server_config.py /home/jovyan/.jupyter/jupyter_server_config.py
 COPY user-settings /home/jovyan/.jupyter/lab/user-settings
 COPY ./spark-defaults.conf $SPARK_CONF_DIR/spark-defaults.conf
