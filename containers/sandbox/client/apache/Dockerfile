@@ -6,7 +6,8 @@ COPY test /test
 
 COPY --from=docker.io/apache/hive:4.0.1 /opt/hive/ /opt/hive/
 
-RUN wget https://downloads.apache.org/pig/pig-0.17.0/pig-0.17.0.tar.gz && \
+RUN chmod +x /test/test.sh && \
+    wget https://downloads.apache.org/pig/pig-0.17.0/pig-0.17.0.tar.gz && \
     tar -xzf pig-0.17.0.tar.gz && \
     rm pig-0.17.0.tar.gz && \
     mv pig-0.17.0 $PIG_HOME && \
