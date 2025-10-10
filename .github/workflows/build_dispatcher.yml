@@ -550,9 +550,7 @@ jobs:
   build-sandbox-client-apache:
     needs:
       - determine-changes
-    if: >-
-      always() &&
-      needs.determine-changes.outputs.sandbox-client-apache-changed == 'true'
+    if: needs.determine-changes.outputs.sandbox-client-apache-changed == 'true'
     name: "Build sandbox-client-apache container"
     permissions:
       contents: read
@@ -565,9 +563,7 @@ jobs:
   build-sandbox-client-jupyter:
     needs:
       - determine-changes
-    if: >-
-      always() &&
-      needs.determine-changes.outputs.sandbox-client-jupyter-changed == 'true'
+    if: needs.determine-changes.outputs.sandbox-client-jupyter-changed == 'true'
     name: "Build sandbox-client-jupyter container"
     permissions:
       contents: read
