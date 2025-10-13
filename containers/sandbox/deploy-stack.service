@@ -2,23 +2,16 @@
 Description=Deploy Cluster Stack
 Wants=network-online.target
 After=network-online.target
-After=multi-user.target
 
 [Service]
 Type=oneshot
 RemainAfterExit=yes
 WorkingDirectory=/opt/stack/
-ExecStartPre=-/root/.local/share/uv/tools/podman-compose/bin/podman-compose --in-pod cluster up --pull --force-recreate --no-start
-ExecStartPre=/usr/bin/podman pod start cluster
-ExecStop=/usr/bin/podman pod stop cluster
-ExecStopPost=/usr/bin/systemctl --force --force poweroff
 EnvironmentFile=/env
-StandardOutput=journal+console
-StandardError=journal+console
-TTYPath=/dev/tty2
-TTYReset=yes
-TTYVHangup=yes
-TTYVTDisallocate=yes
+ExecStart=/bin/sh -c "/root/.local/share/uv/tools/podman-compose/bin/podman-compose --in-pod cluster up --pull --force-recreate --no-start && /usr/bin/podman pod start cluster"
+ExecStop=/usr/bin/podman pod stop cluster
+StandardOutput=journal
+StandardError=journal
 
 [Install]
 WantedBy=multi-user.target
