@@ -21,6 +21,17 @@ RUN groupadd hive && \
     chown -R jovyan /home/jovyan/.jupyter/ && \
     mkdir -p /home/jovyan/.local/ && \
     chown -R jovyan /home/jovyan/.local/ && \
+    wget https://dlcdn.apache.org/maven/maven-3/3.9.11/binaries/apache-maven-3.9.11-bin.tar.gz && \
+    tar -xf apache-maven-3.9.11-bin.tar.gz && \
+    cp -r apache-maven-3.9.11/bin / && \
+    cp -r apache-maven-3.9.11/boot / && \
+    cp -r apache-maven-3.9.11/conf / && \
+    cp -r apache-maven-3.9.11/lib / && \
+    rm -r apache-maven-3.9.11* && \
+    mvn dependency:copy \
+        -Dartifact=org.postgresql:postgresql:42.4.3:jar \
+        -DoutputDirectory=/opt/hive/lib/ \
+        -Dmdep.stripVersion=true && \
     chmod +x /test/test.sh
 
 USER jovyan
