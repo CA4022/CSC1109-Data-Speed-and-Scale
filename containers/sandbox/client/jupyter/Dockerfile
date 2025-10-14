@@ -5,6 +5,8 @@ ENV JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64"
 ENV SPARK_CONF_DIR="/opt/spark/conf"
 
 COPY jupyter_server_config.py /home/jovyan/.jupyter/jupyter_server_config.py
+COPY java_logo.png /home/jovyan/.local/share/jupyter/kernels/rapaio-jupyter-kernel/logo-64x64.png
+COPY jupyter_app_launcher/ /home/jovyan/.local/share/jupyter/jupyter_app_launcher/
 COPY user-settings /home/jovyan/.jupyter/lab/user-settings
 COPY ./spark-defaults.conf $SPARK_CONF_DIR/spark-defaults.conf
 COPY test /test
@@ -32,6 +34,7 @@ RUN mamba update -n base --all --yes && \
         jupyterlab_widgets \
         pyarrow \
         pyright && \
+    mamba install -c conda-forge -n base -y jupyter_app_launcher && \
     mamba clean --all --yes && \
     wget -q https://git.io/coursier-cli && \
     mkdir -p /home/jovyan/.local/bin/ && \
@@ -44,5 +47,3 @@ RUN mamba update -n base --all --yes && \
     wget -q https://github.com/padreati/rapaio-jupyter-kernel/releases/download/2.2.0/rapaio-jupyter-kernel-2.2.0.jar && \
     java -jar ./rapaio-jupyter-kernel-2.2.0.jar -i -auto && \
     rm rapaio-jupyter-kernel-2.2.0.jar
-
-COPY java_logo.png /home/jovyan/.local/share/jupyter/kernels/rapaio-jupyter-kernel/logo-64x64.png
