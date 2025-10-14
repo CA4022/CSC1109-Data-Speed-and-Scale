@@ -1,0 +1,33 @@
+- title: Spark WebUI
+  description: The Spark WebUI Dashboard page
+  source: http://0.0.0.0:8080/
+  type: url
+  catalog: Dashboards
+  args:
+    sandbox:
+      [
+        "allow-same-origin",
+        "allow-scripts",
+        "allow-downloads",
+        "allow-modals",
+        "allow-popups",
+      ]
+    referrerPolicy: ["no-referrer"]
+    createNewWindow: false
+
+- title: Hadoop WebUI
+  description: The Hadoop WebUI Dashboard page
+  source: http://0.0.0.0:9870/
+  type: url
+  catalog: Dashboards
+  args:
+    sandbox:
+      [
+        "allow-same-origin",
+        "allow-scripts",
+        "allow-downloads",
+        "allow-modals",
+        "allow-popups",
+      ]
+    referrerPolicy: ["no-referrer"]
+    createNewWindow: false

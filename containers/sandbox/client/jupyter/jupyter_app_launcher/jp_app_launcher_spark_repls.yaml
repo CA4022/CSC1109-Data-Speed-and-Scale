@@ -1,8 +1,0 @@
-- title: Spark Shell
-  description: Open a new spark-shell instance
-  type: terminal
-  source: "spark-shell"
-  cwd: "/lab/"
-  args:
-    reuse: true
-  catalog: REPLs

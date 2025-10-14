@@ -1,4 +1,4 @@
-FROM ghcr.io/ca4022/csc1109-dind-minimal:latest AS lab6-environment
+FROM ghcr.io/ca4022/csc1109-dind-minimal:latest AS sandbox
 
 COPY --from=docker.io/apache/hadoop:3.4.1 /opt/hadoop/ /opt/hadoop/
 COPY --from=docker.io/apache/hive:4.0.1 /opt/hive/ /opt/hive/
@@ -7,7 +7,7 @@ ENV HADOOP_RUNNER_VERSION=jdk17-u2204
 ENV HADOOP_HOME=/opt/hadoop
 ENV HADOOP_USER_NAME=hadoop
 ENV SPARK_IMAGE=docker.io/library/spark
-ENV SPARK_VERSION=4.0.0-scala2.13-java17-python3-ubuntu
+ENV SPARK_VERSION=3.5.7-scala2.12-java17-python3-ubuntu
 ENV HIVE_IMAGE=docker.io/apache/hive
 ENV HIVE_VERSION=4.0.1
 ENV HIVE_HOME=/opt/hive

@@ -1,0 +1,26 @@
+- title: Spark Shell
+  description: Open a new spark-shell instance
+  type: terminal
+  source: "spark-shell"
+  cwd: "/lab/"
+  args:
+    reuse: false
+  catalog: Consoles
+
+- title: Hive Beeline Shell
+  description: Open a new beeline instance
+  type: terminal
+  source: "beeline"
+  cwd: "/lab/"
+  args:
+    reuse: false
+  catalog: Consoles
+
+- title: Pig Grunt Shell
+  description: Open a new pig instance
+  type: terminal
+  source: "pig"
+  cwd: "/lab/"
+  args:
+    reuse: false
+  catalog: Consoles
