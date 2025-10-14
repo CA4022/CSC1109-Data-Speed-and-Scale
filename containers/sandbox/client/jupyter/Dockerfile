@@ -1,4 +1,4 @@
-FROM quay.io/jupyter/all-spark-notebook:java-17.0.16
+FROM quay.io/jupyter/all-spark-notebook:spark-3.5.3
 
 ENV PATH="/home/jovyan/.local/bin/:$PATH"
 ENV JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64"

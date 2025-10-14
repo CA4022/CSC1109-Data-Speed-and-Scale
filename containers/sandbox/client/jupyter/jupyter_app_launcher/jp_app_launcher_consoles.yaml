@@ -1,26 +1,39 @@
 - title: Spark Shell
   description: Open a new spark-shell instance
+  icon: ./icons/spark.png
   type: terminal
   source: "spark-shell"
   cwd: "/lab/"
   args:
     reuse: false
-  catalog: Consoles
+  catalog: Console
+
+- title: PySpark Shell
+  description: Open a new pyspark instance
+  icon: ./icons/pyspark.png
+  type: terminal
+  source: "pyspark"
+  cwd: "/lab/"
+  args:
+    reuse: false
+  catalog: Console
 
 - title: Hive Beeline Shell
   description: Open a new beeline instance
+  icon: ./icons/hive.png
   type: terminal
   source: "beeline"
   cwd: "/lab/"
   args:
     reuse: false
-  catalog: Consoles
+  catalog: Console
 
 - title: Pig Grunt Shell
   description: Open a new pig instance
+  icon: ./icons/pig.png
   type: terminal
   source: "pig"
   cwd: "/lab/"
   args:
     reuse: false
-  catalog: Consoles
+  catalog: Console
