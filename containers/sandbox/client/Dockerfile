@@ -7,7 +7,7 @@ ENV HIVE_HOME="/opt/hive"
 ENV HIVE_USER_NAME="hive"
 ENV PIG_HOME="/opt/pig/"
 ENV LD_LIBRARY_PATH="$JAVA_HOME/lib/server:$LD_LIBRARY_PATH"
-ENV PATH="/home/jovyan/.local/bin/:/opt/hadoop/bin/:/opt/hive/bin/:/opt/pig/bin/:$PATH"
+ENV PATH="/home/jovyan/.local/bin/:/opt/hadoop/bin/:/opt/hive/bin/:/opt/pig/bin/:/opt/maven/bin/:$PATH"
 
 COPY test /test
 
@@ -21,17 +21,6 @@ RUN groupadd hive && \
     chown -R jovyan /home/jovyan/.jupyter/ && \
     mkdir -p /home/jovyan/.local/ && \
     chown -R jovyan /home/jovyan/.local/ && \
-    wget https://dlcdn.apache.org/maven/maven-3/3.9.11/binaries/apache-maven-3.9.11-bin.tar.gz && \
-    tar -xf apache-maven-3.9.11-bin.tar.gz && \
-    cp -r apache-maven-3.9.11/bin / && \
-    cp -r apache-maven-3.9.11/boot / && \
-    cp -r apache-maven-3.9.11/conf / && \
-    cp -r apache-maven-3.9.11/lib / && \
-    rm -r apache-maven-3.9.11* && \
-    mvn dependency:copy \
-        -Dartifact=org.postgresql:postgresql:42.4.3:jar \
-        -DoutputDirectory=/opt/hive/lib/ \
-        -Dmdep.stripVersion=true && \
     chmod +x /test/test.sh
 
 USER jovyan
