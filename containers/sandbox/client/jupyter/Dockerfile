@@ -11,15 +11,13 @@ COPY test /test
 
 USER root
 
-RUN chmod +x /test/test.sh && \
-    echo "3.10.*" > /opt/conda/conda-meta/pinned
+RUN chmod +x /test/test.sh
 
 USER jovyan
 
 RUN mamba update -n base --all --yes && \
     mamba clean --all --yes && \
     mamba install -n base -y \
-        python=3.10 \
         fsspec \
         ipywidgets \
         jupyter-lsp \

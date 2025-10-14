@@ -1,6 +1,6 @@
-- title: Spark Shell
+- title: Spark (spark-shell)
   description: Open a new spark-shell instance
-  icon: ./icons/spark.png
+  icon: /home/jovyan/.local/share/jupyter/jupyter_app_launcher/icons/spark.png
   type: terminal
   source: "spark-shell"
   cwd: "/lab/"
@@ -8,9 +8,9 @@
     reuse: false
   catalog: Console
 
-- title: PySpark Shell
+- title: PySpark (pyspark)
   description: Open a new pyspark instance
-  icon: ./icons/pyspark.png
+  icon: /home/jovyan/.local/share/jupyter/jupyter_app_launcher/icons/pyspark.png
   type: terminal
   source: "pyspark"
   cwd: "/lab/"
@@ -18,9 +18,9 @@
     reuse: false
   catalog: Console
 
-- title: Hive Beeline Shell
+- title: Hive (beeline)
   description: Open a new beeline instance
-  icon: ./icons/hive.png
+  icon: /home/jovyan/.local/share/jupyter/jupyter_app_launcher/icons/hive.png
   type: terminal
   source: "beeline"
   cwd: "/lab/"
@@ -28,9 +28,9 @@
     reuse: false
   catalog: Console
 
-- title: Pig Grunt Shell
+- title: Pig (grunt)
   description: Open a new pig instance
-  icon: ./icons/pig.png
+  icon: /home/jovyan/.local/share/jupyter/jupyter_app_launcher/icons/pig.png
   type: terminal
   source: "pig"
   cwd: "/lab/"

@@ -1,6 +1,7 @@
 - title: Spark WebUI
   description: The Spark WebUI Dashboard page
-  source: http://0.0.0.0:8080/
+  icon: /home/jovyan/.local/share/jupyter/jupyter_app_launcher/icons/spark.png
+  source: http://spark-master:8080/
   type: url
   catalog: Dashboards
   args:
@@ -17,7 +18,8 @@
 
 - title: Hadoop WebUI
   description: The Hadoop WebUI Dashboard page
-  source: http://0.0.0.0:9870/
+  icon: /home/jovyan/.local/share/jupyter/jupyter_app_launcher/icons/hadoop.png
+  source: http://namenode:9870/
   type: url
   catalog: Dashboards
   args:
