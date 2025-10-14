@@ -19,7 +19,15 @@ COPY ./lab/ /lab/
 COPY ./stack/ /opt/stack/
 WORKDIR /lab/
 
-RUN chmod -R 777 /lab/ && \
+RUN wget https://dlcdn.apache.org/maven/maven-3/3.9.11/binaries/apache-maven-3.9.11-bin.tar.gz && \
+    tar -xf apache-maven-3.9.11-bin.tar.gz -C /opt/ && \
+    mv /opt/apache-maven-3.9.11 /opt/maven && \
+    rm -r apache-maven-3.9.11-bin.tar.gz && \
+    mvn dependency:copy \
+        -Dartifact=org.postgresql:postgresql:42.4.3:jar \
+        -DoutputDirectory=/opt/hive/lib/ \
+        -Dmdep.stripVersion=true && \
+    chmod -R 777 /lab/ && \
     chmod +x /opt/stack/hive-init/init && \
     chmod +x /entrypoint.sh && \
     systemctl enable deploy-stack.service
