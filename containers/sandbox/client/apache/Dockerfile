@@ -1,6 +1,7 @@
 FROM docker.io/apache/hadoop:3.4.1
 
 ENV PIG_HOME="/opt/pig/"
+ENV PATH="/opt/maven/bin/:$PATH"
 
 COPY test /test
 
