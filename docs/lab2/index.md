@@ -141,10 +141,10 @@ view the head of the table, we can see the data we expect.
 NOTE: The `LOAD INTO TABLE` operation here moves the file from its original location on the HDFS
 cluster into hive's "data warehouse".
 
-At this point we have created a SQL queyable table containing our dataset, that is decentrally
-stored across a number of nodes and where queries on that table will run across the entire cluster. From here, we
-can treat it as any other common, familiar SQL table while reaping the benefits of running on a
-HDFS/MapReduce cluster. For example:
+At this point we have created a SQL queryable table containing our dataset, that is decentrally
+stored across a number of nodes and where queries on that table will run across the entire cluster.
+From here, we can treat it as any other common, familiar SQL table while reaping the benefits of
+running on a HDFS/MapReduce cluster. For example:
 
 ```sql
 --8<-- "lab2/src/table_queries.sql"

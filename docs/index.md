@@ -181,7 +181,7 @@ To do this, you can follow the instructions below.
     >
     > === "Windows/WSL"
     >
-    >     1. Open **WSL Setings**.
+    >     1. Open **WSL Settings**.
     >     2. Go to **Memory and Processor**.
     >     3. Set "Processor Count" to **at least** 4.
     >     3. Allocate **at least** 8GB memory overall.

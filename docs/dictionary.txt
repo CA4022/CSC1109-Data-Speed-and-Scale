@@ -100,9 +100,11 @@ performant
 plaintext
 pluggable
 postgres
+powershell
 pre
 preconfigured
 preloaded
+prepending
 preprocess
 programmatically
 punny
