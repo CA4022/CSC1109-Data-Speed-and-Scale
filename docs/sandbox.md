@@ -22,14 +22,14 @@ To download the container for this lab and run it, execute the following command
 
 ```sh
 docker pull {{ page.meta.docker_image }}
-docker run --rm --privileged --hostname sandbox -v .:/lab/ -p 8888:8888 -t {{ page.meta.docker_image }}
+docker run --rm --privileged --hostname sandbox -v .:/lab/ -v lab_cache:/var/containers/cache/ -p 8888:8888 -t {{ page.meta.docker_image }}
 ```
 
 This command will start up the simulated cluster, build and deploy the stack, start up the
 JupyterLab client, and mount your current directory as the working directory for that client. Once
-you see the message "Finished **Deploy Cluster Stack**.", you can then connect to the client via a
-WebUI [here](http://0.0.0.0:8888).
+you see the message "Reached target **Graphical Interface**.", you can then connect to the client
+via a WebUI [here](http://localhost:8888).
 
 WARNING: Once you start this container it will remain running until you have manually stopped it,
-either by sending a `SIGTERM` (by hitting ctrl+c) or running `docker stop` followed by the name or
-hash of the container.
+either by sending a `SIGTERM` (by hitting ctrl+c), running `docker stop` followed by the name or
+hash of the container, or stopping it via the docker desktop GUI.
