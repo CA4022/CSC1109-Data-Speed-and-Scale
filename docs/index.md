@@ -170,22 +170,34 @@ To do this, you can follow the instructions below.
 
     For Windows and MacOS, resource limits are managed through the Docker Desktop graphical interface.
 
-    >? DANGER: **Allocate Sufficient Resources to Docker (only if using Hyper-V)**
+    >? DANGER: **Allocate Sufficient Resources to Docker**
     >
     > Data processing frameworks like Spark and Hadoop can be very resource-intensive. By default,
     > when using the Hyper-V virtualisation backend Docker Desktop limits the amount of CPU and
     > memory (RAM) it can use, which is often too low for big data tasks. Insufficient resources
     > can cause your programs to fail with cryptic errors that are difficult to debug.
     >
-    > Before proceeding, you **must** configure Docker to provide more resources.
+    > Before proceeding, you **must** configure Docker to provide enough resources.
     >
-    > 1.  Open **Docker Desktop**.
-    > 2.  Go to **Settings** (the gear icon ⚙️).
-    > 3.  Navigate to the **Resources** > **Advanced** section.
-    > 4.  Adjust the sliders to allocate **at least**:
-    >     * **CPUs:** 4
-    >     * **Memory:** 8 GB
-    > 5.  Click **Apply & Restart**.
+    > === "Windows/WSL"
+    >
+    >     1. Open **WSL Setings**.
+    >     2. Go to **Memory and Processor**.
+    >     3. Set "Processor Count" to **at least** 4.
+    >     3. Allocate **at least** 8GB memory overall.
+    >         * If you have **more than** 10GB of RAM, set "Memory Size" to **at least** 8192MB (8GB).
+    >         * If you have **between** 2GB and 10GB of RAM, set "Memory Size" to 2GB less than your total RAM.
+    >         * Set "Swap Size" to **at least** 8192MB (8GB), to ensure no OOM errors can occur.
+    >
+    > === "Windows/Hyper-V and MacOS"
+    >
+    >     1.  Open **Docker Desktop**.
+    >     2.  Go to **Settings** (the gear icon ⚙️).
+    >     3.  Navigate to the **Resources** > **Advanced** section.
+    >     4.  Adjust the sliders to allocate **at least**:
+    >         * **CPUs:** 4
+    >         * **Memory:** 8 GB
+    >     5.  Click **Apply & Restart**.
     >
     > > NOTE: If your computer has more resources available (e.g., 16GB of RAM or more), allocating
     > > more to Docker will result in better performance.
