@@ -6,7 +6,7 @@ ARG BASE_GIT_VERSION
 
 RUN zypper --non-interactive install --no-recommends systemd && \
     zypper --non-interactive install \
-        nftables \
+        iptables \
         python312 \
         wget \
         man \
