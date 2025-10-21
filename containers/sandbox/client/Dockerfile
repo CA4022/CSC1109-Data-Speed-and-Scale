@@ -15,7 +15,11 @@ FROM sandbox-client-base AS sandbox-client-final
 
 USER root
 
-RUN groupadd hive && \
+RUN DEBIAN_FRONTEND=noninteractive \
+    apt update && \
+    apt install -y vim micro && \
+    rm -rf /var/lib/apt/lists/* && \
+    groupadd hive && \
     groupadd hadoop && \
     usermod -aG hive,hadoop jovyan && \
     chown -R jovyan /home/jovyan/.jupyter/ && \
