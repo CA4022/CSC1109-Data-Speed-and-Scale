@@ -7,19 +7,24 @@ ENV SPARK_CONF_DIR="/opt/spark/conf"
 COPY jupyter_server_config.py /home/jovyan/.jupyter/jupyter_server_config.py
 COPY user-settings /home/jovyan/.jupyter/lab/user-settings
 COPY ./spark-defaults.conf $SPARK_CONF_DIR/spark-defaults.conf
+COPY ./csc1109-launcher/ /home/jovyan/.local/share/csc1109-launcher/
 COPY test /test
 
 USER root
 
 RUN chmod +x /test/test.sh && \
+    chown -R jovyan /home/jovyan/.local/ && \
     chown -R jovyan /home/jovyan/.jupyter/
 
 USER jovyan
+
+WORKDIR /home/jovyan/.local/share/csc1109-launcher/
 
 RUN mamba update -n base --all --yes && \
     mamba clean --all --yes && \
     mamba install -n base -y \
         fsspec \
+        hatch \
         ipywidgets \
         jupyter-lsp \
         jupyterlab-day \
@@ -28,9 +33,14 @@ RUN mamba update -n base --all --yes && \
         jupyterlab-unfold \
         jupyterlab-variableinspector \
         jupyterlab_widgets \
+        mamba_gator \
         pyarrow \
-        pyright && \
-    mamba install -c conda-forge -n base -y jupyter_app_launcher && \
+        python-build \
+        pyright \
+        twine && \
+    mamba run -n base python -m build && \
+    mamba run -n base python -m pip install ./dist/*.whl && \
+    mamba remove -n base python-build twine hatch && \
     mamba clean --all --yes && \
     wget -q https://git.io/coursier-cli && \
     mkdir -p /home/jovyan/.local/bin/ && \
@@ -45,4 +55,6 @@ RUN mamba update -n base --all --yes && \
     rm rapaio-jupyter-kernel-2.2.0.jar
 
 COPY java_logo.png /home/jovyan/.local/share/jupyter/kernels/rapaio-jupyter-kernel/logo-64x64.png
-COPY jupyter_app_launcher/ /home/jovyan/.local/share/jupyter/jupyter_app_launcher/
+
+WORKDIR /home/jovyan
+

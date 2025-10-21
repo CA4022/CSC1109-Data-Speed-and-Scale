@@ -36,5 +36,6 @@ COPY --from=ghcr.io/ca4022/csc1109-sandbox-client-apache:latest /opt/hadoop/ /op
 COPY --from=ghcr.io/ca4022/csc1109-sandbox-client-apache:latest /opt/hive/ /opt/hive/
 COPY --from=ghcr.io/ca4022/csc1109-sandbox-client-apache:latest /opt/pig/ /opt/pig/
 
-RUN conda env config vars set -n base CLASSPATH=$(hadoop classpath --glob)
+WORKDIR /lab/
 
+RUN conda env config vars set -n base CLASSPATH=$(hadoop classpath --glob)
