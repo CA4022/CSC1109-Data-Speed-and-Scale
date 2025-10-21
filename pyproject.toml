@@ -1,6 +1,6 @@
 [project]
 name = "csc1109-data-speed-and-scale"
-version = "2025.10.20"
+version = "2025.10.21"
 description = "Course materials for DCU's CSC1109 computer science labs."
 readme = "README.md"
 requires-python = ">=3.11"

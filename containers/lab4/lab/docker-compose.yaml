@@ -1,7 +1,6 @@
 version: "3.8"
 
-x-storm-common-config:
-  &storm-common-config
+x-storm-common-config: &storm-common-config
   image: ${STORM_IMAGE}:${STORM_VERSION}
   volumes:
     - .:/lab/
@@ -22,7 +21,12 @@ services:
 
   supervisor:
     <<: *storm-common-config
-    command: /lab/config/supervisor-entrypoint.sh
+    command: |
+      bash -c "
+        curl -Ss https://bootstrap.pypa.io/get-pip.py | python3 - --break-system-packages --root-user-action ignore
+        python3 -m pip install --break-system-packages --root-user-action ignore pystorm
+        storm supervisor
+      "
     depends_on:
       - nimbus
       - zookeeper
@@ -43,7 +47,7 @@ services:
       - nimbus
       - zookeeper
     ports:
-      - 8080:8080
+      - 8000:8080
 
   client:
     image: ghcr.io/ca4022/csc1109-lab4-client
