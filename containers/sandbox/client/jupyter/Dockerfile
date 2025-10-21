@@ -25,7 +25,6 @@ RUN mamba update -n base --all --yes && \
         jupyterlab-day \
         jupyterlab-lsp \
         jupyterlab-night \
-        jupyterlab-plotly-extension \
         jupyterlab-unfold \
         jupyterlab-variableinspector \
         jupyterlab_widgets \
