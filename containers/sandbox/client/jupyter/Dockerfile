@@ -11,7 +11,8 @@ COPY test /test
 
 USER root
 
-RUN chmod +x /test/test.sh
+RUN chmod +x /test/test.sh && \
+    chown -R jovyan /home/jovyan/.jupyter/
 
 USER jovyan
 
