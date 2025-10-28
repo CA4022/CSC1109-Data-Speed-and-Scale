@@ -13,7 +13,14 @@ import { ITranslator } from '@jupyterlab/translation';
 import { LabIcon } from '@jupyterlab/ui-components';
 import { MainAreaWidget } from '@jupyterlab/apputils';
 
-import { hiveIcon, pigIcon, pysparkIcon, sparkIcon } from './icons';
+import {
+    hiveIcon,
+    pigIcon,
+    pysparkIcon,
+    sparkIcon
+} from './icons';
+
+import '../style/index.css';
 
 /**
  * A helper function to add a new terminal command to the launcher.
@@ -42,8 +49,6 @@ async function addToLauncher(
     icon: LabIcon
 ) {
     const { commands, serviceManager } = app;
-
-    // Fetch the base terminal settings to ensure consistency.
     const settings = await settingRegistry.load(
         '@jupyterlab/terminal-extension:plugin'
     );
@@ -59,32 +64,21 @@ async function addToLauncher(
         label: label,
         icon: icon,
         execute: async () => {
-            // Create the terminal options with our custom initial command.
-            // A carriage return '\r' is used to execute the command.
             const options: Partial<ITerminal.IOptions> = {
                 ...baseOptions,
                 initialCommand: initialCommand
             };
 
             try {
-                // Start a new terminal session.
                 const session = await serviceManager.terminals.startNew();
-
-                // Create the terminal widget with our session and options.
                 const term = new Terminal(session, options, translator);
                 term.title.icon = icon;
                 term.title.label = label;
-
-                // Wrap the terminal in a MainAreaWidget to add it to the shell.
                 const main = new MainAreaWidget({ content: term, reveal: term.ready });
                 app.shell.add(main, 'main', { type: 'Terminal' });
-
-                // Add the widget to the tracker if available using inject().
                 if (tracker) {
                     void tracker.inject(main);
                 }
-
-                // Activate the new terminal.
                 app.shell.activateById(main.id);
                 return main;
             } catch (e) {
@@ -96,7 +90,7 @@ async function addToLauncher(
     launcher.add({
         command: command,
         category: category,
-        rank: 1 // Adjust rank as needed
+        rank: 1
     });
 }
 
@@ -117,14 +111,13 @@ const plugin: JupyterFrontEndPlugin<void> = {
         console.log('JupyterLab extension csc1109_launcher is activated!');
         const category = 'Console';
 
-        // Add launchers for each shell.
         void addToLauncher(
             app,
             launcher,
             settingRegistry,
             translator,
             tracker,
-            'hive:launch-beeline',
+            'csc1109-launcher:launch-beeline',
             'beeline\r',
             'Hive (beeline)',
             category,
@@ -136,7 +129,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
             settingRegistry,
             translator,
             tracker,
-            'pig:launch-grunt',
+            'csc1109-launcher:launch-grunt',
             'pig\r',
             'Pig (grunt)',
             category,
@@ -148,7 +141,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
             settingRegistry,
             translator,
             tracker,
-            'spark:launch-pyspark-repl',
+            'csc1109-launcher:launch-pyspark-repl',
             'pyspark\r',
             'PySpark',
             category,
@@ -160,15 +153,14 @@ const plugin: JupyterFrontEndPlugin<void> = {
             settingRegistry,
             translator,
             tracker,
-            'spark:launch-spark-repl',
+            'csc1109-launcher:launch-spark-repl',
             'spark-shell\r',
             'Spark',
             category,
-            sparkIcon // Corrected from pysparkIcon to sparkIcon
+            sparkIcon
         );
     }
 };
 
 export default plugin;
-
 

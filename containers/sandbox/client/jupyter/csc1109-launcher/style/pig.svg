@@ -1,4 +1,4 @@
-export const pigSVG = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
    width="190mm"
    height="190mm"
@@ -358,4 +358,4 @@ export const pigSVG = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
          transform="matrix(0.26458333,0,0,0.26458333,-34.902241,-108.63481)" />
     </g>
   </g>
-</svg>`
+</svg>

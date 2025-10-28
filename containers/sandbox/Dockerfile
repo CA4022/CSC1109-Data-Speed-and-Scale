@@ -12,6 +12,7 @@ ENV HIVE_IMAGE=docker.io/apache/hive
 ENV HIVE_VERSION=4.0.1
 ENV HIVE_HOME=/opt/hive
 ENV HIVE_USER_NAME=hive
+ENV PIG_CLASSPATH="$SPARK_HOME/jars/*"
 ENV IS_RESUME=false
 
 COPY deploy-stack.service /etc/systemd/system/deploy-stack.service
