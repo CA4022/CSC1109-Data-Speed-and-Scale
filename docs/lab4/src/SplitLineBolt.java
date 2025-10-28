@@ -1,4 +1,4 @@
-package com.csc1104.lab;
+package com.csc1109.lab;
 
 import org.apache.storm.task.ShellBolt;
 import org.apache.storm.topology.IRichBolt;

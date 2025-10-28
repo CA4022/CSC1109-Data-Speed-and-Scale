@@ -3,11 +3,11 @@ title: "Lab 4: Storm"
 docker_image: ghcr.io/ca4022/csc1109-lab4:latest
 volumes:
 - host_path: ./docs/lab4/src/
-  container_path: /lab/src/main/com/csc1104/lab/
+  container_path: /lab/src/main/com/csc1109/lab/
   mode: ro
 init_commands:
   - mkdir /lab/src/main/resources/
-  - cp /lab/src/main/com/csc1104/lab/splitline.py /lab/src/main/resources/splitline.py
+  - cp /lab/src/main/com/csc1109/lab/splitline.py /lab/src/main/resources/splitline.py
   - docker compose up -d --force-recreate
 ---
 
@@ -113,7 +113,7 @@ topology for a simple wordcount task. To do this, we first need to set up our pr
 write some source code for our topology. If you take a look at the `pom.xml` file (maven's project
 config file) you will see that we have preconfigured the project to include the dependency
 `org.apache.storm`, which provides us the building blocks we will use to construct our topology.
-You will also see that we have the `groupId` `com.csc1104.lab`. This is important to note, as maven
+You will also see that we have the `groupId` `com.csc1109.lab`. This is important to note, as maven
 projects have strict requirements for project folder structure. These requirements say that:
 
 - Source code must be in a `src` directory
@@ -122,7 +122,7 @@ projects have strict requirements for project folder structure. These requiremen
 languages
 - Each attribute of the `groupId` must have its own nested directory containing its sub-attributes
 
-So, to satisfy this, we need to create the directory `src/main/java/com/csc1104/lab/` which will contain
+So, to satisfy this, we need to create the directory `src/main/java/com/csc1109/lab/` which will contain
 our source code. Create this directory and navigate to it. In the following sections, we will
 explain the process of making a storm topology and as we proceed you should add the source code
 files shown to this directory.
@@ -159,7 +159,7 @@ bolt will overwrite the specified output file with a dump of the current word co
 an ordered, immutable collection of named fields (like a read-only Map<String, Object> with fixed
 keys and order) optimized for efficient network transfer and parallel processing.
 
-```java title="src/main/java/com/csc1104/lab/ReportBolt.java"
+```java title="src/main/java/com/csc1109/lab/ReportBolt.java"
 --8<-- "lab4/src/ReportBolt.java"
 ```
 
@@ -177,7 +177,7 @@ processing storm topology). Finally, what happens if we only get <64 tuples at t
 To avoid this problem, we will again use the tick packet pattern again to tell the `WordCountBolt`
 to send its current batch downstream if it doesn't receive any new tuples for 1 second.
 
-```java title="src/main/java/com/csc1104/lab/WordCountBolt.java"
+```java title="src/main/java/com/csc1109/lab/WordCountBolt.java"
 --8<-- "lab4/src/WordCountBolt.java"
 ```
 
@@ -208,7 +208,7 @@ As previously mentioned: bolts written in languages other than java do need a ja
 storm to interface with them. Thankfully, storm makes this process quite straightforward using the
 `ShellBolt` class.
 
-```java title="src/main/java/com/csc1104/lab/SplitLineBolt.java"
+```java title="src/main/java/com/csc1109/lab/SplitLineBolt.java"
 --8<-- "lab4/src/SplitLineBolt.java"
 ```
 
@@ -230,7 +230,7 @@ topology from a data source. For this example, we will create a spout that simpl
 line-by-line, and emits each line. This is quite straightforward to do in java, as demonstrated
 below.
 
-```java title="src/main/java/com/csc1104/lab/FileSpout.java"
+```java title="src/main/java/com/csc1109/lab/FileSpout.java"
 --8<-- "lab4/src/FileSpout.java"
 ```
 
@@ -254,7 +254,7 @@ With all of our building blocks complete, lets combine them into a storm topolog
 distributed word counts. To do this, we simply need to create a `ConfigurableTopology` class that
 creates a graph from our bolts and spout, then submits that topology to the storm cluster.
 
-```java title="src/main/java/com/csc1104/lab/WordCountTopology.java"
+```java title="src/main/java/com/csc1109/lab/WordCountTopology.java"
 --8<-- "lab4/src/WordCountTopology.java"
 ```
 
@@ -298,7 +298,7 @@ And once inside the client, we tell the storm cluster to run our topology on the
 `data/Word_count.txt` file.
 
 ```sh { .test-block #ghcr.io/ca4022/csc1109-lab4:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
-storm jar target/lab-1.0.0-jar-with-dependencies.jar com.csc1104.lab.WordCountTopology /lab/data/Word_count.txt /lab/out.txt
+storm jar target/lab-1.0.0-jar-with-dependencies.jar com.csc1109.lab.WordCountTopology /lab/data/Word_count.txt /lab/out.txt
 ```
 
 Once the topology has been submitted, you should be able to see it in the active topologies list
