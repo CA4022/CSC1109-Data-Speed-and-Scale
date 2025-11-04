@@ -1,7 +1,7 @@
 -- Filter to only include irises of the "virginica" species
 SELECT * FROM iris WHERE species == "virginica";
 -- Find the 10 samples with the longest petals
-SELECT * FROM iris ORDER BY "petal_length" LIMIT 10;
+SELECT * FROM iris ORDER BY petal_length LIMIT 10;
 -- Get the averages on a per-species basis
 SELECT
     species,
