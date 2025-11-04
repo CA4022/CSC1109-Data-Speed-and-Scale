@@ -1,10 +1,17 @@
 #!/bin/bash
 set -e
 
-echo "Waiting for YARN ResourceManager to be ready..."
+echo "Waiting for NameNode to be ready ..."
+until curl -LfsS --connect-timeout "5" --max-time "30" "http://namenode:9870/" >/dev/null \
+  && curl -LfsS --connect-timeout "5" --max-time "30" "http://namenode:8088/" >/dev/null
+do
+  echo "Waiting for NameNode endpoints to be reachable..."
+  sleep 1
+done
 
 sleep 5
 
+echo "Waiting for YARN ResourceManager to be ready..."
 until timeout 5 yarn node -list 2>/dev/null | grep -q "RUNNING"; do
   echo "Waiting for YARN NodeManager to register with ResourceManager..."
   sleep 1
