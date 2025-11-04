@@ -15,7 +15,7 @@ object WordCountDS {
 
     try {
       spark.read
-        .textFile("data/Word_count.txt")
+        .textFile(inputPath)
         .flatMap(_.toLowerCase.split("[^a-zA-Z']+"))
         .filter(_.nonEmpty)
         .groupBy("value")
