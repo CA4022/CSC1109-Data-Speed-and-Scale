@@ -7,8 +7,10 @@ ENV HIVE_HOME="/opt/hive"
 ENV HIVE_USER_NAME="hive"
 ENV PIG_HOME="/opt/pig/"
 ENV LD_LIBRARY_PATH="$JAVA_HOME/lib/server:$LD_LIBRARY_PATH"
-ENV PATH="/home/jovyan/.local/bin/:/opt/hadoop/bin/:/opt/hive/bin/:/opt/pig/bin/:/opt/maven/bin/:$PATH"
+ENV PATH="/home/jovyan/.local/bin/:/home/jovyan/.cargo/bin/:/opt/hadoop/bin/:/opt/hive/bin/:/opt/pig/bin/:/opt/maven/bin/:$PATH"
 
+COPY ./entrypoint.py /entrypoint.py
+COPY ./bin/brush-hl /bin/brush-hl
 COPY test /test
 
 FROM sandbox-client-base AS sandbox-client-final
@@ -16,8 +18,42 @@ FROM sandbox-client-base AS sandbox-client-final
 USER root
 
 RUN DEBIAN_FRONTEND=noninteractive \
-    apt update && \
-    apt install -y vim micro && \
+    chmod +x /entrypoint.py && \
+    apt-get update && \
+    apt-get install -y gnupg2 software-properties-common && \
+    curl -fsSL "https://apt.fury.io/nushell/gpg.key" | gpg --dearmor -o /etc/apt/trusted.gpg.d/fury-nushell.gpg && \
+    echo "deb https://apt.fury.io/nushell/ /" | tee /etc/apt/sources.list.d/fury.list && \
+    mkdir -p /etc/apt/keyrings && \
+    curl -fsSL "https://repo.charm.sh/apt/gpg.key" | gpg --dearmor -o /etc/apt/keyrings/charm.gpg && \
+    echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | tee /etc/apt/sources.list.d/charm.list && \
+    add-apt-repository ppa:neovim-ppa/unstable && \
+    apt-get install -y \
+        curl \
+        wget \
+        ca-certificates \
+        build-essential \
+        pkg-config \
+        libssl-dev \
+        cargo \
+        fish \
+        nushell \
+        zsh \
+        emacs \
+        vim \
+        neovim \
+        luarocks \
+        micro \
+        bat \
+        glow \
+        fd-find \
+        ripgrep \
+        fzf \
+        tealdeer && \
+    ln -s /bin/batcat /bin/bat && \
+    luarocks install lazy.nvim && \
+    curl -sS https://starship.rs/install.sh | sh -s -- -y -b /usr/local/bin && \
+    curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash && \
+    cargo binstall brush-shell lsd && \
     rm -rf /var/lib/apt/lists/* && \
     groupadd hive && \
     groupadd hadoop && \
@@ -35,7 +71,23 @@ RUN wget -O /home/jovyan/.local/bin/jq https://github.com/jqlang/jq/releases/dow
 COPY --from=ghcr.io/ca4022/csc1109-sandbox-client-apache:latest /opt/hadoop/ /opt/hadoop/
 COPY --from=ghcr.io/ca4022/csc1109-sandbox-client-apache:latest /opt/hive/ /opt/hive/
 COPY --from=ghcr.io/ca4022/csc1109-sandbox-client-apache:latest /opt/pig/ /opt/pig/
+COPY --from=ghcr.io/ca4022/csc1109-base-root:latest /root/.bashrc /home/jovyan/.bashrc
+COPY --from=ghcr.io/ca4022/csc1109-base-root:latest /root/.brushrc /home/jovyan/.brushrc
+COPY --from=ghcr.io/ca4022/csc1109-base-root:latest /root/.vimrc /home/jovyan/.vimrc
+COPY --from=ghcr.io/ca4022/csc1109-base-root:latest /root/.zshrc /home/jovyan/.zshrc
+COPY --from=ghcr.io/ca4022/csc1109-base-root:latest /root/.config/ /home/jovyan/.config/
+COPY --from=ghcr.io/ca4022/csc1109-base-root:latest /root/.local/ /home/jovyan/.local/
+
+USER root
+RUN chown -R jovyan /home/jovyan/.config/ && \
+    chown -R jovyan /home/jovyan/.local/
+USER jovyan
 
 WORKDIR /lab/
 
-RUN conda env config vars set -n base CLASSPATH=$(hadoop classpath --glob)
+RUN conda env config vars set -n base CLASSPATH=$(hadoop classpath --glob) && \
+    sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" && \
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting && \
+    git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions && \
+    vim +'PlugInstall --sync' +qa && \
+    micro -plugin remove cheat

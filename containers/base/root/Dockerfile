@@ -139,3 +139,5 @@ COPY --from=ghcr.io/ca4022/csc1109-base-root-config-emacs:latest /root/ /root/
 COPY --from=ghcr.io/ca4022/csc1109-base-root-config-nvim:latest /root/ /root/
 
 COPY ./CSC1109.md /root/CSC1109.md
+
+RUN rm -r /root/bin
