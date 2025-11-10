@@ -14,7 +14,6 @@ init_commands:
   - cp /lab/docs_src/*.java /lab/src/main/java/
   - cp /lab/docs_src/*.scala /lab/src/main/scala/
   - cp /lab/docs_src/*.py /lab/
-  - docker compose up -d --force-recreate
 ---
 
 {{ "# " ~ page.meta.title ~ " #" }}
@@ -29,13 +28,11 @@ docker pull {{ page.meta.docker_image }}
 docker run --rm --privileged --hostname lab5 -v lab5:/lab/ -v lab_cache:/var/containers/cache/ -p 8000:8080 -p 9870:9870 -it {{ page.meta.docker_image }}
 ```
 
-If you have already started the lab and wish to resume it after exiting, you can do so by running:
+Once inside the container, you can deploy cluster as a docker stack as normal by running:
 
-```sh
-docker start -ia lab5
+```sh { .test-block #ghcr.io/ca4022/csc1109-lab2:latest }
+docker compose up -d
 ```
-
-Once inside the container, you can deploy cluster as a docker stack as normal.
 
 NOTE: Once deployed, the Spark master WebUI will become available at
 [http://127.0.0.1:8000/](http://127.0.0.1:8000/) and the Hadoop namenode UI will become available
@@ -209,13 +206,6 @@ structured API.
     that newly developed expertise!</figcaption>
 </figure>
 
-INFO: Spark has greatly influenced many later tools that use a similar execution model in modern
-big data handling. Most notably, much of the data science community has recently been gradually
-adopting distributed engines that are somewhat easier to program for such as
-"Dask". Dask works similarly to Spark but is designed from the ground-up with python programming
-in mind. Despite this, Spark remains the primary pillar of the ecosystem, and offers a level of
-reliability, resilience and production readiness that younger, user friendly tools like Dask can't yet match.
-
 ## A Programming Polyglot Tour of Spark Examples ##
 
 In this section, we will walk you through running our familiar distributed word count on the Spark
@@ -281,8 +271,11 @@ API [below](#further-reading-examples).
 
 Note: The suggested version of Scala is 2.13.X, but there should be very few compatibility issues
 with Scala 3. The recommended version for Apache Hadoop 3 and later is Spark 4.0.0 (last release)
-pre-built. In this lab, the lab environment container is using Spark 4.0.0, Scala 2.13.12, and
-Hadoop 3.4.1.
+pre-built. For further information on compatibility between Spark and Scala versions, there are
+many
+[compatibility matrices](https://community.cloudera.com/t5/Community-Articles/Spark-Scala-Version-Compatibility-Matrix/ta-p/383713)
+available summarising working combinations of versions. In this lab, the lab environment container
+is using Spark 4.0.0, Scala 2.13.12, and Hadoop 3.4.1.
 
 #### Using the REPL ####
 

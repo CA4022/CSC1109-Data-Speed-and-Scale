@@ -14,6 +14,12 @@ docker pull {{ page.meta.docker_image }}
 docker run --rm --privileged --hostname lab3 -v lab3:/lab/ -v lab_cache:/var/containers/cache/ -p 9870:9870 -p 19888:19888 -it {{ page.meta.docker_image }}
 ```
 
+Once inside the lab container, you can deploy the cluster for this lab by running:
+
+```sh { .test-block #ghcr.io/ca4022/csc1109-lab3:latest }
+docker compose up -d
+```
+
 ## What is Pig? 󱀆&nbsp; ##
 
 In our previous lab we discovered Apache Hive, a higher-level abstraction over HDFS/MR intended to

@@ -8,7 +8,6 @@ volumes:
 init_commands:
   - mkdir /lab/src/main/resources/
   - cp /lab/src/main/com/csc1109/lab/splitline.py /lab/src/main/resources/splitline.py
-  - docker compose up -d --force-recreate
 ---
 
 {{ "# " ~ page.meta.title ~ " #" }}
@@ -22,8 +21,13 @@ docker pull {{ page.meta.docker_image }}
 docker run --rm --privileged --hostname lab4 -v lab4:/lab/ -v lab_cache:/var/containers/cache/ -p 8000:8000 -it {{ page.meta.docker_image }}
 ```
 
-Once the container has downloaded and initialised, deploy your docker compose stack. You can
-continue to read on while the stack deploys.
+Once the container has downloaded and initialised, deploy your docker compose stack by running:
+
+```sh { .test-block #ghcr.io/ca4022/csc1109-lab4:latest }
+docker compose up -d
+```
+
+You can continue to read on while the stack deploys.
 
 # The Basics: Storm and Maven #
 
