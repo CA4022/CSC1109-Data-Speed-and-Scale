@@ -1,5 +1,3 @@
-#!/usr/bin/env python3.12
-
 import asyncio
 import os
 from pathlib import Path
@@ -119,7 +117,9 @@ class EnvSelector(Selector):
             if existing in self.commands.values():
                 self.choice = next(opt for opt, cmd in self.commands.items() if cmd == existing)
                 print(
-                    f'{self.name} is already set to "{self.choice}" ({existing}), skipping selection.'
+                    f'{self.name} is already set to "{self.choice}" ({
+                        existing
+                    }), skipping selection.'
                 )
                 return
         await super().select()
@@ -148,7 +148,9 @@ class ShellSelector(Selector):
                     opt for opt, cmd in self.commands.items() if cmd == existing_shell
                 )
                 print(
-                    f'{self.name} is already set to "{self.choice}" ({existing_shell}), skipping selection.'
+                    f'{self.name} is already set to "{self.choice}" ({
+                        existing_shell
+                    }), skipping selection.'
                 )
             else:
                 await super().select()
@@ -216,7 +218,7 @@ async def main():
     try:
         await selector.select()
         print(SPLASH)
-        display_markdown(["~/CSC1109.md", "/lab/lab.md"])
+        display_markdown(["~/CSC1109.md"])
         if daemon_startup is not None:
             await daemon_startup
         selector.start()

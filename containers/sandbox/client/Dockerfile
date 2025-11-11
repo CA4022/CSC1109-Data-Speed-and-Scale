@@ -8,9 +8,9 @@ ENV HIVE_USER_NAME="hive"
 ENV PIG_HOME="/opt/pig/"
 ENV LD_LIBRARY_PATH="$JAVA_HOME/lib/server:$LD_LIBRARY_PATH"
 ENV PATH="/home/jovyan/.local/bin/:/home/jovyan/.cargo/bin/:/opt/hadoop/bin/:/opt/hive/bin/:/opt/pig/bin/:/opt/maven/bin/:$PATH"
-ENV EDITOR="micro"
 
 COPY ./entrypoint.py /entrypoint.py
+COPY ./CSC1109.md /home/jovyan/CSC1109.md
 COPY ./bin/brush-hl /bin/brush-hl
 COPY test /test
 

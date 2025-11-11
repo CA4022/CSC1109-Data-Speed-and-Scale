@@ -47,6 +47,7 @@ async function addToLauncher(
     initialCommand: string,
     label: string,
     category: string,
+    rank: number,
     icon: LabIcon
 ) {
     const { commands, serviceManager } = app;
@@ -91,7 +92,7 @@ async function addToLauncher(
     launcher.add({
         command: command,
         category: category,
-        rank: 1
+        rank: rank
     });
 }
 
@@ -111,7 +112,8 @@ const plugin: JupyterFrontEndPlugin<void> = {
     ) => {
         console.log('JupyterLab extension csc1109_launcher is activated!');
 
-        const category = 'Console';
+        const shell_category = 'Console';
+        const shell_rank = 0;
 
         void addToLauncher(
             app,
@@ -122,9 +124,13 @@ const plugin: JupyterFrontEndPlugin<void> = {
             'csc1109-launcher:launch-shell',
             'python /entrypoint.py\r',
             'Lab Shell',
-            category,
+            shell_category,
+            shell_rank,
             shellIcon
         );
+
+        const repl_category = 'Console';
+        const repl_rank = 1;
 
         void addToLauncher(
             app,
@@ -135,7 +141,8 @@ const plugin: JupyterFrontEndPlugin<void> = {
             'csc1109-launcher:launch-beeline',
             'beeline\r',
             'Hive (beeline)',
-            category,
+            repl_category,
+            repl_rank,
             hiveIcon
         );
         void addToLauncher(
@@ -147,7 +154,8 @@ const plugin: JupyterFrontEndPlugin<void> = {
             'csc1109-launcher:launch-grunt',
             'pig\r',
             'Pig (grunt)',
-            category,
+            repl_category,
+            repl_rank,
             pigIcon
         );
         void addToLauncher(
@@ -159,7 +167,8 @@ const plugin: JupyterFrontEndPlugin<void> = {
             'csc1109-launcher:launch-pyspark-repl',
             'pyspark\r',
             'PySpark',
-            category,
+            repl_category,
+            repl_rank,
             pysparkIcon
         );
         void addToLauncher(
@@ -171,7 +180,8 @@ const plugin: JupyterFrontEndPlugin<void> = {
             'csc1109-launcher:launch-spark-repl',
             'spark-shell\r',
             'Spark',
-            category,
+            repl_category,
+            repl_rank,
             sparkIcon
         );
     }
