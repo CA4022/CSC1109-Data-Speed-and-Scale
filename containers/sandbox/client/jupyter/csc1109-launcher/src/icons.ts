@@ -1,9 +1,15 @@
 import { LabIcon } from '@jupyterlab/ui-components';
 
+import shellSVG from '../style/shell.svg';
 import hiveSVG from '../style/hive.svg';
 import pigSVG from '../style/pig.svg';
 import pysparkSVG from '../style/pyspark.svg';
 import sparkSVG from '../style/spark.svg';
+
+export const shellIcon = new LabIcon({
+    name: 'csc1109-launcher:shell-icon',
+    svgstr: shellSVG
+});
 
 export const hiveIcon = new LabIcon({
     name: 'csc1109-launcher:hive-icon',

@@ -8,7 +8,6 @@ c.ServerApp.password = ""
 c.ServerApp.allow_unauthenticated_access = True
 c.ServerApp.open_browser = False
 c.ContentsManager.allow_hidden = True
-c.ServerApp.terminado_settings = {"shell_command": ["/entrypoint.py"]}
 
 c.LanguageServerManager.language_servers = {
     "pyright": {

@@ -14,6 +14,7 @@ import { LabIcon } from '@jupyterlab/ui-components';
 import { MainAreaWidget } from '@jupyterlab/apputils';
 
 import {
+    shellIcon,
     hiveIcon,
     pigIcon,
     pysparkIcon,
@@ -109,7 +110,21 @@ const plugin: JupyterFrontEndPlugin<void> = {
         tracker: ITerminalTracker | null
     ) => {
         console.log('JupyterLab extension csc1109_launcher is activated!');
+
         const category = 'Console';
+
+        void addToLauncher(
+            app,
+            launcher,
+            settingRegistry,
+            translator,
+            tracker,
+            'csc1109-launcher:launch-shell',
+            'python /entrypoint.py\r',
+            'Lab Shell',
+            category,
+            shellIcon
+        );
 
         void addToLauncher(
             app,
