@@ -477,8 +477,8 @@ be considered ideal for "modern" `pyspark` code. In modern Spark, we tend to use
 `DataFrame` API where possible, and leave the `Catalyst` optimizer to create an optimized DAG
 instead of directly writing a DAG like we did in the RDD approach. Do to this, we must replace our
 functional operations in the `word_count` function with declarative calls to the `pyspark.sql` API.
-This approach is less flexible than directly writing a DAG ourselves, but generally results in a
-more optimized execution DAG for common operations.
+This approach is less flexible than directly writing a DAG ourselves by processing RDDs, but
+generally results in a more optimized execution DAG for common operations.
 
 ```python title="WordCountDFPython.py"
 --8<-- "lab5/src/WordCountDFPython.py"
@@ -487,7 +487,7 @@ more optimized execution DAG for common operations.
 Similar to in our previous example, we can simply submit this via the `spark-submit` program.
 
 ```sh { .test-block #ghcr.io/ca4022/csc1109-lab5:latest wrapper='docker compose exec -w /lab/ client {shell} -c "{command}"' }
-uv run spark-submit --master spark://spark-master:7077 WordCountPythonRDD.py hdfs://namenode/data/Word_count.txt hdfs://namenode/output/python-df/
+uv run spark-submit --master spark://spark-master:7077 WordCountDFPython.py hdfs://namenode/data/Word_count.txt hdfs://namenode/output/python-df/
 ```
 
 QUESTION: So far, when running distributed code we have been accessing files on our Hadoop cluster.
