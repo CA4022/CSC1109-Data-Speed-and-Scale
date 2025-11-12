@@ -5,6 +5,7 @@ api
 async
 backend
 backends
+bootup
 bottlenecked
 bottlenecking
 bugfixes
@@ -113,6 +114,7 @@ py
 pyproject
 pyspark
 pystorm
+queryable
 quickstart
 qwik
 realtime

@@ -50,7 +50,7 @@ hash of the container, or stopping it via the docker desktop GUI.
         problem will resolve within 5 minutes. If it does not, please let us know and we will help
         you debug.
 - My sandbox keeps freezing
-    - Usually, this is a result of the high RAM usage fo the sandbox. Sadly, this is unavoidable
+    - Usually, this is a result of the high RAM usage of the sandbox. Sadly, this is unavoidable
         when we're trying to simulate a distributed cluster on a local system. Please ensure you
         have adequate RAM and swap space allocated on your machine (see the
         [Docker Setup](./index.md#docker-setup) section of the [Home](./index.md) page for more
