@@ -20,6 +20,9 @@ Once inside the lab container, you can deploy the cluster for this lab by runnin
 docker compose up -d
 ```
 
+REMINDER: Whenever you are trying to interact with the cluster you **must** connect to the client
+node first. To do this, you can run the command `docker compose exec client default_shell`.
+
 ## What is Pig? 󱀆&nbsp; ##
 
 In our previous lab we discovered Apache Hive, a higher-level abstraction over HDFS/MR intended to

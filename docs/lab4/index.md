@@ -29,6 +29,9 @@ docker compose up -d
 
 You can continue to read on while the stack deploys.
 
+REMINDER: Whenever you are trying to interact with the cluster you **must** connect to the client
+node first. To do this, you can run the command `docker compose exec client default_shell`.
+
 # The Basics: Storm and Maven #
 
 Once your storm cluster stack has deployed you will see that it is comprised of 3 types of nodes:

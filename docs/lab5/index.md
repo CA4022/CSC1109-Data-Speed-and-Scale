@@ -41,6 +41,9 @@ at [http://127.0.0.1:9870/](http://127.0.0.1:9870/) as in other labs that use Ha
 --8<-- "lab5/topology.mmd"
 ```
 
+REMINDER: Whenever you are trying to interact with the cluster you **must** connect to the client
+node first. To do this, you can run the command `docker compose exec client default_shell`.
+
 ## What is Spark? &nbsp; ##
 
 So far, we have explored the evolution of distributed HPC systems and found many powerful
