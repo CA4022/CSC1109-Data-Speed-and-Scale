@@ -80,7 +80,6 @@ COPY --from=ghcr.io/ca4022/csc1109-base-root:latest /root/.zshrc /home/jovyan/.z
 COPY --from=ghcr.io/ca4022/csc1109-base-root:latest /root/.config/ /home/jovyan/.config/
 COPY --from=ghcr.io/ca4022/csc1109-base-root:latest /root/.local/ /home/jovyan/.local/
 
-USER root
 RUN chown -R jovyan /home/jovyan/.config/ && \
     chown -R jovyan /home/jovyan/.local/
 
@@ -94,4 +93,5 @@ RUN wget -O /home/jovyan/.local/bin/jq https://github.com/jqlang/jq/releases/dow
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting && \
     git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions && \
     vim +'PlugInstall --sync' +qa && \
-    micro -plugin remove cheat
+    micro -plugin remove cheat && \
+    sed -i '/^style: "~/ s#~#/home/jovyan#' /home/jovyan/.config/glow/glow.yml
