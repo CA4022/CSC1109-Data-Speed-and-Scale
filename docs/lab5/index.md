@@ -9,10 +9,9 @@ init_commands:
   - mkdir /lab/src/
   - mkdir /lab/src/main/
   - mkdir /lab/src/main/java/
-  - mkdir /lab/src/main/scala/
   - mkdir /lab/src/main/python/
   - cp /lab/docs_src/*.java /lab/src/main/java/
-  - cp /lab/docs_src/*.scala /lab/src/main/scala/
+  - cp /lab/docs_src/*.scala /lab/src/main/java/
   - cp /lab/docs_src/*.py /lab/
 ---
 
@@ -338,7 +337,7 @@ In the REPL, we already demonstrated the direct use of RDDs to perform a word co
 a program to do this follows much the same pattern. Doing this programmatically does provide us
 with some opportunities to further optimise the code, in addition to adding some better error
 handling. Since maven is already configured to build our Scala files too, lets create the directory
-`src/main/scala` and place the following source code inside that directory.
+`src/main/java` (if we haven't already) and place the following source code inside that directory.
 
 ```scala title="src/main/java/WordCountRDD.scala"
 --8<-- "lab5/src/WordCountRDD.scala"
@@ -411,14 +410,21 @@ general purpose distributed execution engine for DAGs at large scale.
 
 #### Using the REPL ####
 
-Similar to the Spark scala REPL, we can easily open a python REPL by running `pyspark`. Once inside
-this REPL, we can begin testing out some functions to design a simple python script that will do
-our distributed word count task. The following lines will perform a word count via the Spark engine
-in python.
+Similar to the Spark scala REPL, we can easily open a python REPL by running `uv run pyspark`. Once
+inside this REPL, we can begin testing out some functions to design a simple python script that
+will do our distributed word count task. The following lines will perform a word count via the
+Spark engine in python.
+
+WARNING: Here, we **need** to use `uv` to run the command, as this runs `pyspark` in an
+environment that is pinned to `python3.10`. Running without `uv run` will cause `spark-submit` to
+run using the container's system python interpreter, which is `python3.6`, raising a
+`ModuleNotFound` error as `python3.6` lacks the `importlib.resources` package which our `pyspark`
+version needs.
 
 ```python
  >>> lines = sc.textFile("hdfs://namenode/data/Word_count.txt")
  >>> lower = lines.map(lambda line: line.lower())
+ >>> import re
  >>> words = lower.flatMap(lambda line: re.split(r"[^a-zA-Z']+", line))
  >>> non_empty = words.filter(bool)
  >>> ones = non_empty.map(lambda word: (word, 1))
@@ -464,12 +470,6 @@ JVM objects interacting with Spark.
 uv run spark-submit --master spark://spark-master:7077 WordCountRDDPython.py hdfs://namenode/data/Word_count.txt hdfs://namenode/output/python-rdd/
 ```
 
-WARNING: Here, we **need** to use `uv` to run the command, as this runs `spark-submit` in an
-environment that is pinned to `python3.10`. Running without `uv run` will cause `spark-submit` to
-run using the container's system python interpreter, which is `python3.6`, raising a
-`ModuleNotFound` error as `python3.6` lacks the `importlib.resources` package which `pyspark`
-needs.
-
 #### Using DataFrames ####
 
 Although the RDD approach in the previous section is straightforward and works well, it would not
@@ -493,8 +493,9 @@ uv run spark-submit --master spark://spark-master:7077 WordCountDFPython.py hdfs
 QUESTION: So far, when running distributed code we have been accessing files on our Hadoop cluster.
 However, often, we want the cluster to run computations on files that are on the client's local
 drive without needing to deploy a whole hadoop cluster. Can you figure out how to do this by
-modifying the code provided? (HINT: you can easily broadcast data across a Spark cluster in python
-using the `sc.broadcast` method)
+modifying the code provided? (HINT: if you can figure out how to ensure you are reading on your
+client you can easily split data across a Spark cluster in python using the `sc.parallelize`
+method)
 
 ## Further Reading & Examples &nbsp; ##
 
