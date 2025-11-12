@@ -1,0 +1,15 @@
+#!/bin/bash
+
+NAMENODE_DIR="/tmp/hadoop-hadoop/dfs/name"
+
+if [ ! -d "$NAMENODE_DIR" ]; then
+  echo "NameNode directory not found."
+  echo "Formatting NameNode..."
+  /opt/hadoop/bin/hdfs namenode -format
+  echo "NameNode formatted."
+fi
+
+echo "Starting HDFS..."
+/opt/hadoop/bin/hdfs namenode &
+/opt/hadoop/bin/hdfs datanode &
+wait

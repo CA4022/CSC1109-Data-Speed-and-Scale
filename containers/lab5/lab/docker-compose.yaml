@@ -1,12 +1,5 @@
 version: "3.8"
 
-x-hadoop-common-config: &hadoop-common-config
-  image: ${HADOOP_RUNNER_IMAGE}:${HADOOP_RUNNER_VERSION}
-  volumes:
-    - .:/lab/
-    - /opt/hadoop/:${HADOOP_HOME}
-    - ./config/:${HADOOP_HOME}/etc/hadoop
-
 x-spark-common-config: &spark-common-config
   image: ${SPARK_IMAGE}:${SPARK_VERSION}
   volumes:
@@ -15,9 +8,14 @@ x-spark-common-config: &spark-common-config
 
 services:
   namenode:
-    <<: *hadoop-common-config
+    image: ${HADOOP_RUNNER_IMAGE}:${HADOOP_RUNNER_VERSION}
     hostname: namenode
-    command: ["hdfs", "namenode"]
+    command: /init/init
+    volumes:
+      - .:/lab/
+      - /opt/hadoop/:${HADOOP_HOME}
+      - ./config/:${HADOOP_HOME}/etc/hadoop
+      - ./hadoop-init/:/init/
     ports:
       - 9870:9870
     environment:
@@ -26,24 +24,11 @@ services:
       - ENSURE_NAMENODE_DIR=/tmp/hadoop-root/dfs/name
       - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://namenode:9870"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  datanode:
-    <<: *hadoop-common-config
-    command: ["hdfs", "datanode"]
-    environment:
-      - HADOOP_HOME=${HADOOP_HOME}
-      - HADOOP_USER_NAME=${HADOOP_USER_NAME}
-      - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
-    deploy:
-      mode: replicated
-      replicas: 4
-    depends_on:
-      namenode:
-        condition: service_healthy
+      test: ["CMD-SHELL", "curl -f http://localhost:9870/"]
+      interval: 30s
+      timeout: 10s
+      start_period: 10s
+      retries: 3
 
   spark-master:
     <<: *spark-common-config
@@ -65,8 +50,6 @@ services:
       - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
     depends_on:
       - spark-master
-    links:
-      - spark-master
     deploy:
       mode: replicated
       replicas: 4
@@ -84,8 +67,6 @@ services:
         condition: service_healthy
       spark-master:
         condition: service_started
-    links:
-      - spark-master
     command: sleep infinity
     working_dir: /lab/
     volumes:
