@@ -219,14 +219,14 @@ To do this, you can follow the instructions below.
     > You will need to add the `--cpus` and `--memory` flags to the `docker run` command **every
     > time you start the lab environment.**
     >
-    > For example, to start the base lab environment with 4 CPU cores and 8 GB of RAM, you would
+    > For example, to start the base lab environment with 4 CPU cores and 10 GB of RAM, you would
     > modify the command like this:
     >
     > ```sh
-    > docker run --cpus="4.0" --memory="8g" --privileged --hostname csc1109-base -it ghcr.io/ca4022/csc1109-base:latest
+    > docker run --cpus="4.0" --memory="10g" --privileged --hostname csc1109-base -it ghcr.io/ca4022/csc1109-base:latest
     > ```
     >
-    > We recommend allocating **at least 4 CPUs and 8GB of memory** for the labs.
+    > We recommend allocating **at least 4 CPUs and 10GB of memory** for the labs (if possible).
     >
     > > TIP: For a more graphical experience similar to Windows and macOS, you can install **Docker
     > > Desktop for Linux**. It provides a settings panel to manage default resource allocations for
@@ -245,7 +245,7 @@ to test the lab CSC1109 environment without any lab-specific tools or data being
 you can do so by running the following command:
 
 ```sh
-docker run --privileged --hostname csc1109-base -v lab_cache:/run/containers/ -it ghcr.io/ca4022/csc1109-base:latest
+docker run --rm --stop-timeout 60 --privileged --hostname csc1109-base -v lab_cache:/var/containers/cache/ -it ghcr.io/ca4022/csc1109-base:latest
 ```
 
 NOTE: The docker GUI can only be used to deploy containers from the `DockerHub` repository. Since
@@ -255,15 +255,20 @@ above.
 The options and arguments for this command do the following:
 
 - **`docker run`** tells the docker engine to download and run the given container
+- **`--rm`** tells docker to delete the container once we stop it. This helps stop disk usage by
+    containers from becoming too high.
+- **`--stop-timeout 60`** tells docker to allow 60 seconds for the container to shutdown. Without
+    this flag docker will `SIGKILL` the container after 10 seconds, which can cause errors due to
+    cache corruption.
 - **`--privileged`** tells docker to give the container admin privileges. This is essential, as the
     container needs admin privileges to run the nested docker daemon that will simulate cluster
 - **`--hostname csc1109-base`** names sets the hostname inside the container. This is helpful
     because it puts a consistent name in the prompt so we know which container we are inside at any
     given time.
-- **`-v lab_cache:/run/containers/`** tells docker to create a persistent volume and mount
-    it at the path `/run/containers/` inside the container. This volume will be used to cache
-    images between labs, speeding up our deployments and giving us more time to focus on
-    experiments.
+- **`-v lab_cache:/var/containers/cache/`** tells docker to create a persistent volume called
+    `lab_cache` and mount it at the path `/var/containers/cache` inside the container. This volume
+    will be used to cache images between labs, speeding up our deployments and giving us more time
+    to focus on experiments.
 - **`-i`** tells docker to run the container in interactive mode
 - **`-t`** tells docker to allocate a pseudo-tty to use for interaction
 - **`ghcr.io/ca4022/csc1109-base:latest`** is the container we want to run. In this case:

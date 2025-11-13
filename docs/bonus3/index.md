@@ -25,7 +25,7 @@ To download the container for this lab and run it, execute the following command
 
 ```sh
 docker pull {{ page.meta.docker_image }}
-docker run --rm --privileged  --hostname bonus3 --network host -v bonus3:/lab/ -it {{ page.meta.docker_image }}
+docker run --rm --stop-timeout 60 --privileged  --hostname bonus3 --network host -v bonus3:/lab/ -it {{ page.meta.docker_image }}
 ```
 
 ## Process Parallelism ##

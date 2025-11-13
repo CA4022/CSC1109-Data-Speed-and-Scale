@@ -24,7 +24,7 @@ To download the container for this lab and run it, execute the following command
 
 ```sh
 docker pull {{ page.meta.docker_image }}
-docker run --rm --privileged --hostname lab5 -v lab5:/lab/ -v lab_cache:/var/containers/cache/ -p 8000:8080 -p 9870:9870 -it {{ page.meta.docker_image }}
+docker run --rm --stop-timeout 60 --privileged --hostname lab5 -v lab5:/lab/ -v lab_cache:/var/containers/cache/ -p 8000:8080 -p 9870:9870 -it {{ page.meta.docker_image }}
 ```
 
 Once inside the container, you can deploy cluster as a docker stack as normal by running:
@@ -112,8 +112,8 @@ readily rebuilt in the event of loss or corruption of data.
 
 We have previously encountered DAGs in our discussion on
 [Apache Storm](../lab4/index.md#what-is-a-topology). This model of computation allows us to break
-down our work into discrete, repeatable "nodes" of deterministic, repeatable work that can then be
-distributed across a cluster. DAGs Make computation more reliable by making operations repeatable
+down our work into discrete, repeatable "nodes" of deterministic, idempotent work that can then be
+distributed across a cluster. DAGs Make computation more reliable by making operations reproducible
 if units of data get lost in flight or corrupted. In the case of Spark, they are especially useful
 as when combined with the "lineage" of RDDs they allow us to reconstruct any RDD as long as we
 still have access to any ancestor data in the lineage that produced it. The combination of DAGs and

@@ -26,7 +26,7 @@ To download the container for this lab and run it, execute the following command
 
 ```sh
 docker pull {{ page.meta.docker_image }}
-docker run --rm --privileged --hostname sandbox -v .:/lab/ -v lab_cache:/var/containers/cache/ -p 8888:8888 -t {{ page.meta.docker_image }}
+docker run --rm --stop-timeout 60 --privileged --hostname sandbox -v .:/lab/ -v lab_cache:/var/containers/cache/ -p 8888:8888 -t {{ page.meta.docker_image }}
 ```
 
 This command will start up the simulated cluster, build and deploy the stack, start up the
@@ -55,6 +55,20 @@ hash of the container, or stopping it via the docker desktop GUI.
         have adequate RAM and swap space allocated on your machine (see the
         [Docker Setup](./index.md#docker-setup) section of the [Home](./index.md) page for more
         info).
+- My `lab_cache` volume is filling all of my disk space
+    - The container images being used to build our pseudo-distributed clusters for this lab can be
+        quite large and, sadly, this is an unavoidable side-effect of simulating these systems and
+        their many software tools and components. While we cannot ensure your `lab_cache` remains
+        small, there are steps we can take to try and manage the size of the cache as we proceed
+        through the various labs. For example, if you run the command `podman system prune` inside
+        a running lab container this will remove all stopped containers, and dangling or unused
+        cached resources which should reduce its size. In extremely disk constrained cases it may
+        be necessary to run your lab containers without mounting the cache, which should prevent
+        this problem entirely but would **dramatically** increase the time it takes for each lab
+        container's cluster stack to start up, usually increasing it to at least 20 minutes. For
+        this reason we generally recommend to try and clear enough space to accommodate the cache,
+        or if running without a cache is **completely necessary** to attempt to start your lab
+        container and cluster stack at least an hour before the labs are due to begin.
 - My issue isn't listed here!
     - If you're experiencing an issue that isn't included here please don't hesitate to ask us for
         assistance. We can help you figure out what the problem is, and if it comes up often enough
