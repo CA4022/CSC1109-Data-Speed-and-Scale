@@ -1,12 +1,10 @@
 FROM ghcr.io/ca4022/csc1109-sandbox-client-jupyter:latest AS sandbox-client-base
 
-ENV JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64"
 ENV HADOOP_HOME="/opt/hadoop"
 ENV HADOOP_USER_NAME="hadoop"
 ENV HIVE_HOME="/opt/hive"
 ENV HIVE_USER_NAME="hive"
 ENV PIG_HOME="/opt/pig/"
-ENV LD_LIBRARY_PATH="$JAVA_HOME/lib/server:$LD_LIBRARY_PATH"
 ENV PATH="/home/jovyan/.local/bin/:/home/jovyan/.cargo/bin/:/opt/hadoop/bin/:/opt/hive/bin/:/opt/pig/bin/:/opt/maven/bin/:$PATH"
 
 COPY ./entrypoint.py /entrypoint.py
@@ -86,7 +84,7 @@ RUN chown -R jovyan /home/jovyan/.config/ && \
 USER jovyan
 WORKDIR /lab/
 
-RUN wget -O /home/jovyan/.local/bin/jq https://github.com/jqlang/jq/releases/download/jq-1.8.1/jq-linux-amd64 && \
+RUN wget -O /home/jovyan/.local/bin/jq https://github.com/jqlang/jq/releases/download/jq-1.8.1/jq-linux-$(uname -m | sed 's/aarch64/arm64/; s/x86_64/amd64/') && \
     chmod +x /home/jovyan/.local/bin/jq && \
     conda env config vars set -n base CLASSPATH=$(hadoop classpath --glob) && \
     sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended && \

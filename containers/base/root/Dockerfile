@@ -6,8 +6,8 @@ RUN zypper --non-interactive install gzip tar wget && \
     zypper clean --all
 
 WORKDIR /fzf
-RUN wget https://github.com/junegunn/fzf/releases/download/v0.62.0/fzf-0.62.0-linux_amd64.tar.gz && \
-    tar xzf fzf-0.62.0-linux_amd64.tar.gz
+RUN wget https://github.com/junegunn/fzf/releases/download/v0.62.0/fzf-0.62.0-linux_$(uname -m | sed 's/aarch64/arm64/; s/x86_64/amd64/').tar.gz && \
+    tar xzf fzf-0.62.0-linux_$(uname -m | sed 's/aarch64/arm64/; s/x86_64/amd64/').tar.gz
 
 FROM docker.io/opensuse/leap:${BASE_OPENSUSE_VERSION} AS base
 
@@ -58,14 +58,14 @@ RUN if zypper search -x -i "busybox-less" >/dev/null 2>&1; then \
         fd-bash-completion ripgrep ripgrep-bash-completion tealdeer-bash-completion \
         symbols-only-nerd-fonts unzip vim && \
     zypper clean --all && \
-    wget -O /usr/bin/tldr https://github.com/tealdeer-rs/tealdeer/releases/download/v1.7.2/tealdeer-linux-x86_64-musl && \
+    wget -O /usr/bin/tldr https://github.com/tealdeer-rs/tealdeer/releases/download/v1.7.2/tealdeer-linux-$(uname -m | sed 's/arm64/aarch64/; s/amd64/x86_64/')-musl && \
     chmod +x /usr/bin/tldr && \
-    wget -O yazi.zip https://github.com/sxyazi/yazi/releases/download/v25.5.31/yazi-x86_64-unknown-linux-musl.zip && \
+    wget -O yazi.zip https://github.com/sxyazi/yazi/releases/download/v25.5.31/yazi-$(uname -m | sed 's/arm64/aarch64/; s/amd64/x86_64/')-unknown-linux-musl.zip && \
     unzip -j yazi.zip */ya */yazi && \
     mv yazi /usr/local/bin/yazi && \
     mv ya /usr/local/bin/ya && \
     rm yazi.zip && \
-    wget -O zellij.tar.gz https://github.com/zellij-org/zellij/releases/download/v0.43.1/zellij-no-web-x86_64-unknown-linux-musl.tar.gz && \
+    wget -O zellij.tar.gz https://github.com/zellij-org/zellij/releases/download/v0.43.1/zellij-no-web-$(uname -m | sed 's/arm64/aarch64/; s/amd64/x86_64/')-unknown-linux-musl.tar.gz && \
     tar -xzf zellij.tar.gz && \
     mv zellij /usr/local/bin/zellij && \
     rm zellij.tar.gz && \
@@ -75,9 +75,9 @@ RUN if zypper search -x -i "busybox-less" >/dev/null 2>&1; then \
 WORKDIR /root/
 
 # Set up modern shell features
-RUN wget https://github.com/reubeno/brush/releases/download/brush-shell-v0.2.23/brush-x86_64-unknown-linux-gnu.tar.gz && \
-    tar -xzf brush-x86_64-unknown-linux-gnu.tar.gz && \
-    rm brush-x86_64-unknown-linux-gnu.tar.gz && \
+RUN wget https://github.com/reubeno/brush/releases/download/brush-shell-v0.2.23/brush-$(uname -m | sed 's/arm64/aarch64/; s/amd64/x86_64/')-unknown-linux-gnu.tar.gz && \
+    tar -xzf brush-$(uname -m | sed 's/arm64/aarch64/; s/amd64/x86_64/')-unknown-linux-gnu.tar.gz && \
+    rm brush-$(uname -m | sed 's/arm64/aarch64/; s/amd64/x86_64/')-unknown-linux-gnu.tar.gz && \
     mv brush /usr/bin/brush && \
     rm LICENSE && \
     rm THIRD_PARTY_LICENSES.html && \
