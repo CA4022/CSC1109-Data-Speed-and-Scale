@@ -10,7 +10,7 @@ ENV PATH="/home/jovyan/.local/bin/:/home/jovyan/.cargo/bin/:/opt/hadoop/bin/:/op
 COPY ./entrypoint.py /entrypoint.py
 COPY ./bin/brush-hl /bin/brush-hl
 
-FROM sandbox-client-noroot-base AS sandbox-client-noroot-final
+FROM sandbox-client-noroot-base AS sandbox-client-noroot-build
 
 USER root
 
@@ -68,6 +68,8 @@ RUN DEBIAN_FRONTEND=noninteractive \
     mkdir -p /home/jovyan/.local/ && \
     chown -R jovyan /home/jovyan/.local/ && \
     chmod +x /test/test.sh
+
+FROM sandbox-client-noroot-build AS sandbox-client-noroot-final
 
 COPY --from=ghcr.io/ca4022/csc1109-sandbox-client-apache:latest /opt/hadoop/ /opt/hadoop/
 COPY --from=ghcr.io/ca4022/csc1109-sandbox-client-apache:latest /opt/hive/ /opt/hive/
