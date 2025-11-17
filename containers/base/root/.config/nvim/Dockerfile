@@ -11,10 +11,10 @@ RUN zypper --non-interactive install gcc git gzip lua53 lua53-devel make unzip t
 # Install neovim from tarball (SUSE Leap version is woefully out of date)
 RUN mkdir /nvim
 WORKDIR /nvim
-RUN wget -O nvim.tar.gz https://github.com/neovim/neovim/releases/download/v0.11.2/nvim-linux-$(uname -m | sed 's/aarch64/arm64/; s/amd64/x86_64').tar.gz && \
+RUN wget -O nvim.tar.gz https://github.com/neovim/neovim/releases/download/v0.11.2/nvim-linux-$(uname -m | sed 's/aarch64/arm64/; s/amd64/x86_64/').tar.gz && \
     tar xf nvim.tar.gz && \
-    cp -r nvim-linux-$(uname -m | sed 's/aarch64/arm64/; s/amd64/x86_64')/* / && \
-    rm -r nvim-linux-$(uname -m | sed 's/aarch64/arm64/; s/amd64/x86_64')
+    cp -r nvim-linux-$(uname -m | sed 's/aarch64/arm64/; s/amd64/x86_64/')/* / && \
+    rm -r nvim-linux-$(uname -m | sed 's/aarch64/arm64/; s/amd64/x86_64/')
 
 # Install neovim plugins at container build time
 # First: bootstrap lazy.nvim using luarocks
