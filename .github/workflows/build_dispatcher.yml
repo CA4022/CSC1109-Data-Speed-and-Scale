@@ -36,7 +36,7 @@ jobs:
       bonus3-changed: ${{ steps.consolidate.outputs.bonus3-changed }}
       sandbox-client-noroot-apache: ${{ steps.filter.outputs.sandbox-client-noroot-apache }}
       sandbox-client-noroot-jupyter: ${{ steps.filter.outputs.sandbox-client-noroot-jupyter }}
-      sandbox-client-noroot-changed: ${{ steps.filter.outputs.sandbox-client-noroot-changed }}
+      sandbox-client-noroot-changed: ${{ steps.consolidate.outputs.sandbox-client-noroot-changed }}
       sandbox-client-changed: ${{ steps.consolidate.outputs.sandbox-client-changed }}
       sandbox-changed: ${{ steps.consolidate.outputs.sandbox-changed }}
 
