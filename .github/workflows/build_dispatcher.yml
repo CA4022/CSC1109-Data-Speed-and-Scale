@@ -545,7 +545,8 @@ jobs:
       - build-base
     if: >-
       always() &&
-      needs.determine-changes.outputs.bonus3-changed == 'true'
+      needs.determine-changes.outputs.bonus3-changed == 'true' &&
+      needs.build-base.result != 'failure'
     name: "Build bonus3 container"
     permissions:
       contents: read
