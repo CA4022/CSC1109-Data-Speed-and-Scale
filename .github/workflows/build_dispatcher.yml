@@ -34,8 +34,8 @@ jobs:
       lab6-client-changed: ${{ steps.consolidate.outputs.lab6-client-changed }}
       lab6-changed: ${{ steps.consolidate.outputs.lab6-changed }}
       bonus3-changed: ${{ steps.consolidate.outputs.bonus3-changed }}
-      sandbox-client-apache: ${{ steps.filter.outputs.sandbox-client-apache }}
-      sandbox-client-jupyter: ${{ steps.filter.outputs.sandbox-client-jupyter }}
+      sandbox-client-noroot-apache: ${{ steps.filter.outputs.sandbox-client-noroot-apache }}
+      sandbox-client-noroot-jupyter: ${{ steps.filter.outputs.sandbox-client-noroot-jupyter }}
       sandbox-client-noroot-changed: ${{ steps.filter.outputs.sandbox-client-noroot-changed }}
       sandbox-client-changed: ${{ steps.consolidate.outputs.sandbox-client-changed }}
       sandbox-changed: ${{ steps.consolidate.outputs.sandbox-changed }}
@@ -93,9 +93,9 @@ jobs:
               - 'containers/lab6/**'
             bonus3:
               - 'containers/bonus3/**'
-            sandbox-client-apache:
+            sandbox-client-noroot-apache:
               - 'containers/sandbox/client/noroot/apache/**'
-            sandbox-client-jupyter:
+            sandbox-client-noroot-jupyter:
               - 'containers/sandbox/client/noroot/jupyter/**'
             sandbox-client-noroot:
               - 'containers/sandbox/client/noroot/**'
@@ -137,8 +137,8 @@ jobs:
 
           # Consolidate sandbox image logic similar to above
           sandbox_component_outputs = list(map(str_to_bool, (
-            "${{ steps.filter.outputs.sandbox-client-apache }}",
-            "${{ steps.filter.outputs.sandbox-client-jupyter }}",
+            "${{ steps.filter.outputs.sandbox-client-noroot-apache }}",
+            "${{ steps.filter.outputs.sandbox-client-noroot-jupyter }}",
           )))
           sandbox_client_noroot_output = str_to_bool("${{ steps.filter.outputs.sandbox-client-noroot }}")
           sandbox_client_noroot_changed = any([*sandbox_component_outputs, sandbox_client_noroot_output])
@@ -555,10 +555,10 @@ jobs:
       path: containers/bonus3
     secrets: inherit
 
-  build-sandbox-client-apache:
+  build-sandbox-client-noroot-apache:
     needs: determine-changes
-    if: needs.determine-changes.outputs.sandbox-client-apache == 'true'
-    name: "Build sandbox-client-apache container"
+    if: needs.determine-changes.outputs.sandbox-client-noroot-apache == 'true'
+    name: "Build sandbox-client-noroot-apache container"
     permissions:
       contents: read
       packages: write
@@ -567,10 +567,10 @@ jobs:
       path: containers/sandbox/client/noroot/apache
     secrets: inherit
 
-  build-sandbox-client-jupyter:
+  build-sandbox-client-noroot-jupyter:
     needs: determine-changes
-    if: needs.determine-changes.outputs.sandbox-client-jupyter == 'true'
-    name: "Build sandbox-client-jupyter container"
+    if: needs.determine-changes.outputs.sandbox-client-noroot-jupyter == 'true'
+    name: "Build sandbox-client-noroot-jupyter container"
     permissions:
       contents: read
       packages: write
@@ -582,13 +582,13 @@ jobs:
   build-sandbox-client-noroot:
     needs:
       - determine-changes
-      - build-sandbox-client-apache
-      - build-sandbox-client-jupyter
+      - build-sandbox-client-noroot-apache
+      - build-sandbox-client-noroot-jupyter
     if: >-
       always() &&
       needs.determine-changes.outputs.sandbox-client-noroot-changed == 'true' &&
-      needs.build-sandbox-client-apache.result != 'failure' &&
-      needs.build-sandbox-client-jupyter.result != 'failure'
+      needs.build-sandbox-client-noroot-apache.result != 'failure' &&
+      needs.build-sandbox-client-noroot-jupyter.result != 'failure'
     name: "Build sandbox-client-noroot container"
     permissions:
       contents: read
