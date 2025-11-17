@@ -77,27 +77,36 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build container image for testing (native arch)
+      - name: Build and load native image for testing
         if: steps.check_tag.outputs.exists == 'false'
-        run: |
-          just build ${{ inputs.path }}
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ inputs.path }}
+          platforms: linux/amd64
+          load: true
+          push: false
+          tags: ${{ env.VERSION_TAG_LOCAL }}
+          build-args: |
+            BASE_OPENSUSE_VERSION=${{ env.BASE_OPENSUSE_VERSION }}
+            BASE_PODMAN_VERSION=${{ env.BASE_PODMAN_VERSION }}
+            BASE_COMPOSE_VERSION=${{ env.BASE_COMPOSE_VERSION }}
+            BASE_BASH_VERSION=${{ env.BASE_BASH_VERSION }}
+            BASE_GIT_VERSION=${{ env.BASE_GIT_VERSION }}
+            BASE_GCC_VERSION=${{ env.BASE_GCC_VERSION }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Test container image (native arch)
         if: steps.check_tag.outputs.exists == 'false'
         run: |
           just test ${{ inputs.path }}
 
-      - name: Clean up local Docker images and cache
-        if: (steps.check_tag.outputs.exists == 'false') && success()
-        run: |
-          docker system prune -af
-
       - name: Build and push multi-platform image
         if: (steps.check_tag.outputs.exists == 'false') && success()
         uses: docker/build-push-action@v6
         with:
           context: ${{ inputs.path }}
-          platforms: linux/amd64 ,linux/arm64
+          platforms: linux/amd64,linux/arm64
           push: true
           tags: |
             ${{ env.VERSION_TAG_REMOTE }}
