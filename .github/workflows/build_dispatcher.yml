@@ -578,11 +578,13 @@ jobs:
       - determine-changes
       - build-sandbox-client-apache
       - build-sandbox-client-jupyter
+      - build-base-root
     if: >-
       always() &&
       needs.determine-changes.outputs.sandbox-client-changed == 'true' &&
       needs.build-sandbox-client-apache.result != 'failure' &&
-      needs.build-sandbox-client-jupyter.result != 'failure'
+      needs.build-sandbox-client-jupyter.result != 'failure' &&
+      needs.build-base-root.result != 'failure'
     name: "Build sandbox client container"
     permissions:
       contents: read
