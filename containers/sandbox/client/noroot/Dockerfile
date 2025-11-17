@@ -23,15 +23,6 @@ RUN DEBIAN_FRONTEND=noninteractive \
         curl \
         wget \
         ca-certificates \
-        zsh \
-        emacs \
-        vim \
-        micro \
-        bat \
-        fd-find \
-        ripgrep \
-        fzf \
-        tealdeer \
         $BUILD_DEPS && \
     curl -fsSL "https://apt.fury.io/nushell/gpg.key" | gpg --dearmor -o /etc/apt/trusted.gpg.d/fury-nushell.gpg && \
     echo "deb https://apt.fury.io/nushell/ /" | tee /etc/apt/sources.list.d/fury.list && \
@@ -41,19 +32,29 @@ RUN DEBIAN_FRONTEND=noninteractive \
     add-apt-repository ppa:neovim-ppa/unstable && \
     add-apt-repository ppa:fish-shell/release-4 && \
     apt-get update && \
-    apt-get install -y --no-install-recommends \
-        fish \
-        glow \
-        nushell \
-        neovim && \
-    ln -s /bin/batcat /bin/bat && \
-    luarocks install lazy.nvim && \
-    curl -sS https://starship.rs/install.sh | sh -s -- -y -b /usr/local/bin && \
+    rustup set profile minimal && \
     rustup default stable && \
     curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash && \
     cargo binstall brush-shell lsd && \
     rustup default none && \
     rm -r /home/jovyan/.rustup && \
+    apt-get install -y --no-install-recommends \
+        zsh \
+        emacs \
+        vim \
+        micro \
+        bat \
+        fd-find \
+        ripgrep \
+        fzf \
+        tealdeer \
+        fish \
+        glow \
+        nushell \
+        neovim && \
+    ln -s /bin/batcat /bin/bat && \
+    curl -sS https://starship.rs/install.sh | sh -s -- -y -b /usr/local/bin && \
+    luarocks install lazy.nvim && \
     apt-get purge -y --auto-remove $BUILD_DEPS && \
     rm -rf /var/lib/apt/lists/* && \
     rm -f /etc/apt/sources.list.d/fury.list \
