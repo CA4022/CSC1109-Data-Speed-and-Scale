@@ -36,6 +36,7 @@ jobs:
       bonus3-changed: ${{ steps.consolidate.outputs.bonus3-changed }}
       sandbox-client-apache: ${{ steps.filter.outputs.sandbox-client-apache }}
       sandbox-client-jupyter: ${{ steps.filter.outputs.sandbox-client-jupyter }}
+      sandbox-client-noroot-changed: ${{ steps.filter.outputs.sandbox-client-noroot-changed }}
       sandbox-client-changed: ${{ steps.consolidate.outputs.sandbox-client-changed }}
       sandbox-changed: ${{ steps.consolidate.outputs.sandbox-changed }}
 
@@ -92,14 +93,16 @@ jobs:
               - 'containers/lab6/**'
             bonus3:
               - 'containers/bonus3/**'
-            sandbox:
-              - 'containers/sandbox/**'
+            sandbox-client-apache:
+              - 'containers/sandbox/client/noroot/apache/**'
+            sandbox-client-jupyter:
+              - 'containers/sandbox/client/noroot/jupyter/**'
+            sandbox-client-noroot:
+              - 'containers/sandbox/client/noroot/**'
             sandbox-client:
               - 'containers/sandbox/client/**'
-            sandbox-client-apache:
-              - 'containers/sandbox/client/apache/**'
-            sandbox-client-jupyter:
-              - 'containers/sandbox/client/jupyter/**'
+            sandbox:
+              - 'containers/sandbox/**'
 
       - name: Consolidate change logic
         id: consolidate
@@ -137,8 +140,11 @@ jobs:
             "${{ steps.filter.outputs.sandbox-client-apache }}",
             "${{ steps.filter.outputs.sandbox-client-jupyter }}",
           )))
+          sandbox_client_noroot_output = str_to_bool("${{ steps.filter.outputs.sandbox-client-noroot }}")
+          sandbox_client_noroot_changed = any([*sandbox_component_outputs, sandbox_client_noroot_output])
+          github_output["sandbox-client-noroot-changed"] = sandbox_client_noroot_changed
           sandbox_client_output = str_to_bool("${{ steps.filter.outputs.sandbox-client }}")
-          sandbox_client_changed = any([*sandbox_component_outputs, sandbox_client_output])
+          sandbox_client_changed = sandbox_client_noroot_changed or sandbox_client_output
           github_output["sandbox-client-changed"] = sandbox_client_changed
 
           sandbox_changed = str_to_bool("${{ steps.filter.outputs.sandbox }}") or dind_minimal_changed
@@ -558,7 +564,7 @@ jobs:
       packages: write
     uses: ./.github/workflows/build.yml
     with:
-      path: containers/sandbox/client/apache
+      path: containers/sandbox/client/noroot/apache
     secrets: inherit
 
   build-sandbox-client-jupyter:
@@ -570,20 +576,37 @@ jobs:
       packages: write
     uses: ./.github/workflows/build.yml
     with:
-      path: containers/sandbox/client/jupyter
+      path: containers/sandbox/client/noroot/jupyter
+    secrets: inherit
+
+  build-sandbox-client-noroot:
+    needs:
+      - determine-changes
+      - build-sandbox-client-apache
+      - build-sandbox-client-jupyter
+    if: >-
+      always() &&
+      needs.determine-changes.outputs.sandbox-client-noroot-changed == 'true' &&
+      needs.build-sandbox-client-apache.result != 'failure' &&
+      needs.build-sandbox-client-jupyter.result != 'failure'
+    name: "Build sandbox-client-noroot container"
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/build.yml
+    with:
+      path: containers/sandbox/client/noroot
     secrets: inherit
 
   build-sandbox-client:
     needs:
       - determine-changes
-      - build-sandbox-client-apache
-      - build-sandbox-client-jupyter
+      - build-sandbox-client-noroot
       - build-base-root
     if: >-
       always() &&
       needs.determine-changes.outputs.sandbox-client-changed == 'true' &&
-      needs.build-sandbox-client-apache.result != 'failure' &&
-      needs.build-sandbox-client-jupyter.result != 'failure' &&
+      needs.build-sandbox-client-noroot.result != 'failure' &&
       needs.build-base-root.result != 'failure'
     name: "Build sandbox client container"
     permissions:

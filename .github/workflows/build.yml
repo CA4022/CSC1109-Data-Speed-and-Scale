@@ -87,6 +87,11 @@ jobs:
         run: |
           just test ${{ inputs.path }}
 
+      - name: Clean up local Docker images and cache
+        if: (steps.check_tag.outputs.exists == 'false') && success()
+        run: |
+          docker system prune -af
+
       - name: Build and push multi-platform image
         if: (steps.check_tag.outputs.exists == 'false') && success()
         uses: docker/build-push-action@v6
