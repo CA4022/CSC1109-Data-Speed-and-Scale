@@ -14,7 +14,7 @@ FROM sandbox-client-noroot-base AS sandbox-client-noroot-final
 
 USER root
 
-ENV BUILD_DEPS="gnupg2 software-properties-common build-essential pkg-config libssl-dev cargo luarocks"
+ENV BUILD_DEPS="gnupg2 software-properties-common build-essential pkg-config libssl-dev rustup luarocks"
 
 RUN DEBIAN_FRONTEND=noninteractive \
     chmod +x /entrypoint.py && \
@@ -49,8 +49,11 @@ RUN DEBIAN_FRONTEND=noninteractive \
     ln -s /bin/batcat /bin/bat && \
     luarocks install lazy.nvim && \
     curl -sS https://starship.rs/install.sh | sh -s -- -y -b /usr/local/bin && \
+    rustup default stable && \
     curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash && \
     cargo binstall brush-shell lsd && \
+    rustup default none && \
+    rm -r /home/jovyan/.rustup && \
     apt-get purge -y --auto-remove $BUILD_DEPS && \
     rm -rf /var/lib/apt/lists/* && \
     rm -f /etc/apt/sources.list.d/fury.list \
