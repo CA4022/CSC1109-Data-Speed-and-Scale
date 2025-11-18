@@ -1,9 +1,8 @@
 FROM ghcr.io/ca4022/csc1109-dind:latest AS lab2-environment
 
-COPY --from=docker.io/apache/hadoop:3.4.1 /opt/hadoop/ /opt/hadoop/
 COPY --from=docker.io/apache/hive:3.1.3 /opt/hive/ /opt/hive/
-ENV HADOOP_RUNNER_IMAGE=docker.io/apache/hadoop-runner
-ENV HADOOP_RUNNER_VERSION=jdk17-u2204
+ENV HADOOP_RUNNER_IMAGE=ghcr.io/ca4022/hadoop
+ENV HADOOP_RUNNER_VERSION=3.4.2-lean-jdk17
 ENV HADOOP_HOME=/opt/hadoop
 ENV HADOOP_USER_NAME=hadoop
 ENV HIVE_IMAGE=docker.io/apache/hive

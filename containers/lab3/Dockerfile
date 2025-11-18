@@ -1,8 +1,7 @@
 FROM ghcr.io/ca4022/csc1109-dind:latest AS lab3-environment
 
-COPY --from=docker.io/apache/hadoop:3.4.1 /opt/hadoop/ /opt/hadoop/
-ENV HADOOP_RUNNER_IMAGE=docker.io/apache/hadoop-runner
-ENV HADOOP_RUNNER_VERSION=jdk11-u2204
+ENV HADOOP_RUNNER_IMAGE=ghcr.io/ca4022/hadoop
+ENV HADOOP_RUNNER_VERSION=3.4.2-lean
 ENV HADOOP_HOME=/opt/hadoop
 ENV HADOOP_USER_NAME=hadoop
 ENV PIG_HOME=/opt/pig/
