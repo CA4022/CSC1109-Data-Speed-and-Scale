@@ -1,4 +1,4 @@
-FROM ghcr.io/ca4022/sandbox-client-noroot:latest
+FROM ghcr.io/ca4022/csc1109-sandbox-client-noroot:latest
 
 COPY ./CSC1109.md /home/jovyan/CSC1109.md
 COPY test /test
