@@ -2,6 +2,9 @@ name: Build Hadoop (External)
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/hadoop_build.yml"
 
 jobs:
   build-hadoop-external:
