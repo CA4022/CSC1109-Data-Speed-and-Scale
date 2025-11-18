@@ -5,7 +5,7 @@ ENV SPARK_CONF_DIR="/opt/spark/conf"
 
 COPY jupyter_server_config.py /home/jovyan/.jupyter/jupyter_server_config.py
 COPY user-settings /home/jovyan/.jupyter/lab/user-settings
-COPY ./spark-defaults.conf $SPARK_CONF_DIR/spark-defaults.conf
+# COPY ./spark-defaults.conf $SPARK_CONF_DIR/spark-defaults.conf
 COPY ./csc1109-launcher/ /home/jovyan/.local/share/csc1109-launcher/
 COPY test /test
 
@@ -19,8 +19,7 @@ USER jovyan
 
 WORKDIR /home/jovyan/.local/share/csc1109-launcher/
 
-RUN sed -i "s/13/10/g" /opt/conda/conda-meta/pinned && \
-    mamba update -n base --all --yes && \
+RUN mamba update -n base --all --yes && \
     mamba clean --all --yes && \
     mamba install -n base -y \
         fsspec \
