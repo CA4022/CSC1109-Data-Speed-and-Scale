@@ -19,7 +19,8 @@ USER jovyan
 
 WORKDIR /home/jovyan/.local/share/csc1109-launcher/
 
-RUN mamba update -n base --all --yes && \
+RUN sed -i "s/13/10/g" /opt/conda/conda-meta/pinned && \
+    mamba update -n base --all --yes && \
     mamba clean --all --yes && \
     mamba install -n base -y \
         fsspec \
