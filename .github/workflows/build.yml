@@ -18,6 +18,13 @@ jobs:
     steps:
       - name: Free disk space
         uses: jlumbroso/free-disk-space@main
+        with:
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: false
 
       - name: Checkout repository
         uses: actions/checkout@v5
@@ -94,12 +101,16 @@ jobs:
             BASE_GIT_VERSION=${{ env.BASE_GIT_VERSION }}
             BASE_GCC_VERSION=${{ env.BASE_GCC_VERSION }}
           cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-to: type=gha,mode=min
 
       - name: Test container image (native arch)
         if: steps.check_tag.outputs.exists == 'false'
         run: |
           just test ${{ inputs.path }}
+
+      - name: Pre-build Cleanup
+        if: steps.check_tag.outputs.exists == 'false'
+        run: docker system prune -a -f
 
       - name: Build and push multi-platform image
         if: (steps.check_tag.outputs.exists == 'false') && success()
