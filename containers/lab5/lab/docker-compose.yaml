@@ -13,7 +13,6 @@ services:
     command: /init/init
     volumes:
       - .:/lab/
-      - /opt/hadoop/:${HADOOP_HOME}
       - ./config/:${HADOOP_HOME}/etc/hadoop
       - ./hadoop-init/:/init/
     ports:

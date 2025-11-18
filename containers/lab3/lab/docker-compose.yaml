@@ -4,7 +4,6 @@ x-hadoop-common-config: &hadoop-common-config
   image: ${HADOOP_RUNNER_IMAGE}:${HADOOP_RUNNER_VERSION}
   volumes:
     - .:/lab/
-    - /opt/hadoop/:${HADOOP_HOME}
     - ./config/:${HADOOP_HOME}/etc/hadoop
 
 services:
@@ -95,7 +94,6 @@ services:
     command: ["sleep", "infinity"]
     volumes:
       - .:/lab/
-      - /opt/hadoop/:${HADOOP_HOME}
       - ./config/:${HADOOP_HOME}/etc/hadoop
       - /opt/pig/:/opt/pig/
     environment:

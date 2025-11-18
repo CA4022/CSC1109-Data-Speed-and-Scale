@@ -4,7 +4,6 @@ x-hadoop-common-config: &hadoop-common-config
   image: ${HADOOP_RUNNER_IMAGE}:${HADOOP_RUNNER_VERSION}
   volumes:
     - .:/lab/
-    - /opt/hadoop/:${HADOOP_HOME}
     - ./config:${HADOOP_HOME}/etc/hadoop
   environment:
     - HADOOP_HOME=${HADOOP_HOME}
@@ -162,7 +161,6 @@ services:
     working_dir: /lab/
     volumes:
       - .:/lab/
-      - /opt/hadoop/:${HADOOP_HOME}
       - ./config:${HADOOP_HOME}/etc/hadoop
       - /opt/hive:${HIVE_HOME}
       - ./config:${HIVE_HOME}/conf
