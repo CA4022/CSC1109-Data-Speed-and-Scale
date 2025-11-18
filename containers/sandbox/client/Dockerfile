@@ -3,6 +3,7 @@ FROM ghcr.io/ca4022/csc1109-sandbox-client-noroot:latest
 COPY ./CSC1109.md /home/jovyan/CSC1109.md
 COPY test /test
 
+COPY --from=ghcr.io/ca4022/hadoop:3.4.2-lean-jdk17 /opt/hadoop/ /opt/hadoop/
 COPY --from=ghcr.io/ca4022/csc1109-base-root:latest /root/.bashrc /home/jovyan/.bashrc
 COPY --from=ghcr.io/ca4022/csc1109-base-root:latest /root/.brushrc /home/jovyan/.brushrc
 COPY --from=ghcr.io/ca4022/csc1109-base-root:latest /root/.vimrc /home/jovyan/.vimrc
