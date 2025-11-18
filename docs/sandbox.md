@@ -29,6 +29,11 @@ docker pull {{ page.meta.docker_image }}
 docker run --rm --stop-timeout 60 --privileged --hostname sandbox -v .:/lab/ -v lab_cache:/var/containers/cache/ -p 8888:8888 -t {{ page.meta.docker_image }}
 ```
 
+WARNING: This may hang for quite a while on the step "Deploy Cluster Stack" the first time you
+deploy the environment. This is perfectly normal, and happens because the lab environment needs to
+download images for the client, hadoop nodes, hive nodes, pig components, and spark nodes. Future
+deployments should be significantly faster, so please be patient with this first deployment.
+
 This command will start up the simulated cluster, build and deploy the stack, start up the
 JupyterLab client, and mount your current directory as the working directory for that client.
 Shortly after you see the message "Reached target **Graphical Interface**.", you can then connect

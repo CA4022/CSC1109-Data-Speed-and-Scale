@@ -21,17 +21,26 @@ docker pull {{ page.meta.docker_image }}
 docker run --rm --stop-timeout 60 --privileged --hostname lab6 -v lab6:/lab/ -v lab_cache:/var/containers/cache/ -p 4040:4040 -p 8000:8000 -p 8080:8080 -p 8888:8888 -p 9870:9870 -t {{ page.meta.docker_image }}
 ```
 
-This will automatically deploy the stack without forking it as a daemon, as we will not be working
-in the CLI for this lab.
+This command will start up the simulated cluster, build and deploy the stack, start up the
+JupyterLab client, and mount a working volume called `lab6` for your work in this lab. The statusCode
+is finished deploying when you see the message "Reached target **Graphical Interface**.".
+
+WARNING: This may hang for quite a while on the step "Deploy Cluster Stack" the first time you
+deploy the environment. This is perfectly normal, and happens because the lab environment needs to
+download images for the client, hadoop nodes, hive nodes, pig components, and spark nodes. Future
+deployments should be significantly faster, so please be patient with this first deployment.
 
 ## Getting Started ##
 
-Once the stack is deployed, it will bind the following ports on your host
-machine:
+While the stack is deploying, it will connect come of the ports from the nodes of the stack to the
+corresponding ports on your host machine, via **port binding**. This will allow us to connect to
+them via a web browser to monitor our stack by navigating to one of the **local host URLS**
+(either `localhost`, `127.0.0.1`, and/or `0.0.0.0`) followed by the corresponding port number
+(e.g: `http://localhost:8888`). The ports bound for this lab will be:
 
-- 8000: [Spark WebUI](http://0.0.0.0:8000/)
-- 8888: [Jupyter Notebook](http://0.0.0.0:8888/lab)
-- 9870: [Hadoop WebUI](http://0.0.0.0:9870/)
+- 8000: [Spark WebUI](http://127.0.0.1:8000/)
+- 8888: [Jupyter Notebook](http://127.0.0.1:8888/lab)
+- 9870: [Hadoop WebUI](http://127.0.0.1:9870/)
 
 Connecting to the jupyter notebook will drop you in a full interactive coding environment from
 which you can easily explore your data and test/develop your model. This environment will allow you
