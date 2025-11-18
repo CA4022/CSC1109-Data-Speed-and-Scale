@@ -24,8 +24,6 @@ RUN DEBIAN_FRONTEND=noninteractive \
         wget \
         ca-certificates \
         $BUILD_DEPS && \
-    curl -fsSL "https://apt.fury.io/nushell/gpg.key" | gpg --dearmor -o /etc/apt/trusted.gpg.d/fury-nushell.gpg && \
-    echo "deb https://apt.fury.io/nushell/ /" | tee /etc/apt/sources.list.d/fury.list && \
     mkdir -p /etc/apt/keyrings && \
     curl -fsSL "https://repo.charm.sh/apt/gpg.key" | gpg --dearmor -o /etc/apt/keyrings/charm.gpg && \
     echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | tee /etc/apt/sources.list.d/charm.list && \
@@ -50,7 +48,6 @@ RUN DEBIAN_FRONTEND=noninteractive \
         tealdeer \
         fish \
         glow \
-        nushell \
         neovim && \
     ln -s /bin/batcat /bin/bat && \
     curl -sS https://starship.rs/install.sh | sh -s -- -y -b /usr/local/bin && \
@@ -72,6 +69,15 @@ RUN DEBIAN_FRONTEND=noninteractive \
 
 FROM sandbox-client-noroot-build AS sandbox-client-noroot-final
 
+COPY --from=ghcr.io/nushell/nushell:0.108.0-bookworm /usr/bin/nu /usr/bin/nu
+COPY --from=ghcr.io/nushell/nushell:0.108.0-bookworm /usr/bin/nu_plugin_custom_values /usr/bin/nu_plugin_custom_values
+COPY --from=ghcr.io/nushell/nushell:0.108.0-bookworm /usr/bin/nu_plugin_example /usr/bin/nu_plugin_example
+COPY --from=ghcr.io/nushell/nushell:0.108.0-bookworm /usr/bin/nu_plugin_formats /usr/bin/nu_plugin_formats
+COPY --from=ghcr.io/nushell/nushell:0.108.0-bookworm /usr/bin/nu_plugin_gstat /usr/bin/nu_plugin_gstat
+COPY --from=ghcr.io/nushell/nushell:0.108.0-bookworm /usr/bin/nu_plugin_inc /usr/bin/nu_plugin_inc
+COPY --from=ghcr.io/nushell/nushell:0.108.0-bookworm /usr/bin/nu_plugin_polars /usr/bin/nu_plugin_polars
+COPY --from=ghcr.io/nushell/nushell:0.108.0-bookworm /usr/bin/nu_plugin_query /usr/bin/nu_plugin_query
+COPY --from=ghcr.io/nushell/nushell:0.108.0-bookworm /usr/bin/nu_plugin_stress_internals /usr/bin/nu_plugin_stress_internals
 COPY --from=ghcr.io/ca4022/csc1109-sandbox-client-apache:latest /opt/hadoop/ /opt/hadoop/
 COPY --from=ghcr.io/ca4022/csc1109-sandbox-client-apache:latest /opt/hive/ /opt/hive/
 COPY --from=ghcr.io/ca4022/csc1109-sandbox-client-apache:latest /opt/pig/ /opt/pig/
