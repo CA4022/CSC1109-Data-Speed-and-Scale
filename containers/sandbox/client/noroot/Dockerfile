@@ -1,4 +1,4 @@
-FROM ghcr.io/ca4022/csc1109-sandbox-client-jupyter:latest AS sandbox-client-noroot-base
+FROM ghcr.io/ca4022/csc1109-sandbox-client-noroot-jupyter:latest AS sandbox-client-noroot-base
 
 ENV HADOOP_HOME="/opt/hadoop"
 ENV HADOOP_USER_NAME="hadoop"
