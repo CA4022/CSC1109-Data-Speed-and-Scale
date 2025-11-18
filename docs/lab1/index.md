@@ -414,6 +414,10 @@ uv run mrcount.py -r local ./data/Word_count.txt
 Once we are confident it works, we can then reconnect to the client and run the script on the
 Hadoop cluster.
 
+IMPORTANT: Before you connect to the client we need to ensure the client user can use our `uv`
+virtual environment. To do this, we must run `chmod -R 777 ./.venv` before running the command
+below.
+
 ```sh
 docker compose exec -w /lab/ client default_shell
 ```
