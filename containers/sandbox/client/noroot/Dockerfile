@@ -67,7 +67,7 @@ RUN DEBIAN_FRONTEND=noninteractive \
     chown -R jovyan /home/jovyan/.local/ && \
     chmod +x /test/test.sh
 
-FROM sandbox-client-noroot-build AS sandbox-client-noroot-final
+FROM sandbox-client-noroot-build AS sandbox-client-noroot-nocopy
 
 COPY --from=ghcr.io/nushell/nushell:0.108.0-bookworm /usr/bin/nu /usr/bin/nu
 COPY --from=ghcr.io/nushell/nushell:0.108.0-bookworm /usr/bin/nu_plugin_custom_values /usr/bin/nu_plugin_custom_values
@@ -78,6 +78,9 @@ COPY --from=ghcr.io/nushell/nushell:0.108.0-bookworm /usr/bin/nu_plugin_inc /usr
 COPY --from=ghcr.io/nushell/nushell:0.108.0-bookworm /usr/bin/nu_plugin_polars /usr/bin/nu_plugin_polars
 COPY --from=ghcr.io/nushell/nushell:0.108.0-bookworm /usr/bin/nu_plugin_query /usr/bin/nu_plugin_query
 COPY --from=ghcr.io/nushell/nushell:0.108.0-bookworm /usr/bin/nu_plugin_stress_internals /usr/bin/nu_plugin_stress_internals
+
+FROM sandbox-client-noroot-build AS sandbox-client-noroot-final
+
 COPY --from=ghcr.io/ca4022/csc1109-sandbox-client-apache:latest /opt/hadoop/ /opt/hadoop/
 COPY --from=ghcr.io/ca4022/csc1109-sandbox-client-apache:latest /opt/hive/ /opt/hive/
 COPY --from=ghcr.io/ca4022/csc1109-sandbox-client-apache:latest /opt/pig/ /opt/pig/
