@@ -20,7 +20,6 @@ WORKDIR /lab/
 
 RUN wget -O /home/jovyan/.local/bin/jq https://github.com/jqlang/jq/releases/download/jq-1.8.1/jq-linux-$(uname -m | sed 's/aarch64/arm64/; s/x86_64/amd64/') && \
     chmod +x /home/jovyan/.local/bin/jq && \
-    mamba install -y conda && \
     conda env config vars set -n base CLASSPATH=$(hadoop classpath --glob) && \
     sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended && \
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting && \

@@ -40,7 +40,6 @@ RUN sed -i "s/13/10/g" /opt/conda/conda-meta/pinned && \
         twine && \
     mamba run -n base python -m build && \
     mamba run -n base python -m pip install ./dist/*.whl && \
-    mamba remove -n base python-build twine hatch && \
     mamba clean --all --yes && \
     wget -q https://git.io/coursier-cli && \
     mkdir -p /home/jovyan/.local/bin/ && \
