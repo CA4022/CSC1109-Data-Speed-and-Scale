@@ -14,6 +14,10 @@ jobs:
             branch: "docker-hadoop-3.4.1"
             is_latest: false
 
+          - version: "3.4.2"
+            branch: "docker-hadoop-3.4.2"
+            is_latest: false
+
           - version: "3.4.2-lean"
             branch: "docker-hadoop-3.4.2-lean"
             is_latest: false
