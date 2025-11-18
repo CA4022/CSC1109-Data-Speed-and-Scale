@@ -1,4 +1,4 @@
-FROM docker.io/apache/hadoop:3.4.1
+FROM ghcr.io/ca4022/hadoop:3.4.2-lean-jdk17
 
 ENV PIG_HOME="/opt/pig/"
 ENV PATH="/opt/maven/bin/:$PATH"
