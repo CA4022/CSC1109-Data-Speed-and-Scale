@@ -12,7 +12,8 @@ COPY --from=ghcr.io/ca4022/csc1109-base-root:latest /root/.config/ /home/jovyan/
 COPY --from=ghcr.io/ca4022/csc1109-base-root:latest /root/.local/ /home/jovyan/.local/
 
 RUN chown -R jovyan /home/jovyan/.config/ && \
-    chown -R jovyan /home/jovyan/.local/
+    chown -R jovyan /home/jovyan/.local/ && \
+    chmod +x /test/test.sh
 
 USER jovyan
 WORKDIR /lab/

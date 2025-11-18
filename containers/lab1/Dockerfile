@@ -6,10 +6,4 @@ ENV HADOOP_HOME=/opt/hadoop
 ENV HADOOP_USER_NAME=hadoop
 
 COPY ./lab/ /lab/
-RUN chown -R 1000 /lab/ && \
-    useradd -m $HADOOP_USER_NAME && \
-    chown -R $HADOOP_USER_NAME $HADOOP_HOME
-
-USER $HADOOP_USER_NAME
-RUN uv sync && chown -R 1000 /lab/.venv && chmod -R 777 /lab/.venv
-USER root
+RUN chown -R 1000 /lab/
