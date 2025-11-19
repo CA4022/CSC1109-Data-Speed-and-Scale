@@ -27,30 +27,30 @@ services:
       start_period: 30s
       retries: 3
 
-  # spark-master:
-  #   image: ${SPARK_IMAGE}:${SPARK_VERSION}
-  #   hostname: spark-master
-  #   command: /init/init
-  #   volumes:
-  #     - /lab/:/lab/
-  #     - ./spark-init/:/init/
-  #     - ./config/:/var/config/hadoop/
-  #   environment:
-  #     - HADOOP_HOME=${HADOOP_HOME}
-  #     - HADOOP_USER_NAME=${HADOOP_USER_NAME}
-  #     - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
-  #   ports:
-  #     - "8080:8080"
-  #   healthcheck:
-  #     test:
-  #       [
-  #         "CMD-SHELL",
-  #         "curl -fsS http://localhost:8080/json >/dev/null || exit 1",
-  #       ]
-  #     interval: 10s
-  #     timeout: 3s
-  #     retries: 12
-  #     start_period: 20s
+  spark-master:
+    image: ${SPARK_IMAGE}:${SPARK_VERSION}
+    hostname: spark-master
+    command: /init/init
+    volumes:
+      - /lab/:/lab/
+      - ./spark-init/:/init/
+      - ./config/:/var/config/hadoop/
+    environment:
+      - HADOOP_HOME=${HADOOP_HOME}
+      - HADOOP_USER_NAME=${HADOOP_USER_NAME}
+      - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -fsS http://localhost:8080/json >/dev/null || exit 1",
+        ]
+      interval: 10s
+      timeout: 3s
+      retries: 12
+      start_period: 20s
 
   hiveserver:
     image: ${HIVE_IMAGE}:${HIVE_VERSION}
@@ -97,8 +97,8 @@ services:
         condition: service_healthy
       hiveserver:
         condition: service_healthy
-      # spark-master:
-      #   condition: service_healthy
+      spark-master:
+        condition: service_healthy
     working_dir: /lab/
     volumes:
       - /lab/:/lab/
