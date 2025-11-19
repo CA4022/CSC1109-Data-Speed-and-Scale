@@ -405,11 +405,17 @@ orchestrating how they handle that data.
 
 Further links:
 
+<div class="annotate" markdown>
 - Python
-    - [Connect Jupyter Notebook to a Spark Cluster](https://www.bmc.com/blogs/jupyter-notebooks-apache-spark/)
+    - [Connect Jupyter Notebook to a Spark Cluster](https://www.bmc.com/blogs/jupyter-notebooks-apache-spark/) (1)
     - [Pyspark ml modules](https://spark.apache.org/docs/latest/api/python/reference/pyspark.ml.html)
 - Scala/Java/Python
     - [Machine Learning with MLib](https://www.tutorialkart.com/apache-spark/apache-spark-mllib-scalable-machine-learning-library/)
+</div>
+
+1. This may not work if the python version for your notebook doesn't match the version on the
+nodes. In such cases, connecting a notebook requires the use of the newly developed "Spark Connect"
+API.
 
 You can start by running some of the examples available in `$SPARK_HOME/examples/src/main/python/ml/`
 The corresponding code is also illustrated in the [MLlib manual](https://spark.apache.org/docs/latest/ml-guide.html)
@@ -420,18 +426,16 @@ The example is illustrated
 [here](https://spark.apache.org/docs/latest/ml-statistics.html#correlation) and contained in
 `correlation_example.py`
 
-- start spark master and worker as seen in previous labs (if not running already)
 - submit the task to your spark server
     ```sh
     spark-submit --master spark://spark-master:7077 examples/src/main/python/ml/correlation_example.py
     ```
-- check in your output the spearman's and pearson's correlation matrix for the input vectors
+- In your output, check the Spearman's and Pearson's correlation matrix for the input vectors
 
 ### K-Means clustering ###
 
 The example is illustrated [here](https://spark.apache.org/docs/latest/ml-clustering.html#k-means) and contained in `kmeans_example.py`
 
-- start spark master and worker as seen in previous labs (if not running already)
 - submit the task to your spark server
     ```sh
     spark-submit --master spark://spark-master:7077 examples/src/main/python/ml/kmeans_example.py
