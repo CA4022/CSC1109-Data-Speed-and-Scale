@@ -161,7 +161,7 @@ So, we can just keep it simple and stream these Parquet files directly onto our 
     find the `parquet_url`, then streams the parquet table from the download link directly onto the
     Hadoop cluster.
 
-=== "&nbsp; Python"
+=== "&nbsp; Python (General)"
 
     ```python
     import requests
@@ -194,6 +194,18 @@ So, we can just keep it simple and stream these Parquet files directly onto our 
     `ds` will be a dict containing the data and metadata. You can peruse this metadata at your
     leisure. When you are ready to move the dataset to the hadoop cluster you can directly dump the
     "data" dataframe using `pandas`' `pd.DataFrames.to_csv` method.
+
+
+=== "&nbsp; Python (SciKit-Learn)"
+
+    You can also easily load data from OpenML using `sklearn`. Do, however, bare in mind that this
+    data will need to be transformed into a Spark dataframe, and that it will be loaded into RAM
+    making this approach unsuitable for larger datasets.
+
+    ```
+    from sklearn.datasets import fetch_openml
+    dataset = fetch_openml(data_id=43603, as_frame=True, parser="auto")
+    ```
 
 
 === "&nbsp; Scala"
@@ -504,6 +516,13 @@ examples of how to build a RecSys based on Collaborative filtering with ALS in P
 
 - [Movie recommender](https://spark.apache.org/docs/latest/ml-collaborative-filtering.html)
 - [Book recommender](https://medium.com/data-science/building-a-recommendation-engine-to-recommend-books-in-spark-f09334d47d67)
+
+An example of an extremely simple and rudimentary recommender built using a Spark ML clustering
+model in a local pyspark environment might be as follows:
+
+```python title="spam_ham.py"
+--8<-- "lab6/src/movie_recommender.py"
+```
 
 ### Other ML libraries with Spark integrations ###
 
