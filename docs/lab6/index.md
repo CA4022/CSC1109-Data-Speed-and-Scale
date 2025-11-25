@@ -520,7 +520,7 @@ examples of how to build a RecSys based on Collaborative filtering with ALS in P
 An example of an extremely simple and rudimentary recommender built using a Spark ML clustering
 model in a local pyspark environment might be as follows:
 
-```python title="spam_ham.py"
+```python title="movei_recommender.py"
 --8<-- "lab6/src/movie_recommender.py"
 ```
 
