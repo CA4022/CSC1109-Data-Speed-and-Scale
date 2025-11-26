@@ -56,30 +56,34 @@ We will focus on the use of the console in the steps below.
 In your GCP console, you will see already that a project named "My First Project" is created. The
 following steps are accessible by the menu list at the top left corner of your console window.
 
-High level steps (follow step-by-step
+High level steps (more detailed step-by-step
 [here](https://cloud.google.com/dataproc/docs/tutorials/gcs-connector-spark-tutorial)):
 
-- Make sure your project is linked to a billing account (you will see automatically that this
-shows your credit.
-- You will need three services: Cloud DataProc, Compute Engine and Cloud Storage: looking for
-them in the Library page and Enable them if not enabled.
-- Create a Storage bucket
-- Activate the GCP shell and upload your file `my-file.py` using the upload menu option (or from
-git)
-- Create a cluster, remember to change your worker nodes to work with 2CPUs instead of 4 to stay
-within the free tier quota (you find the "create cluster"option in the Big Data section of the
-menu, under Dataproc)
-- Submit job (using the `gcloud` command)
+- Go to your [Google Cloud Console](https://console.cloud.google.com/)
+- Create your project
+- You will need to enable several APIs first:
+    - Cloud Resource Manager API
+    - Compute Engine API
+    - Cloud Storage API
+    - DataProc API
+- Now, on the IAM dashboard you need to give your "Compute Engine default service account" user
+    the following permissions:
+    - Dataproc Administrator
+    - Storage Admin
+- **Optional:** if you need web access in your cluster, go to "Cloud NAT" and create a gateway for
+    the "default" network.
+- Return to the Dataproc section, choose "Cluster", and create your cluster
+- Once your cluster is running, if you click on it you can access its various WebUIs under the
+    "Web Interfaces" tab on this page.
+- To get a shell on one of your nodes you can click the cloud terminal icon in the top right (or
+    open a local terminal if you have the `gcloud` tool configured) and run
+    `gcloud compute ssh {node_name}`
+- Now you can submit your jobs in the "Jobs" section of the Dataproc panel
 
-```sh
-gcloud dataproc jobs submit pyspark my-file.py \
-    --cluster=${CLUSTER} \
-    --region=${REGION} \
-    -- gs://${BUCKET_NAME}/input/ gs://${BUCKET_NAME}/output/
-```
-
-- View output via the GCP shell
-- Delete cluster
+NOTE: You will need to ensure that your data and source code are accessible to your cluster nodes
+    to run a job successfully. You can achieve this using google cloud storage, or by uploading
+    these files to your hadoop cluster as we have been doing in other labs (either by running
+    `hdfs dfs -put` or via the Hadoop WebUI).
 
 ### DataProc Resources ###
 
