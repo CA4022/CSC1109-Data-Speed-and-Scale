@@ -1,9 +1,18 @@
 # Current status
 
-All labs are implemented, site is optimized, everything has been proofread/fact-checked, and
-automated testing of code on site has been implemented. Also added an extra bonus lab. As things
-stand, I **think** this is all ready to go and if it works as intended should significantly
-update/streamline this module.
+Year 1 of labs have been run successfully.
+
+## Notes
+
+- Hive lab is prone to breakage, just switch to Tez
+- RAM usage is a consistent problem. wasting several GB just for JVMs in containers. Try finding some solution for reducing JVM overhead.Maybe switch to OpenJ9 with shared object cache?
+- Deploying in cloud made it clear that the sandbox should have more tools for java/scala packaging. add maven and scala deployment tool (forget the name right now)
+- Need fallback for deploying without a lab.md file
+
+## Ideas
+
+- Add "fresh" as editor for more VSCode-like experience
+- Add newer tools if time will allow: e.g. ceph
 
 # To Do
 
