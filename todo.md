@@ -12,6 +12,7 @@ Year 1 of labs have been run successfully.
 ## Ideas
 
 - Add "fresh" as editor for more VSCode-like experience
+- For higher level tools, maybe replace java with kotlin? or somehow add kotlin as a more sane alternative to raw java
 - Add newer tools if time will allow: e.g. ceph
 
 # To Do
