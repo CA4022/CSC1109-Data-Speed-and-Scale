@@ -207,6 +207,7 @@ async def main():
                 "Editor",
                 "\033[90m\033[0m Please select your default text editor:",
                 [
+                    ("fresh", "\x1b[38;5;27m\033[0m", "fresh"),
                     ("micro", "\x1b[38;5;97mμ\033[0m", "micro"),
                     ("vim", "\x1b[38;5;2m\033[0m", "vim"),
                     ("neovim", "\x1b[38;5;12m\033[0m", "nvim"),

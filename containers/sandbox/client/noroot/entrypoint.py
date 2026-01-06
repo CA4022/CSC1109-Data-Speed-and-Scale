@@ -1,7 +1,6 @@
 import asyncio
 import os
 from pathlib import Path
-import shutil
 import subprocess
 
 
@@ -15,9 +14,10 @@ SPLASH = """\033[35m
 
 
 def display_markdown(files: list[str]):
+    filepaths = (p for p in (Path(f).expanduser() for f in files) if p.exists())
     with subprocess.Popen(["glow"], stdin=subprocess.PIPE) as glow_proc:
         assert glow_proc.stdin is not None
-        for fpath in (Path(f).expanduser() for f in files):
+        for fpath in filepaths:
             with fpath.open("rb") as f:
                 glow_proc.stdin.write(f.read())
         glow_proc.stdin.close()
@@ -205,6 +205,7 @@ async def main():
                 "Editor",
                 "\033[90m\033[0m Please select your default text editor:",
                 [
+                    ("fresh", "\x1b[38;5;27m\033[0m", "fresh"),
                     ("micro", "\x1b[38;5;97mμ\033[0m", "micro"),
                     ("vim", "\x1b[38;5;2m\033[0m", "vim"),
                     ("neovim", "\x1b[38;5;12m\033[0m", "nvim"),
@@ -218,7 +219,7 @@ async def main():
     try:
         await selector.select()
         print(SPLASH)
-        display_markdown(["~/CSC1109.md"])
+        display_markdown(["~/CSC1109.md", "/lab/lab.md"])
         if daemon_startup is not None:
             await daemon_startup
         selector.start()

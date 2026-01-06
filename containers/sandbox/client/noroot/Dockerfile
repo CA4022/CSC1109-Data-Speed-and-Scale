@@ -49,6 +49,9 @@ RUN DEBIAN_FRONTEND=noninteractive \
         fish \
         glow \
         neovim && \
+    curl -sL $(curl -s https://api.github.com/repos/sinelaw/fresh/releases/latest | grep "browser_download_url.*_$(dpkg --print-architecture)\.deb" | cut -d '"' -f 4) -o fresh-editor.deb && \
+    dpkg -i fresh-editor.deb && \
+    rm fresh-editor.deb && \
     ln -s /bin/batcat /bin/bat && \
     curl -sS https://starship.rs/install.sh | sh -s -- -y -b /usr/local/bin && \
     luarocks install lazy.nvim && \

@@ -330,8 +330,10 @@ in current use, and we have included a selection that should be comfortable for 
 beginners to CLI editing to those who work primarily in a CLI. Recommendations on these options
 for those who are unsure are:
 
-- μ&nbsp; Micro: most beginner friendly of these editors, great for those who are less comfortable
-    in a CLI
+- &nbsp; Fresh: the most familiar to users of modern GUI code editors like VSCode or PyCharm,
+    great for those who are experienced at writing code but less comfortable in a CLI
+- μ&nbsp; Micro: most beginner friendly of these editors, designed to be like GNU Nano but with
+    "batteries included"
 - &nbsp; Vim: for users who prefer modal editing, has a steep learning curve for new users
 - &nbsp; Neovim: same advice as for Vim, but a bit more modern and customisable
 - &nbsp; Emacs: non-modal modifier key based editing, has a similarly steep learning curve to Vim
