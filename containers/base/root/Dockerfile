@@ -56,7 +56,7 @@ RUN if zypper search -x -i "busybox-less" >/dev/null 2>&1; then \
     fi && \
     zypper --non-interactive install zsh fish hashdeep starship make wget git glow lsd fd \
         fd-bash-completion ripgrep ripgrep-bash-completion tealdeer-bash-completion \
-        symbols-only-nerd-fonts unzip vim && \
+        symbols-only-nerd-fonts unzip vim bottom && \
     curl -sL $(curl -s https://api.github.com/repos/sinelaw/fresh/releases/latest | grep "browser_download_url.*\.$(uname -m)\.rpm" | cut -d '"' -f 4) -o fresh-editor.rpm && \
     rpm -U fresh-editor.rpm && \
     rm fresh-editor.rpm && \
