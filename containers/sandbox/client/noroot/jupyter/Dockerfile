@@ -1,4 +1,4 @@
-FROM quay.io/jupyter/all-spark-notebook:spark-4.0.1
+FROM quay.io/jupyter/all-spark-notebook:spark-4.1.0
 
 ENV PATH="/home/jovyan/.local/bin/:$PATH"
 ENV JAVA_HOME="/usr/lib/jvm/live-jdk"

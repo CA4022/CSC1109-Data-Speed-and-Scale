@@ -1,4 +1,4 @@
-ARG BASE_OPENSUSE_VERSION=15.6
+ARG BASE_OPENSUSE_VERSION=16.0
 
 FROM docker.io/opensuse/leap:${BASE_OPENSUSE_VERSION} AS base
 
@@ -10,14 +10,14 @@ RUN zypper --non-interactive refresh
 
 FROM base AS dind-minimal
 
-ARG BASE_OPENSUSE_VERSION=15.6
+ARG BASE_OPENSUSE_VERSION=16.0
 ARG BASE_BASH_VERSION
 ARG BASE_PODMAN_VERSION
 ARG BASE_COMPOSE_VERSION
 
 COPY ./storage.conf /etc/containers/storage.conf
 COPY ./containers.conf /etc/containers/containers.conf
-COPY --from=ghcr.io/astral-sh/uv:0.7.13 /uv /uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv:0.9.22 /uv /uvx /bin/
 COPY entrypoint.sh /entrypoint.sh
 
 ENV PATH="/root/.local/bin:/usr/local/bin:$PATH"

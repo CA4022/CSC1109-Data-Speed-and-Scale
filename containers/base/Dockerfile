@@ -16,7 +16,7 @@ RUN zypper --non-interactive install --no-recommends systemd && \
     rpm -qa 'python311*' | xargs -r zypper rm --clean-deps && \
     zypper clean --all
 
-COPY --from=ghcr.io/astral-sh/uv:0.7.13 /uv /uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv:0.9.22 /uv /uvx /bin/
 
 # Assembly stage: copy over application-specific code, tests, and entrypoint.
 # These files are expected to change most frequently.

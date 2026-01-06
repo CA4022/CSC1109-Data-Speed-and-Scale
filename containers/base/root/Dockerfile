@@ -1,4 +1,4 @@
-ARG BASE_OPENSUSE_VERSION=15.6
+ARG BASE_OPENSUSE_VERSION=16.0
 
 FROM docker.io/opensuse/leap:${BASE_OPENSUSE_VERSION} AS fzf-builder
 
@@ -6,8 +6,8 @@ RUN zypper --non-interactive install gzip tar wget && \
     zypper clean --all
 
 WORKDIR /fzf
-RUN wget https://github.com/junegunn/fzf/releases/download/v0.62.0/fzf-0.62.0-linux_$(uname -m | sed 's/aarch64/arm64/; s/x86_64/amd64/').tar.gz && \
-    tar xzf fzf-0.62.0-linux_$(uname -m | sed 's/aarch64/arm64/; s/x86_64/amd64/').tar.gz
+RUN wget -O fzf.tar.gz https://github.com/junegunn/fzf/releases/download/v0.67.0/fzf-0.67.0-linux_$(uname -m | sed 's/aarch64/arm64/; s/x86_64/amd64/').tar.gz && \
+    tar xzf fzf.tar.gz
 
 FROM docker.io/opensuse/leap:${BASE_OPENSUSE_VERSION} AS base
 
@@ -61,9 +61,9 @@ RUN if zypper search -x -i "busybox-less" >/dev/null 2>&1; then \
     rpm -U fresh-editor.rpm && \
     rm fresh-editor.rpm && \
     zypper clean --all && \
-    wget -O /usr/bin/tldr https://github.com/tealdeer-rs/tealdeer/releases/download/v1.7.2/tealdeer-linux-$(uname -m | sed 's/arm64/aarch64/; s/amd64/x86_64/')-musl && \
+    wget -O /usr/bin/tldr https://github.com/tealdeer-rs/tealdeer/releases/download/v1.8.1/tealdeer-linux-$(uname -m | sed 's/arm64/aarch64/; s/amd64/x86_64/')-musl && \
     chmod +x /usr/bin/tldr && \
-    wget -O yazi.zip https://github.com/sxyazi/yazi/releases/download/v25.5.31/yazi-$(uname -m | sed 's/arm64/aarch64/; s/amd64/x86_64/')-unknown-linux-musl.zip && \
+    wget -O yazi.zip https://github.com/sxyazi/yazi/releases/download/v26.1.4/yazi-$(uname -m | sed 's/arm64/aarch64/; s/amd64/x86_64/')-unknown-linux-musl.zip && \
     unzip -j yazi.zip */ya */yazi && \
     mv yazi /usr/local/bin/yazi && \
     mv ya /usr/local/bin/ya && \
@@ -78,7 +78,7 @@ RUN if zypper search -x -i "busybox-less" >/dev/null 2>&1; then \
 WORKDIR /root/
 
 # Set up modern shell features
-RUN wget https://github.com/reubeno/brush/releases/download/brush-shell-v0.2.23/brush-$(uname -m | sed 's/arm64/aarch64/; s/amd64/x86_64/')-unknown-linux-gnu.tar.gz && \
+RUN wget https://github.com/reubeno/brush/releases/download/brush-shell-v0.3.0/brush-$(uname -m | sed 's/arm64/aarch64/; s/amd64/x86_64/')-unknown-linux-gnu.tar.gz && \
     tar -xzf brush-$(uname -m | sed 's/arm64/aarch64/; s/amd64/x86_64/')-unknown-linux-gnu.tar.gz && \
     rm brush-$(uname -m | sed 's/arm64/aarch64/; s/amd64/x86_64/')-unknown-linux-gnu.tar.gz && \
     mv brush /usr/bin/brush && \
@@ -112,8 +112,8 @@ COPY .config/nushell .config/nushell
 
 COPY --from=fzf-builder /fzf/fzf /usr/local/bin/fzf
 
-COPY --from=ghcr.io/nushell/nushell:0.105.1-bookworm /bin/nu /bin/nu/
-COPY --from=ghcr.io/nushell/nushell:0.105.1-bookworm /usr/bin/nu /usr/bin/
+COPY --from=ghcr.io/nushell/nushell:0.109.1-bookworm /bin/nu /bin/nu/
+COPY --from=ghcr.io/nushell/nushell:0.109.1-bookworm /usr/bin/nu /usr/bin/
 
 COPY --from=ghcr.io/ca4022/csc1109-base-root-config-bat:latest /usr/bin/bat /usr/bin/bat
 COPY --from=ghcr.io/ca4022/csc1109-base-root-config-bat:latest /usr/share/man/man1/bat.1.gz /usr/share/man/man1/bat.1.gz

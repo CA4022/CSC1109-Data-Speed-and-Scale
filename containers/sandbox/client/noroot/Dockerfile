@@ -77,15 +77,15 @@ RUN DEBIAN_FRONTEND=noninteractive \
 
 FROM sandbox-client-noroot-build AS sandbox-client-noroot-nocopy
 
-COPY --from=ghcr.io/nushell/nushell:0.108.0-bookworm /usr/bin/nu /usr/bin/nu
-COPY --from=ghcr.io/nushell/nushell:0.108.0-bookworm /usr/bin/nu_plugin_custom_values /usr/bin/nu_plugin_custom_values
-COPY --from=ghcr.io/nushell/nushell:0.108.0-bookworm /usr/bin/nu_plugin_example /usr/bin/nu_plugin_example
-COPY --from=ghcr.io/nushell/nushell:0.108.0-bookworm /usr/bin/nu_plugin_formats /usr/bin/nu_plugin_formats
-COPY --from=ghcr.io/nushell/nushell:0.108.0-bookworm /usr/bin/nu_plugin_gstat /usr/bin/nu_plugin_gstat
-COPY --from=ghcr.io/nushell/nushell:0.108.0-bookworm /usr/bin/nu_plugin_inc /usr/bin/nu_plugin_inc
-COPY --from=ghcr.io/nushell/nushell:0.108.0-bookworm /usr/bin/nu_plugin_polars /usr/bin/nu_plugin_polars
-COPY --from=ghcr.io/nushell/nushell:0.108.0-bookworm /usr/bin/nu_plugin_query /usr/bin/nu_plugin_query
-COPY --from=ghcr.io/nushell/nushell:0.108.0-bookworm /usr/bin/nu_plugin_stress_internals /usr/bin/nu_plugin_stress_internals
+COPY --from=ghcr.io/nushell/nushell:0.109.1-bookworm /usr/bin/nu /usr/bin/nu
+COPY --from=ghcr.io/nushell/nushell:0.109.1-bookworm /usr/bin/nu_plugin_custom_values /usr/bin/nu_plugin_custom_values
+COPY --from=ghcr.io/nushell/nushell:0.109.1-bookworm /usr/bin/nu_plugin_example /usr/bin/nu_plugin_example
+COPY --from=ghcr.io/nushell/nushell:0.109.1-bookworm /usr/bin/nu_plugin_formats /usr/bin/nu_plugin_formats
+COPY --from=ghcr.io/nushell/nushell:0.109.1-bookworm /usr/bin/nu_plugin_gstat /usr/bin/nu_plugin_gstat
+COPY --from=ghcr.io/nushell/nushell:0.109.1-bookworm /usr/bin/nu_plugin_inc /usr/bin/nu_plugin_inc
+COPY --from=ghcr.io/nushell/nushell:0.109.1-bookworm /usr/bin/nu_plugin_polars /usr/bin/nu_plugin_polars
+COPY --from=ghcr.io/nushell/nushell:0.109.1-bookworm /usr/bin/nu_plugin_query /usr/bin/nu_plugin_query
+COPY --from=ghcr.io/nushell/nushell:0.109.1-bookworm /usr/bin/nu_plugin_stress_internals /usr/bin/nu_plugin_stress_internals
 
 FROM sandbox-client-noroot-build AS sandbox-client-noroot-final
 
