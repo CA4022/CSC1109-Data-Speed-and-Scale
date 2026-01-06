@@ -27,6 +27,9 @@ RUN DEBIAN_FRONTEND=noninteractive \
     mkdir -p /etc/apt/keyrings && \
     curl -fsSL "https://repo.charm.sh/apt/gpg.key" | gpg --dearmor -o /etc/apt/keyrings/charm.gpg && \
     echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | tee /etc/apt/sources.list.d/charm.list && \
+    echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee /etc/apt/sources.list.d/sbt.list && \
+    echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | tee /etc/apt/sources.list.d/sbt_old.list && \
+    curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | tee /etc/apt/trusted.gpg.d/sbt.asc && \
     add-apt-repository ppa:neovim-ppa/unstable && \
     add-apt-repository ppa:fish-shell/release-4 && \
     apt-get update && \
@@ -37,6 +40,8 @@ RUN DEBIAN_FRONTEND=noninteractive \
     rustup default none && \
     rm -r /home/jovyan/.rustup && \
     apt-get install -y --no-install-recommends \
+        maven \
+        sbt \
         zsh \
         emacs \
         vim \
