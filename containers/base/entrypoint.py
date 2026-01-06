@@ -17,9 +17,10 @@ SPLASH = """\033[35m
 
 
 def display_markdown(files: list[str]):
+    filepaths = (p for p in (Path(f).expanduser() for f in files) if p.exists())
     with subprocess.Popen(["glow"], stdin=subprocess.PIPE) as glow_proc:
         assert glow_proc.stdin is not None
-        for fpath in (Path(f).expanduser() for f in files):
+        for fpath in filepaths:
             with fpath.open("rb") as f:
                 glow_proc.stdin.write(f.read())
         glow_proc.stdin.close()
@@ -119,7 +120,9 @@ class EnvSelector(Selector):
             if existing in self.commands.values():
                 self.choice = next(opt for opt, cmd in self.commands.items() if cmd == existing)
                 print(
-                    f'{self.name} is already set to "{self.choice}" ({existing}), skipping selection.'
+                    f'{self.name} is already set to "{self.choice}" ({
+                        existing
+                    }), skipping selection.'
                 )
                 return
         await super().select()
@@ -148,7 +151,9 @@ class ShellSelector(Selector):
                     opt for opt, cmd in self.commands.items() if cmd == existing_shell
                 )
                 print(
-                    f'{self.name} is already set to "{self.choice}" ({existing_shell}), skipping selection.'
+                    f'{self.name} is already set to "{self.choice}" ({
+                        existing_shell
+                    }), skipping selection.'
                 )
             else:
                 await super().select()
