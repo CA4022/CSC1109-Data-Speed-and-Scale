@@ -25,6 +25,7 @@ ENV PATH="/root/.local/bin:/usr/local/bin:$PATH"
 RUN zypper --non-interactive addrepo https://download.opensuse.org/repositories/Virtualization:containers/${BASE_OPENSUSE_VERSION}/Virtualization:containers.repo && \
     zypper --non-interactive --gpg-auto-import-keys refresh && \
     zypper --non-interactive install --no-recommends systemd && \
+    # Install systemd, bash, and podman 6.x
     zypper --non-interactive install \
         bash-${BASE_BASH_VERSION} \
         podman-${BASE_PODMAN_VERSION} \

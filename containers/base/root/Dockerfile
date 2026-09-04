@@ -116,8 +116,9 @@ COPY --from=fzf-builder /fzf/fzf /usr/local/bin/fzf
 COPY --from=ghcr.io/nushell/nushell:0.109.1-bookworm /bin/nu /bin/nu/
 COPY --from=ghcr.io/nushell/nushell:0.109.1-bookworm /usr/bin/nu /usr/bin/
 
-COPY --from=mcr.microsoft.com/powershell:lts-7.4-noble /opt/microsoft/powershell/ /opt/microsoft/powershell/
-RUN ln -s /opt/microsoft/powershell/7/pwsh /usr/bin/pwsh
+COPY --from=mcr.microsoft.com/powershell:lts-ubuntu-22.04 /opt/microsoft/powershell/ /opt/microsoft/powershell/
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
+RUN ln -s /opt/microsoft/powershell/7-lts/pwsh /usr/bin/pwsh
 
 COPY --from=ghcr.io/ca4022/csc1109-base-root-config-bat:latest /usr/bin/bat /usr/bin/bat
 COPY --from=ghcr.io/ca4022/csc1109-base-root-config-bat:latest /usr/share/man/man1/bat.1.gz /usr/share/man/man1/bat.1.gz
