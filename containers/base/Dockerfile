@@ -4,15 +4,15 @@ ARG BASE_GCC_VERSION
 ARG BASE_BASH_VERSION
 ARG BASE_GIT_VERSION
 
-RUN zypper --non-interactive install --no-recommends systemd && \
-    zypper --non-interactive install \
+RUN for i in 1 2 3 4 5; do zypper --non-interactive install --no-recommends systemd && break || sleep 15; done && \
+    for i in 1 2 3 4 5; do zypper --non-interactive install \
         iptables \
         python312 \
         wget \
         man \
         maven \
         java-17-openj9-devel \
-        scala && \
+        scala && break || sleep 15; done && \
     rpm -qa 'python311*' | xargs -r zypper rm --clean-deps && \
     mkdir -p /var/cache/javasharedresources && chmod 1777 /var/cache/javasharedresources && \
     update-alternatives --set java /usr/lib64/jvm/jre-17-openj9/bin/java && \
