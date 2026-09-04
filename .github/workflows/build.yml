@@ -100,8 +100,8 @@ jobs:
             BASE_BASH_VERSION=${{ env.BASE_BASH_VERSION }}
             BASE_GIT_VERSION=${{ env.BASE_GIT_VERSION }}
             BASE_GCC_VERSION=${{ env.BASE_GCC_VERSION }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=min
+          cache-from: type=registry,ref=${{ env.LATEST_TAG_REMOTE }}-buildcache
+          cache-to: type=registry,ref=${{ env.LATEST_TAG_REMOTE }}-buildcache,mode=max
 
       - name: Test container image (native arch)
         if: steps.check_tag.outputs.exists == 'false'
@@ -129,5 +129,5 @@ jobs:
             BASE_BASH_VERSION=${{ env.BASE_BASH_VERSION }}
             BASE_GIT_VERSION=${{ env.BASE_GIT_VERSION }}
             BASE_GCC_VERSION=${{ env.BASE_GCC_VERSION }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=registry,ref=${{ env.LATEST_TAG_REMOTE }}-buildcache
+          cache-to: type=registry,ref=${{ env.LATEST_TAG_REMOTE }}-buildcache,mode=max

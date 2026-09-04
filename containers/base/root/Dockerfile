@@ -36,13 +36,13 @@ ARG BASE_COMPOSE_VERSION
 
 # These are the core packages for the environment. They are installed in their own stage
 # as they are expected to change infrequently.
-RUN zypper --non-interactive addrepo "https://download.opensuse.org/repositories/shells:fish:release:4/${BASE_OPENSUSE_VERSION}/shells:fish:release:4.repo" && \
-    zypper --non-interactive --gpg-auto-import-keys refresh && \
-    zypper --non-interactive install \
+RUN for i in 1 2 3 4 5; do zypper --non-interactive addrepo "https://download.opensuse.org/repositories/shells:fish:release:4/${BASE_OPENSUSE_VERSION}/shells:fish:release:4.repo" && break || sleep 15; done && \
+    for i in 1 2 3 4 5; do zypper --non-interactive --gpg-auto-import-keys refresh && break || sleep 15; done && \
+    for i in 1 2 3 4 5; do zypper --non-interactive install \
         git-${BASE_GIT_VERSION} \
         gcc-${BASE_GCC_VERSION} \
         bash-${BASE_BASH_VERSION} \
-        gzip emacs libgpm2 tar wget && \
+        gzip emacs libgpm2 tar wget && break || sleep 15; done && \
     zypper clean --all
 
 ENV LANG="en_US.UTF-8"
