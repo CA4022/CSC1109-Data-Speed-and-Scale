@@ -9,17 +9,9 @@ WORKDIR /fzf
 RUN wget -O fzf.tar.gz https://github.com/junegunn/fzf/releases/download/v0.67.0/fzf-0.67.0-linux_$(uname -m | sed 's/aarch64/arm64/; s/x86_64/amd64/').tar.gz && \
     tar xzf fzf.tar.gz
 
-FROM docker.io/opensuse/leap:${BASE_OPENSUSE_VERSION} AS hashdeep-builder
+FROM docker.io/debian:bookworm-slim AS hashdeep-provider
 
-RUN zypper --non-interactive install autoconf automake gcc gcc-c++ git make && \
-    zypper clean --all
-
-WORKDIR /hashdeep
-RUN git clone --depth 1 https://github.com/jessek/hashdeep.git . && \
-    ./bootstrap.sh && \
-    ./configure && \
-    make -j$(nproc) && \
-    make install
+RUN apt-get update && apt-get install -y --no-install-recommends hashdeep
 
 FROM docker.io/opensuse/leap:${BASE_OPENSUSE_VERSION} AS base
 
@@ -136,12 +128,12 @@ COPY .config/powershell .config/powershell
 
 COPY --from=fzf-builder /fzf/fzf /usr/local/bin/fzf
 
-COPY --from=hashdeep-builder /usr/local/bin/hashdeep /usr/local/bin/hashdeep
-COPY --from=hashdeep-builder /usr/local/bin/md5deep /usr/local/bin/md5deep
-COPY --from=hashdeep-builder /usr/local/bin/sha1deep /usr/local/bin/sha1deep
-COPY --from=hashdeep-builder /usr/local/bin/sha256deep /usr/local/bin/sha256deep
-COPY --from=hashdeep-builder /usr/local/bin/tigerdeep /usr/local/bin/tigerdeep
-COPY --from=hashdeep-builder /usr/local/bin/whirlpooldeep /usr/local/bin/whirlpooldeep
+COPY --from=hashdeep-provider /usr/bin/hashdeep /usr/local/bin/hashdeep
+COPY --from=hashdeep-provider /usr/bin/md5deep /usr/local/bin/md5deep
+COPY --from=hashdeep-provider /usr/bin/sha1deep /usr/local/bin/sha1deep
+COPY --from=hashdeep-provider /usr/bin/sha256deep /usr/local/bin/sha256deep
+COPY --from=hashdeep-provider /usr/bin/tigerdeep /usr/local/bin/tigerdeep
+COPY --from=hashdeep-provider /usr/bin/whirlpooldeep /usr/local/bin/whirlpooldeep
 
 COPY --from=ghcr.io/nushell/nushell:0.109.1-bookworm /usr/bin/nu /usr/bin/nu
 
