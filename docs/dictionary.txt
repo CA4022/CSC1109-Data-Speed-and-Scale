@@ -142,6 +142,7 @@ subqueries
 sudo
 tensorflow
 textfile
+tez
 timeframe
 tmp
 tokenize

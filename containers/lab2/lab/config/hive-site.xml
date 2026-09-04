@@ -57,6 +57,6 @@
     </property>
     <property>
         <name>hive.execution.engine</name>
-        <value>mr</value>
+        <value>tez</value>
     </property>
 </configuration>

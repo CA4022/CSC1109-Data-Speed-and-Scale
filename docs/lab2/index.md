@@ -16,6 +16,10 @@ simple queries and file operations on external tables. Hive can either run on to
 HDFS/MapReduce cluster, or in local mode (useful for debugging). In this lab, as we are here
 to demonstrate and get hands-on experience with distributed computing, we will be in HDFS/MR mode.
 
+??? note "Execution Engine Note"
+
+    Technically we're not using MapReduce because Hive deprecated it, but the underlying concepts are the same.
+
 To download the container for this lab and run it, execute the following commands:
 
 ```sh
