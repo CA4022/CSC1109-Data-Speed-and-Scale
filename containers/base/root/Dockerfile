@@ -96,8 +96,8 @@ RUN vim +'PlugInstall --sync' +qa
 # Move across test files and make them executable
 COPY ./test/ /test/
 COPY ./.config/micro/test.sh /test/base/editor_tests/micro_test.sh
-COPY ./.config/emacs/test.sh /test/base/editor_tests/micro_test.sh
-COPY ./.config/nvim/test.sh /test/base/editor_tests/micro_test.sh
+COPY ./.config/emacs/test.sh /test/base/editor_tests/emacs_test.sh
+COPY ./.config/nvim/test.sh /test/base/editor_tests/nvim_test.sh
 RUN chmod -R +x /test/
 
 COPY .bashrc .bashrc
@@ -133,10 +133,10 @@ COPY --from=ghcr.io/ca4022/csc1109-base-root-config-emacs:latest /var/games/emac
 COPY --from=ghcr.io/ca4022/csc1109-base-root-config-emacs:latest /usr/share/man/man1/emacs.1.gz /usr/share/man/man1/emacs.1.gz
 COPY --from=ghcr.io/ca4022/csc1109-base-root-config-emacs:latest /usr/share/info/emacs.info.gz /usr/share/info/emacs.info.gz
 COPY --from=ghcr.io/ca4022/csc1109-base-root-config-emacs:latest /usr/local/ /usr/local/
-COPY --from=ghcr.io/ca4022/csc1109-base-root-config-nvim:latest /bin/nvim /bin/nvim
-COPY --from=ghcr.io/ca4022/csc1109-base-root-config-nvim:latest /lib/nvim /lib/nvim
-COPY --from=ghcr.io/ca4022/csc1109-base-root-config-nvim:latest /share/nvim /share/nvim
-COPY --from=ghcr.io/ca4022/csc1109-base-root-config-nvim:latest /share/man /share/man
+COPY --from=ghcr.io/ca4022/csc1109-base-root-config-nvim:latest /usr/bin/nvim /usr/bin/nvim
+COPY --from=ghcr.io/ca4022/csc1109-base-root-config-nvim:latest /usr/lib/nvim /usr/lib/nvim
+COPY --from=ghcr.io/ca4022/csc1109-base-root-config-nvim:latest /usr/share/nvim /usr/share/nvim
+COPY --from=ghcr.io/ca4022/csc1109-base-root-config-nvim:latest /usr/share/man /usr/share/man
 COPY --from=ghcr.io/ca4022/csc1109-base-root-config-nvim:latest /usr/local/ /usr/local/
 
 COPY --from=ghcr.io/ca4022/csc1109-base-root-config-glamour:latest /root/ /root/

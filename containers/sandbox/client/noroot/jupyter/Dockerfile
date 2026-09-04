@@ -15,7 +15,8 @@ USER root
 RUN chmod +x /test/test.sh && \
     chown -R jovyan /home/jovyan/.local/ && \
     chown -R jovyan /home/jovyan/.jupyter/ && \
-    ln -s /usr/lib/jvm/java-17-openjdk-$(uname -m | sed 's/aarch64/arm64/; s/x86_64/amd64/') /usr/lib/jvm/live-jdk
+    JDK_PATH=$(find /usr/lib/jvm/ -maxdepth 1 -name "java-*-openjdk-*" | head -n 1) && \
+    ln -s "$JDK_PATH" /usr/lib/jvm/live-jdk
 
 USER jovyan
 
@@ -42,11 +43,11 @@ RUN mamba update -n base --all --yes && \
     mamba run -n base python -m build && \
     mamba run -n base python -m pip install ./dist/*.whl && \
     mamba clean --all --yes && \
-    wget -q https://git.io/coursier-cli && \
+    wget -q https://raw.githubusercontent.com/coursier/coursier/gh-pages/coursier -O coursier-cli && \
     mkdir -p /home/jovyan/.local/bin/ && \
     mv coursier-cli /home/jovyan/.local/bin/coursier && \
     chmod +x /home/jovyan/.local/bin/coursier && \
-    coursier bootstrap --standalone almond:0.14.1 --jvm-dir "/usr/lib/jvm/java-17-openjdk-$(uname -m | sed 's/aarch64/arm64/; s/x86_64/amd64/')" --scala 2.13 --output /home/jovyan/.local/bin/almond && \
+    coursier bootstrap --standalone almond:0.14.1 --jvm-dir /usr/lib/jvm/live-jdk --scala 2.13 --output /home/jovyan/.local/bin/almond && \
     almond --install && \
     # coursier bootstrap org.scalameta:metals_2.13:1.6.0 -o metals -f && \
     # mv metals /home/jovyan/.local/bin/metals && \
