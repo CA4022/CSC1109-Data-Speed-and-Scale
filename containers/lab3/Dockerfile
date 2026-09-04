@@ -14,4 +14,5 @@ RUN wget https://downloads.apache.org/pig/pig-0.17.0/pig-0.17.0.tar.gz && \
 COPY ./lab/ /lab/
 RUN chown -R 1000 /lab/ && \
     useradd -m $HADOOP_USER_NAME && \
+    mkdir -p $HADOOP_HOME && \
     chown -R $HADOOP_USER_NAME $HADOOP_HOME

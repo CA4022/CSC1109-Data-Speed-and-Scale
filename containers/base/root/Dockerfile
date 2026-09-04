@@ -9,6 +9,18 @@ WORKDIR /fzf
 RUN wget -O fzf.tar.gz https://github.com/junegunn/fzf/releases/download/v0.67.0/fzf-0.67.0-linux_$(uname -m | sed 's/aarch64/arm64/; s/x86_64/amd64/').tar.gz && \
     tar xzf fzf.tar.gz
 
+FROM docker.io/opensuse/leap:${BASE_OPENSUSE_VERSION} AS hashdeep-builder
+
+RUN zypper --non-interactive install autoconf automake gcc gcc-c++ git make && \
+    zypper clean --all
+
+WORKDIR /hashdeep
+RUN git clone --depth 1 https://github.com/jessek/hashdeep.git . && \
+    ./bootstrap.sh && \
+    ./configure && \
+    make -j$(nproc) && \
+    make install
+
 FROM docker.io/opensuse/leap:${BASE_OPENSUSE_VERSION} AS base
 
 ARG BASE_OPENSUSE_VERSION
@@ -63,6 +75,17 @@ RUN if zypper search -x -i "busybox-less" >/dev/null 2>&1; then \
     zypper clean --all && \
     wget -O /usr/bin/tldr https://github.com/tealdeer-rs/tealdeer/releases/download/v1.8.1/tealdeer-linux-$(uname -m | sed 's/arm64/aarch64/; s/amd64/x86_64/')-musl && \
     chmod +x /usr/bin/tldr && \
+    ln -s /usr/bin/tldr /usr/bin/tealdeer && \
+    mkdir -p /usr/share/bash-completion/completions && \
+    wget -O /usr/share/bash-completion/completions/tldr https://raw.githubusercontent.com/tealdeer-rs/tealdeer/v1.8.1/completion/bash_tealdeer && \
+    echo "complete -F _tealdeer tealdeer" >> /usr/share/bash-completion/completions/tldr && \
+    ln -s /usr/share/bash-completion/completions/tldr /usr/share/bash-completion/completions/tealdeer && \
+    mkdir -p /usr/share/zsh/site-functions && \
+    wget -O /usr/share/zsh/site-functions/_tldr https://raw.githubusercontent.com/tealdeer-rs/tealdeer/v1.8.1/completion/zsh_tealdeer && \
+    ln -s /usr/share/zsh/site-functions/_tldr /usr/share/zsh/site-functions/_tealdeer && \
+    mkdir -p /usr/share/fish/vendor_completions.d && \
+    wget -O /usr/share/fish/vendor_completions.d/tldr.fish https://raw.githubusercontent.com/tealdeer-rs/tealdeer/v1.8.1/completion/fish_tealdeer && \
+    ln -s /usr/share/fish/vendor_completions.d/tldr.fish /usr/share/fish/vendor_completions.d/tealdeer.fish && \
     wget -O yazi.zip https://github.com/sxyazi/yazi/releases/download/v26.1.4/yazi-$(uname -m | sed 's/arm64/aarch64/; s/amd64/x86_64/')-unknown-linux-musl.zip && \
     unzip -j yazi.zip */ya */yazi && \
     mv yazi /usr/local/bin/yazi && \
@@ -112,6 +135,13 @@ COPY .config/nushell .config/nushell
 COPY .config/powershell .config/powershell
 
 COPY --from=fzf-builder /fzf/fzf /usr/local/bin/fzf
+
+COPY --from=hashdeep-builder /usr/local/bin/hashdeep /usr/local/bin/hashdeep
+COPY --from=hashdeep-builder /usr/local/bin/md5deep /usr/local/bin/md5deep
+COPY --from=hashdeep-builder /usr/local/bin/sha1deep /usr/local/bin/sha1deep
+COPY --from=hashdeep-builder /usr/local/bin/sha256deep /usr/local/bin/sha256deep
+COPY --from=hashdeep-builder /usr/local/bin/tigerdeep /usr/local/bin/tigerdeep
+COPY --from=hashdeep-builder /usr/local/bin/whirlpooldeep /usr/local/bin/whirlpooldeep
 
 COPY --from=ghcr.io/nushell/nushell:0.109.1-bookworm /bin/nu /bin/nu/
 COPY --from=ghcr.io/nushell/nushell:0.109.1-bookworm /usr/bin/nu /usr/bin/

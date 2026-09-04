@@ -1,4 +1,4 @@
-FROM db710cd492cb AS lab1-environment
+FROM ghcr.io/ca4022/csc1109-dind:latest AS lab1-environment
 
 ENV HADOOP_RUNNER_IMAGE=ghcr.io/ca4022/hadoop
 ENV HADOOP_RUNNER_VERSION=3.4.2-lean-jdk17
