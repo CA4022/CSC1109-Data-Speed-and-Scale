@@ -365,6 +365,26 @@ example, a cheatsheet can be displayed for (most) commands using the `tldr` comm
 tldr docker
 ```
 
+In addition to the core utilities, the lab environment includes several optional tools
+designed to assist users who may be less familiar with working in a command line interface:
+
+- &nbsp; **Yazi**: A visual terminal file manager. For those who find directory
+    navigation via `cd` and `ls` unintuitive, executing `yazi` opens a split-pane file
+    browser. This interface allows users to visually navigate and preview files similarly
+    to a graphical file explorer.
+- &nbsp; **Zellij**: A terminal multiplexer. Executing `zellij` opens a workspace
+    environment where the screen can be split into multiple panes and tabs. This allows
+    for running concurrent tasks without opening multiple terminal windows, and displays
+    the available keyboard shortcuts at the bottom of the screen.
+- 󰓅&nbsp; **Bottom**: A graphical system monitor. Executing `btm` provides a visual
+    overview of current system resource usage, which is useful for identifying processes
+    (such as Hadoop or Spark) that may be consuming excessive CPU or memory.
+- 󰽉&nbsp; **Glow**: A terminal markdown reader. Executing `glow <filename.md>` renders
+    markdown documentation with full formatting directly within the terminal output.
+
+While the use of these tools is strictly optional, they are provided to help make working
+mostly via the CLI feel less intimidating in this lab environment.
+
 ## Oops, I Broke It! &nbsp; ##
 
 We encourage students in this lab to play around with, explore, and discover the limits of the
