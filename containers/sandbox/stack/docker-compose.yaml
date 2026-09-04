@@ -9,6 +9,7 @@ services:
       - /lab/:/lab/
       - ./config/:${HADOOP_HOME}/etc/hadoop/
       - ./hadoop-init/:/init/
+      - jvm-shared-cache:/var/cache/javasharedresources
     ports:
       - 9870:9870
       - 8088:8088
@@ -35,6 +36,7 @@ services:
       - /lab/:/lab/
       - ./spark-init/:/init/
       - ./config/:/var/config/hadoop/
+      - jvm-shared-cache:/var/cache/javasharedresources
     environment:
       - HADOOP_HOME=${HADOOP_HOME}
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
@@ -68,6 +70,7 @@ services:
       - ./hive-init/:/init/
       - ./config/:${HIVE_HOME}/conf/
       - ./config/:${HADOOP_HOME}/etc/hadoop/
+      - jvm-shared-cache:/var/cache/javasharedresources
     ports:
       - "10000:10000"
       - "10002:10002"
@@ -105,6 +108,7 @@ services:
       - ./config/:${HADOOP_HOME}/etc/hadoop/
       - /opt/hive:${HIVE_HOME}
       - ./config:${HIVE_HOME}/conf
+      - jvm-shared-cache:/var/cache/javasharedresources
     stdin_open: true
     tty: true
     healthcheck:
@@ -113,3 +117,6 @@ services:
       timeout: 1s
       start_period: 3s
       retries: 3
+
+volumes:
+  jvm-shared-cache:

@@ -4,10 +4,13 @@ x-storm-common-config: &storm-common-config
   image: ${STORM_IMAGE}:${STORM_VERSION}
   volumes:
     - .:/lab/
+    - jvm-shared-cache:/var/cache/javasharedresources
 
 services:
   zookeeper:
     image: ${ZOOKEEPER_IMAGE}:${ZOOKEEPER_VERSION}
+    volumes:
+      - jvm-shared-cache:/var/cache/javasharedresources
 
   nimbus:
     <<: *storm-common-config
@@ -61,8 +64,12 @@ services:
       - .:/lab/
       - /apache-storm/:/apache-storm/
       - ./config/storm-client.yaml:/apache-storm/conf/storm.yaml
+      - jvm-shared-cache:/var/cache/javasharedresources
     environment:
       - SHELL=${SHELL}
       - EDITOR=${EDITOR}
     stdin_open: true
     tty: true
+
+volumes:
+  jvm-shared-cache:

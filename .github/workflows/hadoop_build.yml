@@ -29,8 +29,9 @@ jobs:
             branch: "docker-hadoop-3.4.2-lean"
             is_latest: true
             preprocess: |
-              echo "Upgrading Dockerfile from JDK 11 to JDK 17..."
+              echo "Upgrading Dockerfile to OpenJ9 (IBM Semeru) JDK 17 with shared cache..."
               sed -i 's/:jdk11/:jdk17/g' Dockerfile
+              sed -i '/FROM ghcr.io\/apache\/hadoop-runner:jdk17-u2204/a COPY --from=docker.io\/ibm-semeru-runtimes:open-17-jre \/opt\/java\/openjdk \/opt\/java\/openjdk\nENV JAVA_TOOL_OPTIONS="-Xshareclasses:name=csc1109_cache,cacheDir=\/var\/cache\/javasharedresources -Xscmx64M"\nUSER root\nRUN mkdir -p \/var\/cache\/javasharedresources \&\& chmod 1777 \/var\/cache\/javasharedresources\nUSER hadoop' Dockerfile
 
     permissions:
       contents: read

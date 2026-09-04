@@ -5,6 +5,7 @@ x-spark-common-config: &spark-common-config
   volumes:
     - /lab/:/opt/spark/work-dir/
     - ./config/:${HADOOP_HOME}/etc/hadoop
+    - jvm-shared-cache:/var/cache/javasharedresources
 
 services:
   namenode:
@@ -15,6 +16,7 @@ services:
       - .:/lab/
       - ./config/:${HADOOP_HOME}/etc/hadoop
       - ./hadoop-init/:/init/
+      - jvm-shared-cache:/var/cache/javasharedresources
     ports:
       - 9870:9870
     environment:
@@ -70,5 +72,9 @@ services:
     working_dir: /lab/
     volumes:
       - .:/lab/
+      - jvm-shared-cache:/var/cache/javasharedresources
     stdin_open: true
     tty: true
+
+volumes:
+  jvm-shared-cache:

@@ -5,7 +5,7 @@ Year 1 of labs have been run successfully.
 ## Notes
 
 - [X] Hive lab is prone to breakage, just switch to Tez
-- [ ] RAM usage is a consistent problem. wasting several GB just for JVMs in containers. Try finding some solution for reducing JVM overhead. Maybe switch to OpenJ9 with shared object cache?
+- [X] RAM usage is a consistent problem. wasting several GB just for JVMs in containers. Try finding some solution for reducing JVM overhead. Maybe switch to OpenJ9 with shared object cache?
 - [ ] Current curriculum is somewhat out-of-date re: streaming. Streaming is far more relevant nowadays than it was back when course materials were first written. Need to expand beyond just Storm.
 - [X] Deploying in cloud made it clear that the sandbox should have more tools for java/scala packaging. add maven and sbt.
 - [X] Need fallback for deploying without a lab.md file

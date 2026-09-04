@@ -5,6 +5,7 @@ x-hadoop-common-config: &hadoop-common-config
   volumes:
     - .:/lab/
     - ./config/:${HADOOP_HOME}/etc/hadoop
+    - jvm-shared-cache:/var/cache/javasharedresources
   environment:
     - HADOOP_HOME=${HADOOP_HOME}
     - HADOOP_USER_NAME=${HADOOP_USER_NAME}
@@ -73,6 +74,7 @@ services:
     volumes:
       - .:/lab/
       - ./config/:${HADOOP_HOME}/etc/hadoop
+      - jvm-shared-cache:/var/cache/javasharedresources
     environment:
       - SHELL=${SHELL}
       - EDITOR=${EDITOR}
@@ -84,3 +86,6 @@ services:
       - UV_PYTHON=python3.12
     stdin_open: true
     tty: true
+
+volumes:
+  jvm-shared-cache:

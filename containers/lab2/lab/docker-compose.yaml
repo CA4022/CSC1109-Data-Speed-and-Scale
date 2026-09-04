@@ -5,6 +5,7 @@ x-hadoop-common-config: &hadoop-common-config
   volumes:
     - .:/lab/
     - ./config:${HADOOP_HOME}/etc/hadoop
+    - jvm-shared-cache:/var/cache/javasharedresources
   environment:
     - HADOOP_HOME=${HADOOP_HOME}
     - HADOOP_USER_NAME=${HADOOP_USER_NAME}
@@ -164,6 +165,7 @@ services:
       - ./config:${HADOOP_HOME}/etc/hadoop
       - /opt/hive:${HIVE_HOME}
       - ./config:${HIVE_HOME}/conf
+      - jvm-shared-cache:/var/cache/javasharedresources
     environment:
       - SHELL=${SHELL}
       - EDITOR=${EDITOR}
@@ -174,3 +176,6 @@ services:
       - HIVE_USER_NAME=${HIVE_USER_NAME}
     stdin_open: true
     tty: true
+
+volumes:
+  jvm-shared-cache:

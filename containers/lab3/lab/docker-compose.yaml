@@ -5,6 +5,7 @@ x-hadoop-common-config: &hadoop-common-config
   volumes:
     - .:/lab/
     - ./config/:${HADOOP_HOME}/etc/hadoop
+    - jvm-shared-cache:/var/cache/javasharedresources
 
 services:
   namenode:
@@ -96,6 +97,7 @@ services:
       - .:/lab/
       - ./config/:${HADOOP_HOME}/etc/hadoop
       - /opt/pig/:/opt/pig/
+      - jvm-shared-cache:/var/cache/javasharedresources
     environment:
       - SHELL=${SHELL}
       - EDITOR=${EDITOR}
@@ -105,3 +107,6 @@ services:
       - PIG_HOME=${PIG_HOME}
     stdin_open: true
     tty: true
+
+volumes:
+  jvm-shared-cache:

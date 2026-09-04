@@ -11,9 +11,11 @@ RUN zypper --non-interactive install --no-recommends systemd && \
         wget \
         man \
         maven \
-        java-17-openjdk-devel \
+        java-17-openj9-devel \
         scala && \
     rpm -qa 'python311*' | xargs -r zypper rm --clean-deps && \
+    mkdir -p /var/cache/javasharedresources && chmod 1777 /var/cache/javasharedresources && \
+    update-alternatives --set java /usr/lib64/jvm/jre-17-openj9/bin/java && \
     zypper clean --all
 
 COPY --from=ghcr.io/astral-sh/uv:0.9.22 /uv /uvx /bin/
@@ -32,8 +34,9 @@ COPY ./test/ /test/
 RUN mv /test-base/ /test/base/ && chmod -R +x /test/
 
 # Set env variables
-ENV PATH="/opt/hdfs/bin:/opt/hadoop/bin:/opt/hive/bin:/opt/pig/bin:/apache-storm/bin:/apache-zookeeper-3.9.3-bin/bin:/opt/spark/bin:${PATH}"
-ENV JAVA_HOME=/usr/lib64/jvm/java-17-openjdk-17
+ENV JAVA_HOME=/usr/lib64/jvm/java-17-openj9-17
+ENV PATH="${JAVA_HOME}/bin:/opt/hdfs/bin:/opt/hadoop/bin:/opt/hive/bin:/opt/pig/bin:/apache-storm/bin:/apache-zookeeper-3.9.3-bin/bin:/opt/spark/bin:${PATH}"
+ENV JAVA_TOOL_OPTIONS="-Xshareclasses:name=csc1109_cache,cacheDir=/var/cache/javasharedresources -Xscmx64M"
 
 # Copy lab specific files and set entrypoint running
 COPY ./lab/ /lab/
