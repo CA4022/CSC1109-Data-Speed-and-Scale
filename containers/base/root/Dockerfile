@@ -143,8 +143,7 @@ COPY --from=hashdeep-builder /usr/local/bin/sha256deep /usr/local/bin/sha256deep
 COPY --from=hashdeep-builder /usr/local/bin/tigerdeep /usr/local/bin/tigerdeep
 COPY --from=hashdeep-builder /usr/local/bin/whirlpooldeep /usr/local/bin/whirlpooldeep
 
-COPY --from=ghcr.io/nushell/nushell:0.109.1-bookworm /bin/nu /bin/nu/
-COPY --from=ghcr.io/nushell/nushell:0.109.1-bookworm /usr/bin/nu /usr/bin/
+COPY --from=ghcr.io/nushell/nushell:0.109.1-bookworm /usr/bin/nu /usr/bin/nu
 
 COPY --from=mcr.microsoft.com/powershell:lts-ubuntu-22.04 /opt/microsoft/powershell/ /opt/microsoft/powershell/
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
@@ -173,4 +172,4 @@ COPY --from=ghcr.io/ca4022/csc1109-base-root-config-nvim:latest /root/ /root/
 
 COPY ./CSC1109.md /root/CSC1109.md
 
-RUN rm -r /root/bin
+RUN rm -rf /root/bin
