@@ -121,18 +121,13 @@ ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
 RUN ln -s /opt/microsoft/powershell/7-lts/pwsh /usr/bin/pwsh
 
 COPY --from=ghcr.io/ca4022/csc1109-base-root-config-bat:latest /usr/bin/bat /usr/bin/bat
-COPY --from=ghcr.io/ca4022/csc1109-base-root-config-bat:latest /usr/share/man/man1/bat.1.gz /usr/share/man/man1/bat.1.gz
 COPY --from=ghcr.io/ca4022/csc1109-base-root-config-bat:latest /usr/local/ /usr/local/
 COPY --from=ghcr.io/ca4022/csc1109-base-root-config-micro:latest /usr/bin/micro /usr/bin/micro
 COPY --from=ghcr.io/ca4022/csc1109-base-root-config-micro:latest /usr/local/ /usr/local/
 COPY --from=ghcr.io/ca4022/csc1109-base-root-config-emacs:latest /usr/bin/emacs /usr/bin/emacs
 COPY --from=ghcr.io/ca4022/csc1109-base-root-config-emacs:latest /usr/bin/emacsclient /usr/bin/emacsclient
 COPY --from=ghcr.io/ca4022/csc1109-base-root-config-emacs:latest /usr/bin/emacs-nox /usr/bin/emacs-nox
-COPY --from=ghcr.io/ca4022/csc1109-base-root-config-emacs:latest /usr/lib/emacs /usr/lib/emacs
 COPY --from=ghcr.io/ca4022/csc1109-base-root-config-emacs:latest /usr/share/emacs /usr/share/emacs
-COPY --from=ghcr.io/ca4022/csc1109-base-root-config-emacs:latest /var/games/emacs /var/games/emacs
-COPY --from=ghcr.io/ca4022/csc1109-base-root-config-emacs:latest /usr/share/man/man1/emacs.1.gz /usr/share/man/man1/emacs.1.gz
-COPY --from=ghcr.io/ca4022/csc1109-base-root-config-emacs:latest /usr/share/info/emacs.info.gz /usr/share/info/emacs.info.gz
 COPY --from=ghcr.io/ca4022/csc1109-base-root-config-emacs:latest /usr/local/ /usr/local/
 COPY --from=ghcr.io/ca4022/csc1109-base-root-config-nvim:latest /usr/bin/nvim /usr/bin/nvim
 COPY --from=ghcr.io/ca4022/csc1109-base-root-config-nvim:latest /usr/lib/nvim /usr/lib/nvim
