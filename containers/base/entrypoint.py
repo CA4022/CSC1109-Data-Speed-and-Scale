@@ -201,6 +201,7 @@ async def main():
             ("bash", "", "brush-hl"),
             ("zshell", "", "zsh"),
             ("nushell", "\x1b[32m❯\033[0m", "nu"),
+            ("powershell", "\x1b[34m󰨊\033[0m", "pwsh"),
         ],
         [
             EnvSelector(

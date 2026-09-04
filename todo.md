@@ -13,7 +13,7 @@ Year 1 of labs have been run successfully.
 ## Ideas
 
 - [X] Add "fresh" as editor for more VSCode-like experience
-- [ ] Add powershell for windows users? (depends on POSIX compatibility)
+- [X] Add powershell for windows users? (depends on POSIX compatibility)
 - [X] Add rudimentary observability without abstracting away programs, e.g: btm and podman-tui
 - [ ] Maybe switch to a more efficient and maintainable build system? e.g: kiwi? (probably best) nix? guix? Even just asdf?
 - [ ] For higher level tools, maybe replace java with kotlin? or somehow add kotlin as a more sane alternative to raw java

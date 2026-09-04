@@ -304,6 +304,7 @@ those who are unsure we offer the following recommendations:
 - &nbsp; Zsh: recommended for those who are reasonably familiar with CLI, particularly mac users
     as it is the OS X default shell
 - ❯&nbsp; Nushell: good for advanced users, especially those already familiar with data processing paradigms
+- 󰨊&nbsp; PowerShell: for users who are already familiar with PowerShell scripting and cmdlet paradigms
 
 >? TIP: Each of these shells will look the same, but will give a visual indicator of which shell
 > you are currently using in the form of a "prompt token". For example, if you chose `bash` as your
@@ -320,6 +321,8 @@ those who are unsure we offer the following recommendations:
 > - `>`: Fish user shell
 >
 > - `❯`: Nushell user shell
+>
+> - `󰨊`: PowerShell user shell
 >
 > These prompt token shorthands are not standardised by anyone, but are generally observed as
 > convention among programmers.

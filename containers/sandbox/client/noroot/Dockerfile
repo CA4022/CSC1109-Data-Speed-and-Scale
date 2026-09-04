@@ -87,6 +87,9 @@ COPY --from=ghcr.io/nushell/nushell:0.109.1-bookworm /usr/bin/nu_plugin_polars /
 COPY --from=ghcr.io/nushell/nushell:0.109.1-bookworm /usr/bin/nu_plugin_query /usr/bin/nu_plugin_query
 COPY --from=ghcr.io/nushell/nushell:0.109.1-bookworm /usr/bin/nu_plugin_stress_internals /usr/bin/nu_plugin_stress_internals
 
+COPY --from=mcr.microsoft.com/powershell:lts-7.4-noble /opt/microsoft/powershell/ /opt/microsoft/powershell/
+RUN ln -s /opt/microsoft/powershell/7/pwsh /usr/bin/pwsh
+
 FROM sandbox-client-noroot-build AS sandbox-client-noroot-final
 
 COPY --from=ghcr.io/ca4022/csc1109-sandbox-client-apache:latest /opt/hadoop/ /opt/hadoop/
