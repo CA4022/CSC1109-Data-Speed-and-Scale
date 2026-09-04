@@ -40,6 +40,7 @@ if not DOCS_DEV_MODE:
         else:  # If not windows: default to unix-like behaviour
             logger.info("`docker.from_env()` failed. Trying common Unix sockets.")
             socket_urls = [
+                f"unix://{os.environ.get('XDG_RUNTIME_DIR', '')}/podman/podman.sock",
                 "unix://var/run/docker.sock",
                 "unix://var/run/docker/docker.sock",
                 "unix://var/run/podman.sock",
@@ -103,14 +104,18 @@ def run_docker_test(
         output_log.append(f"Ensuring Docker image '{docker_image}' is available...")
         image_hash = None
         try:
-            image_hash = CLIENT.images.pull(docker_image)
-            output_log.append(f"Image '{docker_image}' pulled successfully (or already present).")
+            image_hash = CLIENT.images.get(docker_image)
+            output_log.append(f"Image '{docker_image}' found locally.")
         except ImageNotFound:
-            output_log.append(f"ERROR: Docker image '{docker_image}' not found.")
-            return False, "\n".join(output_log)
-        except APIError as e:
-            output_log.append(f"ERROR: Docker API error pulling image '{docker_image}': {e}")
-            return False, "\n".join(output_log)
+            try:
+                image_hash = CLIENT.images.pull(docker_image)
+                output_log.append(f"Image '{docker_image}' pulled successfully (or already present).")
+            except ImageNotFound:
+                output_log.append(f"ERROR: Docker image '{docker_image}' not found.")
+                return False, "\n".join(output_log)
+            except APIError as e:
+                output_log.append(f"ERROR: Docker API error pulling image '{docker_image}': {e}")
+                return False, "\n".join(output_log)
 
         if image_hash is None:
             msg = f"The image '{docker_image}' was not pulled, but the pull operation failed silently."
@@ -295,7 +300,7 @@ def main():
             content = f.read()
 
         code_block_regex = re.compile(
-            r"```(?P<lang>\w+)\s*\{?\s*\.test-block\s*(?:#(?P<docker_id>\S+))?\s*(?:wrapper=\"(?P<wrapper>.*?)\")?\s*\}?\n(?P<code>.*?)\n```",
+            r"```(?P<lang>\w+)\s*\{?\s*\.test-block\s*(?:#(?P<docker_id>\S+))?\s*(?:wrapper=(?P<quote>[\"'])(?P<wrapper>.*?)(?P=quote))?\s*\}?\n(?P<code>.*?)\n```",
             re.DOTALL,
         )
 
@@ -340,7 +345,10 @@ def main():
                 "`CLIENT` should not be `None` but this should not be reachable either!"
             )
             for docker_image in PREFETCH_IMAGES:
-                CLIENT.images.pull(docker_image)
+                try:
+                    CLIENT.images.get(docker_image)
+                except ImageNotFound:
+                    CLIENT.images.pull(docker_image)
             for docker_image, code_blocks in tests_by_image.items():
                 n_blocks = len(code_blocks)
                 if n_blocks < 1:

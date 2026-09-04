@@ -79,5 +79,8 @@ services:
       - HADOOP_HOME=${HADOOP_HOME}
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
       - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
+      - UV_PYTHON_PREFERENCE=only-system
+      - UV_LINK_MODE=copy
+      - UV_PYTHON=python3.12
     stdin_open: true
     tty: true
