@@ -35,4 +35,12 @@
         <name>yarn.resourcemanager.webapp.address</name>
         <value>0.0.0.0:8088</value>
     </property>
+    <property>
+        <name>yarn.nodemanager.disk-health-checker.max-disk-utilization-per-disk-percentage</name>
+        <value>99.0</value>
+        <description>
+            Raise the disk utilization threshold so NodeManager does not mark
+            itself UNHEALTHY on machines with high disk usage. Default is 90%.
+        </description>
+    </property>
 </configuration>

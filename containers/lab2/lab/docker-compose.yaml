@@ -18,6 +18,8 @@ x-hive-common-config: &hive-common-config
     - ./config:${HIVE_HOME}/conf
     - ./hive_init.sh:/hive_init.sh
     - /opt/hive/lib/postgresql.jar:/opt/hive/lib/postgresql.jar
+    - /opt/tez:/opt/tez
+    - /opt/tez.tar.gz:/opt/tez.tar.gz
 
 services:
   namenode:
@@ -142,12 +144,13 @@ services:
     <<: *hive-common-config
     container_name: hiveserver
     hostname: hiveserver
-    entrypoint: hive --skiphadoopversion --skiphbasecp --service hiveserver2
     environment:
       - HADOOP_HOME=${HADOOP_HOME}
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
       - HIVE_HOME=${HIVE_HOME}
       - HIVESERVER2_PID_DIR=/tmp/hive
+      - SERVICE_NAME=hiveserver2
+      - TEZ_HOME=/opt/tez
     depends_on:
       metastore:
         condition: service_started

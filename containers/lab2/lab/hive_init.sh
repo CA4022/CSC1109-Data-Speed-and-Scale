@@ -66,4 +66,25 @@ hdfs dfs -chmod -R 1777 hdfs://namenode/user/$HIVE_USER_NAME/warehouse
 echo "Ensuring '$HIVE_USER_NAME' user owns hdfs://namenode/user/$HIVE_USER_NAME..."
 hdfs dfs -chown -R $HIVE_USER_NAME:$HIVE_USER_NAME hdfs://namenode/user/$HIVE_USER_NAME
 
+# --- Upload Tez to HDFS ---
+TEZ_HDFS_PATH="hdfs://namenode/apps/tez"
+TEZ_TARBALL="/opt/tez.tar.gz"
+
+if [ -f "$TEZ_TARBALL" ]; then
+  if ! hdfs dfs -test -d "$TEZ_HDFS_PATH"; then
+    echo "Creating HDFS directory $TEZ_HDFS_PATH..."
+    hdfs dfs -mkdir -p "$TEZ_HDFS_PATH"
+  fi
+  if ! hdfs dfs -test -f "${TEZ_HDFS_PATH}/tez.tar.gz"; then
+    echo "Uploading Tez tarball to HDFS at ${TEZ_HDFS_PATH}/tez.tar.gz..."
+    hdfs dfs -put "$TEZ_TARBALL" "${TEZ_HDFS_PATH}/tez.tar.gz"
+    echo "Tez tarball uploaded successfully."
+  else
+    echo "Tez tarball already present in HDFS. Skipping upload."
+  fi
+  hdfs dfs -chmod -R 755 "$TEZ_HDFS_PATH"
+else
+  echo "WARNING: Tez tarball not found at $TEZ_TARBALL, skipping HDFS upload."
+fi
+
 echo "Initialization complete."

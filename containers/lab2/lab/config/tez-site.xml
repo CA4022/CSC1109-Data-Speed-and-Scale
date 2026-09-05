@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+    <property>
+        <name>tez.lib.uris</name>
+        <value>hdfs://namenode/apps/tez/tez.tar.gz</value>
+        <description>
+            URI of the Tez tarball on HDFS. YARN uses this to distribute Tez
+            libraries to all containers that run Tez ApplicationMasters and tasks.
+        </description>
+    </property>
+    <property>
+        <name>tez.use.cluster.hadoop-libs</name>
+        <value>true</value>
+        <description>
+            Use the Hadoop libraries present on the cluster (NodeManager classpath)
+            rather than bundling them inside the Tez tarball. Required when running
+            Tez 0.10.x against Hadoop 3.x to avoid class conflicts.
+        </description>
+    </property>
+    <property>
+        <name>tez.am.resource.memory.mb</name>
+        <value>512</value>
+    </property>
+    <property>
+        <name>tez.task.resource.memory.mb</name>
+        <value>512</value>
+    </property>
+</configuration>

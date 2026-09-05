@@ -10,6 +10,7 @@ ENV HIVE_IMAGE=docker.io/apache/hive
 ENV HIVE_VERSION=3.1.3
 ENV HIVE_HOME=/opt/hive
 ENV HIVE_USER_NAME=hive
+ENV TEZ_VERSION=0.10.4
 ENV IS_RESUME=false
 
 COPY ./lab/ /lab/
@@ -17,4 +18,8 @@ RUN chown -R 1000 /lab/ && \
     mvn dependency:copy \
         -Dartifact=org.postgresql:postgresql:42.4.3:jar \
         -DoutputDirectory=/opt/hive/lib/ \
-        -Dmdep.stripVersion=true
+        -Dmdep.stripVersion=true && \
+    wget -q -O /opt/tez.tar.gz \
+        "https://dlcdn.apache.org/tez/${TEZ_VERSION}/apache-tez-${TEZ_VERSION}-bin.tar.gz" && \
+    mkdir -p /opt/tez && \
+    tar -xzf /opt/tez.tar.gz -C /opt/tez --strip-components=1
