@@ -15,7 +15,9 @@ elif command -v iptables-legacy >/dev/null 2>&1 && iptables-legacy -t nat -L -n 
     update-alternatives --set ip6tables /usr/sbin/xtables-legacy-multi >/dev/null 2>&1 || true
 fi
 
-if [ -x /usr/bin/python3.12 ]; then
+if [ -x /usr/bin/python3.13 ]; then
+    ln -sf /usr/bin/python3.13 /usr/bin/python3
+elif [ -x /usr/bin/python3.12 ]; then
     ln -sf /usr/bin/python3.12 /usr/bin/python3
 fi
 

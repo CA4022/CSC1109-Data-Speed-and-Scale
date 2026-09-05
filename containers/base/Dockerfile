@@ -8,19 +8,20 @@ RUN for i in 1 2 3 4 5; do zypper --non-interactive install --no-recommends syst
     for i in 1 2 3 4 5; do zypper --non-interactive install \
         iptables \
         python313 \
+        python3-base \
         wget \
         man \
         maven \
         java-17-openj9-devel \
-        curl \
-        update-alternatives && break || { [ $i -eq 5 ] && exit 1 || sleep 15; }; done && \
+        curl && break || { [ $i -eq 5 ] && exit 1 || sleep 15; }; done && \
     rpm -qa 'python311*' | xargs -r zypper rm --clean-deps && \
     mkdir -p /var/cache/javasharedresources && chmod 1777 /var/cache/javasharedresources && \
-    update-alternatives --set java /usr/lib64/jvm/jre-17-openj9/bin/java && \
     zypper clean --all && \
     curl -fL https://downloads.lightbend.com/scala/2.13.12/scala-2.13.12.tgz | tar xz -C /opt && \
     ln -s /opt/scala-2.13.12/bin/scala /usr/bin/scala && \
-    ln -s /opt/scala-2.13.12/bin/scalac /usr/bin/scalac
+    ln -s /opt/scala-2.13.12/bin/scalac /usr/bin/scalac && \
+    ln -sf /usr/bin/python3.13 /usr/bin/python3 && \
+    ln -sf /usr/bin/python3 /usr/bin/python
 
 COPY --from=ghcr.io/astral-sh/uv:0.9.22 /uv /uvx /bin/
 
