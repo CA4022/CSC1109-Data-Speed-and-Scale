@@ -7,9 +7,7 @@ ARG BASE_COMPOSE_VERSION
 COPY ./storage.conf /etc/containers/storage.conf
 COPY ./containers.conf /etc/containers/containers.conf
 
-RUN zypper --non-interactive addrepo https://download.opensuse.org/repositories/Virtualization:containers/${BASE_OPENSUSE_VERSION}/Virtualization:containers.repo && \
-    zypper --non-interactive --gpg-auto-import-keys refresh && \
-    zypper --non-interactive install \
+RUN zypper --non-interactive install \
         podman-${BASE_PODMAN_VERSION} \
         podman-docker-${BASE_PODMAN_VERSION} \
         fuse-overlayfs \
