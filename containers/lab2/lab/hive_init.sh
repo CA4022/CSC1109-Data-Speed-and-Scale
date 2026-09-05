@@ -1,7 +1,12 @@
 #!/bin/bash
 set -e
 
-sleep 5
+# Wait for PostgreSQL to become reachable
+echo "Waiting for postgres:5432..."
+until (echo > /dev/tcp/postgres/5432) >/dev/null 2>&1 || nc -z postgres 5432 >/dev/null 2>&1 || (exec 3<>/dev/tcp/postgres/5432) >/dev/null 2>&1; do
+  sleep 2
+done
+sleep 3
 
 # --- Metastore Schema Initialization ---
 echo "--- Metastore Schema Initialization ---"
