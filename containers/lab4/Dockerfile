@@ -9,7 +9,7 @@ ENV SOTRM_USER_NAME=storm
 ENV ZOOKEEPER_IMAGE=docker.io/library/zookeeper
 ENV ZOOKEEPER_VERSION=3.9.3-jre-17
 
-RUN python3.12 -m ensurepip && python3.12 -m pip install --upgrade pip
+RUN python3 -m ensurepip && python3 -m pip install --upgrade pip
 
 COPY ./lab/ /lab/
 RUN chown -R 1000 /lab/

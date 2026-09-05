@@ -4,7 +4,7 @@ ENV HADOOP_HOME=/opt/hadoop
 ENV HADOOP_USER_NAME=hadoop
 ENV UV_PYTHON_PREFERENCE=only-system
 ENV UV_LINK_MODE=copy
-ENV UV_PYTHON=python3.12
+ENV UV_PYTHON=python3
 
 COPY --from=ghcr.io/ca4022/hadoop:3.4.2-lean-jdk17 /opt/hadoop/ /opt/hadoop/
 

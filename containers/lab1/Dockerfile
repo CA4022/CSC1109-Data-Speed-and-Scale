@@ -7,7 +7,7 @@ ENV HADOOP_USER_NAME=hadoop
 
 ENV UV_PYTHON_PREFERENCE=only-system
 ENV UV_LINK_MODE=copy
-ENV UV_PYTHON=python3.12
+ENV UV_PYTHON=python3
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
