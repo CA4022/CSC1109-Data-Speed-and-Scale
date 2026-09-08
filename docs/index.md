@@ -78,15 +78,12 @@ The first step is to ensure you have Docker installed and running. To verify you
 installation, run the following command in your terminal:
 
 ```sh
-docker run hello-world
+docker --help
 ```
 
->? DANGER: Depending on your operating system and configuration, you might need to run Docker
-> commands with `sudo`. On Linux, you can avoid this by adding your user to the `docker` group. See
-> the Linux installation notes below for more details.
-
-If the command runs successfully, you will see a confirmation message from Docker, and you can
-proceed. If not, please follow the installation instructions for your operating system below.
+If the command runs successfully, you will see a help message explaining your available Docker
+commands, and you can skip the installation steps below. If not, please follow the installation
+instructions for your operating system.
 
 <!-- pyml disable MD046 -->
 === "&nbsp; Windows and &nbsp; MacOS"
@@ -231,6 +228,20 @@ To do this, you can follow the instructions below.
     > > TIP: For a more graphical experience similar to Windows and macOS, you can install **Docker
     > > Desktop for Linux**. It provides a settings panel to manage default resource allocations for
     > > all containers, which can be more convenient.
+
+Once docker has been installed, you should be able to run your first container (a simple
+"Hello world!" container) by running the following command:
+
+```sh
+docker run hello-world
+```
+
+If the installation was successful, you should see a greeting message displayed to your CLI from
+inside your containerised VM.
+
+>? DANGER: Depending on your operating system and configuration, you might need to run Docker
+> commands with `sudo`. On Linux, you can avoid this by adding your user to the `docker` group. See
+> the Linux installation notes above for more details.
 
 ## The Lab Environment ##
 

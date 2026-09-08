@@ -191,16 +191,30 @@ run our programs. To connect to the client node, run the following command:
 docker compose exec client default_shell
 ```
 
+Once you are inside the client container, you may notice that the shell is largely the same
+as before. However, now your username and hostname (in the CLI prompt) will have changed.
+This indicates that you are now inside the client node, the node from which we will interact
+with our cluster. Inside this node, we have already mounted your lab data directory, which you
+can see by running an `ls` command. Inside the `data` folder a test file has been provided, which
+we can use to test some of our `MapReduce` programs.
+
+```sh
+ls data
+```
+
+TIP: Run `yazi` to explore the filetree interactively. This is helpful when you get lost in your
+file tree. Simply hit `q` to exit `yazi` and return to your CLI.
+
 To begin our experiments, let us start by locally running some prebuilt Hadoop programs kindly
 provided by the Apache project (Hadoop's maintainers). These can be found in the `share/hadoop/`
-directory of `$HADOOP_HOME`. Inside this directory, we can see directories containing `.jar` files
-for interacting with Hadoop clusters. Since we are specifically interested in the `MapReduce`
+subdirectory of `/opt/hadoop/`. Inside this directory, we can see directories containing `.jar`
+files for interacting with Hadoop clusters. Since we are specifically interested in the `MapReduce`
 computational model, we will begin by playing with the examples from the `mapreduce` directory.
 We can see a list of the provided `MapReduce` examples by telling hadoop to run the
 `hadoop-mapreduce-examples` jar as follows:
 
 ```sh
-hadoop jar $HADOOP_HOME/share/hadoop/mapreduce/hadoop-mapreduce-examples-*.jar
+hadoop jar /opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-*.jar
 ```
 
 For any of these provided programs, we can see their arguments by simply providing that program's
@@ -248,7 +262,7 @@ hdfs fsck /
 ```
 
 INFO: You can connect to a WebUI for your cluster at any time by opening your browser and
-navigating to the URL [http://0.0.0.0:9870](http://0.0.0.0:9870). This is another way to check
+navigating to the URL [http://127.0.0.1:9870](http://127.0.0.1:9870). This is another way to check
 your cluster status.
 
 Once we have confirmed that the cluster is healthy, we can create a directory and put our example
@@ -326,7 +340,7 @@ hadoop jar wordcount.jar WordCount hdfs://namenode/lab/data/Word_count.txt hdfs:
 ```
 
 INFO: Similar to the HDFS WebUI, you can connect to the WebUI for your ResourceManager at any time
-by opening your browser and navigating to the URL [http://0.0.0.0:8088](http://0.0.0.0:8088).
+by opening your browser and navigating to the URL [http://127.0.0.1:8088](http://127.0.0.1:8088).
 This allows you to track the status of various MapReduce jobs across your YARN cluster.
 
 TIP: If you want to test this on even bigger text files you can find many, many plaintext public
