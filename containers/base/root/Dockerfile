@@ -158,6 +158,7 @@ COPY --from=ghcr.io/ca4022/csc1109-base-root-config-nvim:latest /usr/local/ /usr
 
 COPY --from=ghcr.io/ca4022/csc1109-base-root-config-glamour:latest /root/ /root/
 COPY --from=ghcr.io/ca4022/csc1109-base-root-config-bat:latest /root/ /root/
+COPY --from=ghcr.io/ca4022/csc1109-base-root-config-fresh:latest /root/ /root/
 COPY --from=ghcr.io/ca4022/csc1109-base-root-config-micro:latest /root/ /root/
 COPY --from=ghcr.io/ca4022/csc1109-base-root-config-emacs:latest /root/ /root/
 COPY --from=ghcr.io/ca4022/csc1109-base-root-config-nvim:latest /root/ /root/

@@ -1,0 +1,22 @@
+{
+  "theme": "catppuccin-mocha.json",
+  "editor": {
+    "ensure_final_newline_on_save": true,
+    "completion_popup_auto_show": true,
+    "diagnostics_inline_text": true,
+    "trim_trailing_whitespace_on_save": true,
+    "nerd_font_icons": true
+  },
+  "version": 2,
+  "active_keybinding_map": "vscode",
+  "plugins": {
+    "vi_mode": {
+      "enabled": true,
+      "settings": {
+        "autoStart": false,
+        "arrowKeys": true,
+        "searchWordUnderCursor": true
+      }
+    }
+  }
+}

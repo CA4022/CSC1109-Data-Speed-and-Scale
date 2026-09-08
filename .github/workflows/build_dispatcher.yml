@@ -14,6 +14,7 @@ jobs:
     outputs:
       base-root-config-bat: ${{ steps.filter.outputs.base-root-config-bat }}
       base-root-config-glamour: ${{ steps.filter.outputs.base-root-config-glamour }}
+      base-root-config-fresh: ${{ steps.filter.outputs.base-root-config-fresh }}
       base-root-config-micro: ${{ steps.filter.outputs.base-root-config-micro }}
       base-root-config-emacs: ${{ steps.filter.outputs.base-root-config-emacs }}
       base-root-config-nvim: ${{ steps.filter.outputs.base-root-config-nvim }}
@@ -53,6 +54,8 @@ jobs:
               - 'containers/base/root/.config/bat/**'
             base-root-config-glamour:
               - 'containers/base/root/.config/glamour/**'
+            base-root-config-fresh:
+              - 'containers/base/root/.config/fresh/**'
             base-root-config-micro:
               - 'containers/base/root/.config/micro/**'
             base-root-config-emacs:
@@ -118,6 +121,7 @@ jobs:
           base_config_outputs = list(map(str_to_bool, (
             "${{ steps.filter.outputs.base-root-config-bat }}",
             "${{ steps.filter.outputs.base-root-config-glamour }}",
+            "${{ steps.filter.outputs.base-root-config-fresh }}",
             "${{ steps.filter.outputs.base-root-config-micro }}",
             "${{ steps.filter.outputs.base-root-config-emacs }}",
             "${{ steps.filter.outputs.base-root-config-nvim }}",
@@ -199,6 +203,18 @@ jobs:
       path: containers/base/root/.config/glamour
     secrets: inherit
 
+  build-base-root-config-fresh:
+    needs: determine-changes
+    if: needs.determine-changes.outputs.base-root-config-fresh == 'true'
+    name: "Build base-root-config-fresh container"
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/build.yml
+    with:
+      path: containers/base/root/.config/fresh
+    secrets: inherit
+
   build-base-root-config-micro:
     needs: determine-changes
     if: needs.determine-changes.outputs.base-root-config-micro == 'true'
@@ -241,6 +257,7 @@ jobs:
       - determine-changes
       - build-base-root-config-bat
       - build-base-root-config-glamour
+      - build-base-root-config-fresh
       - build-base-root-config-micro
       - build-base-root-config-emacs
       - build-base-root-config-nvim
@@ -263,6 +280,7 @@ jobs:
               str_to_bool("${{ needs.determine-changes.outputs.base-root-changed }}"), # base_root_changed
               status_to_bool("${{ needs.build-base-root-config-bat.result }}"), # config_bat_result
               status_to_bool("${{ needs.build-base-root-config-glamour.result }}"), # config_glamour_result
+              status_to_bool("${{ needs.build-base-root-config-fresh.result }}"), # config_fresh_result
               status_to_bool("${{ needs.build-base-root-config-micro.result }}"), # config_micro_result
               status_to_bool("${{ needs.build-base-root-config-emacs.result }}"), # config_emacs_result
               status_to_bool("${{ needs.build-base-root-config-nvim.result }}"), # config_nvim_result
