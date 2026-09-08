@@ -126,12 +126,14 @@ services:
     <<: *hive-common-config
     container_name: metastore
     hostname: metastore
-    entrypoint: hive --skiphadoopversion --skiphbasecp --service metastore
     environment:
       - HADOOP_HOME=${HADOOP_HOME}
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
       - HIVE_HOME=${HIVE_HOME}
       - METASTORE_PORT=9083
+      - SERVICE_NAME=metastore
+      - IS_RESUME=true
+      - DB_DRIVER=postgres
     depends_on:
       hive-init:
         condition: service_completed_successfully
@@ -151,6 +153,8 @@ services:
       - HIVESERVER2_PID_DIR=/tmp/hive
       - SERVICE_NAME=hiveserver2
       - TEZ_HOME=/opt/tez
+      - IS_RESUME=true
+      - DB_DRIVER=postgres
     depends_on:
       metastore:
         condition: service_started
