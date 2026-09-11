@@ -3,7 +3,7 @@ FROM ghcr.io/ca4022/csc1109-base
 ENV HADOOP_HOME=/opt/hadoop
 ENV HADOOP_USER_NAME=hadoop
 
-COPY --from=ghcr.io/ca4022/hadoop:3.4.2-lean /opt/hadoop/ /opt/hadoop/
+COPY --from=ghcr.io/ca4022/hadoop:3.5.0 /opt/hadoop/ /opt/hadoop/
 
 RUN groupadd hadoop && \
     useradd -g $HADOOP_USER_NAME -k /root/ -m $HADOOP_USER_NAME && \

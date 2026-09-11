@@ -6,7 +6,7 @@ ENV UV_PYTHON_PREFERENCE=only-system
 ENV UV_LINK_MODE=copy
 ENV UV_PYTHON=python3
 
-COPY --from=ghcr.io/ca4022/hadoop:3.4.2-lean-jdk17 /opt/hadoop/ /opt/hadoop/
+COPY --from=ghcr.io/ca4022/hadoop:3.5.0 /opt/hadoop/ /opt/hadoop/
 
 RUN groupadd hadoop && \
     useradd -g $HADOOP_USER_NAME -k /root/ -m $HADOOP_USER_NAME && \

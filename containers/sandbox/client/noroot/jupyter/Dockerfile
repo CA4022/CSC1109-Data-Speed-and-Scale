@@ -1,4 +1,4 @@
-FROM quay.io/jupyter/all-spark-notebook:spark-4.1.0
+FROM quay.io/jupyter/all-spark-notebook:spark-4.1.2
 
 ENV PATH="/home/jovyan/.local/bin/:$PATH"
 ENV JAVA_HOME="/usr/lib/jvm/live-jdk"
@@ -48,13 +48,13 @@ RUN mamba update -n base --all --yes && \
     mkdir -p /home/jovyan/.local/bin/ && \
     mv coursier-cli /home/jovyan/.local/bin/coursier && \
     chmod +x /home/jovyan/.local/bin/coursier && \
-    coursier bootstrap --standalone almond:0.14.1 --jvm-dir /usr/lib/jvm/live-jdk --scala 2.13 --output /home/jovyan/.local/bin/almond && \
+    coursier bootstrap --standalone almond:0.14.5 --jvm-dir /usr/lib/jvm/live-jdk --scala 2.13 --output /home/jovyan/.local/bin/almond && \
     almond --install && \
     # coursier bootstrap org.scalameta:metals_2.13:1.6.0 -o metals -f && \
     # mv metals /home/jovyan/.local/bin/metals && \
-    wget -q https://github.com/padreati/rapaio-jupyter-kernel/releases/download/2.2.0/rapaio-jupyter-kernel-2.2.0.jar && \
-    java -jar ./rapaio-jupyter-kernel-2.2.0.jar -i -auto && \
-    rm rapaio-jupyter-kernel-2.2.0.jar
+    wget -q https://github.com/padreati/rapaio-jupyter-kernel/releases/download/4.0.0/rapaio-jupyter-kernel-4.0.0.jar && \
+    java -jar ./rapaio-jupyter-kernel-4.0.0.jar -i -auto && \
+    rm rapaio-jupyter-kernel-4.0.0.jar
 
 COPY java_logo.png /home/jovyan/.local/share/jupyter/kernels/rapaio-jupyter-kernel/logo-64x64.png
 

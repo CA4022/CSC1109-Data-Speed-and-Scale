@@ -35,7 +35,12 @@ jobs:
       lab6-client-changed: ${{ steps.consolidate.outputs.lab6-client-changed }}
       lab6-changed: ${{ steps.consolidate.outputs.lab6-changed }}
       bonus3-changed: ${{ steps.consolidate.outputs.bonus3-changed }}
-      sandbox-client-noroot-apache: ${{ steps.filter.outputs.sandbox-client-noroot-apache }}
+      dep-hadoop-changed: ${{ steps.consolidate.outputs.dep-hadoop-changed }}
+      dep-hive-changed: ${{ steps.consolidate.outputs.dep-hive-changed }}
+      dep-spark-changed: ${{ steps.consolidate.outputs.dep-spark-changed }}
+      dep-storm-changed: ${{ steps.consolidate.outputs.dep-storm-changed }}
+      dep-zookeeper-changed: ${{ steps.consolidate.outputs.dep-zookeeper-changed }}
+      sandbox-client-noroot-apache: ${{ steps.consolidate.outputs.sandbox-client-noroot-apache }}
       sandbox-client-noroot-jupyter: ${{ steps.filter.outputs.sandbox-client-noroot-jupyter }}
       sandbox-client-noroot-changed: ${{ steps.consolidate.outputs.sandbox-client-noroot-changed }}
       sandbox-client-changed: ${{ steps.consolidate.outputs.sandbox-client-changed }}
@@ -106,6 +111,16 @@ jobs:
               - 'containers/sandbox/client/**'
             sandbox:
               - 'containers/sandbox/**'
+            dep-hadoop:
+              - 'containers/deps/hadoop/**'
+            dep-hive:
+              - 'containers/deps/hive/**'
+            dep-spark:
+              - 'containers/deps/spark/**'
+            dep-storm:
+              - 'containers/deps/storm/**'
+            dep-zookeeper:
+              - 'containers/deps/zookeeper/**'
 
       - name: Consolidate change logic
         id: consolidate
@@ -116,6 +131,19 @@ jobs:
           github_output = {}
           str_to_bool = {"true": True, "false": False}.get
           bool_to_str = {True: "true", False: "false"}.get
+
+          # Dependency image logic
+          dep_hadoop_changed = str_to_bool("${{ steps.filter.outputs.dep-hadoop }}")
+          dep_hive_changed = str_to_bool("${{ steps.filter.outputs.dep-hive }}")
+          dep_spark_changed = str_to_bool("${{ steps.filter.outputs.dep-spark }}")
+          dep_storm_changed = str_to_bool("${{ steps.filter.outputs.dep-storm }}")
+          dep_zookeeper_changed = str_to_bool("${{ steps.filter.outputs.dep-zookeeper }}")
+
+          github_output["dep-hadoop-changed"] = dep_hadoop_changed
+          github_output["dep-hive-changed"] = dep_hive_changed
+          github_output["dep-spark-changed"] = dep_spark_changed
+          github_output["dep-storm-changed"] = dep_storm_changed
+          github_output["dep-zookeeper-changed"] = dep_zookeeper_changed
 
           # Consolidate base image logic
           base_config_outputs = list(map(str_to_bool, (
@@ -140,10 +168,13 @@ jobs:
           github_output["dind-minimal-changed"] = dind_minimal_changed
 
           # Consolidate sandbox image logic similar to above
-          sandbox_component_outputs = list(map(str_to_bool, (
-            "${{ steps.filter.outputs.sandbox-client-noroot-apache }}",
-            "${{ steps.filter.outputs.sandbox-client-noroot-jupyter }}",
-          )))
+          sandbox_client_noroot_apache = str_to_bool("${{ steps.filter.outputs.sandbox-client-noroot-apache }}") or dep_hadoop_changed
+          github_output["sandbox-client-noroot-apache"] = sandbox_client_noroot_apache
+
+          sandbox_component_outputs = [
+            sandbox_client_noroot_apache,
+            str_to_bool("${{ steps.filter.outputs.sandbox-client-noroot-jupyter }}"),
+          ]
           sandbox_client_noroot_output = str_to_bool("${{ steps.filter.outputs.sandbox-client-noroot }}")
           sandbox_client_noroot_changed = any([*sandbox_component_outputs, sandbox_client_noroot_output])
           github_output["sandbox-client-noroot-changed"] = sandbox_client_noroot_changed
@@ -151,23 +182,23 @@ jobs:
           sandbox_client_changed = sandbox_client_noroot_changed or sandbox_client_output
           github_output["sandbox-client-changed"] = sandbox_client_changed
 
-          sandbox_changed = str_to_bool("${{ steps.filter.outputs.sandbox }}") or dind_minimal_changed
+          sandbox_changed = str_to_bool("${{ steps.filter.outputs.sandbox }}") or dind_minimal_changed or dep_hadoop_changed or dep_hive_changed or dep_spark_changed
           github_output["sandbox-changed"] = sandbox_changed
 
           # Consolidate lab change logic
           lab_changes = {
-            k: v or base_changed for k, v in
+            k: v for k, v in
             {
-              "lab1-client-changed": str_to_bool("${{ steps.filter.outputs.lab1-client }}") or base_changed,
-              "lab1-changed": str_to_bool("${{ steps.filter.outputs.lab1 }}") or dind_changed,
-              "lab2-client-changed": str_to_bool("${{ steps.filter.outputs.lab2-client }}") or base_changed,
-              "lab2-changed": str_to_bool("${{ steps.filter.outputs.lab2 }}") or dind_changed,
-              "lab3-client-changed": str_to_bool("${{ steps.filter.outputs.lab3-client }}") or base_changed,
-              "lab3-changed": str_to_bool("${{ steps.filter.outputs.lab3 }}") or dind_changed,
+              "lab1-client-changed": str_to_bool("${{ steps.filter.outputs.lab1-client }}") or base_changed or dep_hadoop_changed,
+              "lab1-changed": str_to_bool("${{ steps.filter.outputs.lab1 }}") or dind_changed or dep_hadoop_changed,
+              "lab2-client-changed": str_to_bool("${{ steps.filter.outputs.lab2-client }}") or base_changed or dep_hadoop_changed,
+              "lab2-changed": str_to_bool("${{ steps.filter.outputs.lab2 }}") or dind_changed or dep_hadoop_changed or dep_hive_changed,
+              "lab3-client-changed": str_to_bool("${{ steps.filter.outputs.lab3-client }}") or base_changed or dep_hadoop_changed,
+              "lab3-changed": str_to_bool("${{ steps.filter.outputs.lab3 }}") or dind_changed or dep_hadoop_changed,
               "lab4-client-changed": str_to_bool("${{ steps.filter.outputs.lab4-client }}") or base_changed,
-              "lab4-changed": str_to_bool("${{ steps.filter.outputs.lab4 }}") or dind_changed,
-              "lab5-client-changed": str_to_bool("${{ steps.filter.outputs.lab5-client }}") or base_changed,
-              "lab5-changed": str_to_bool("${{ steps.filter.outputs.lab5 }}") or dind_changed,
+              "lab4-changed": str_to_bool("${{ steps.filter.outputs.lab4 }}") or dind_changed or dep_storm_changed or dep_zookeeper_changed,
+              "lab5-client-changed": str_to_bool("${{ steps.filter.outputs.lab5-client }}") or base_changed or dep_hadoop_changed or dep_spark_changed,
+              "lab5-changed": str_to_bool("${{ steps.filter.outputs.lab5 }}") or dind_changed or dep_hadoop_changed or dep_spark_changed,
               "lab6-client-changed": str_to_bool("${{ steps.filter.outputs.lab6-client }}") or sandbox_client_changed,
               "lab6-changed": str_to_bool("${{ steps.filter.outputs.lab6 }}") or sandbox_changed,
               "bonus3-changed": str_to_bool("${{ steps.filter.outputs.bonus3 }}") or base_changed,
@@ -179,6 +210,66 @@ jobs:
               for k, v in github_output.items():
                   output_file.write(f"{k}={bool_to_str(v)}\n")
 
+  build-dep-hadoop:
+    needs: determine-changes
+    if: >-
+      always() &&
+      (needs.determine-changes.outputs.dep-hadoop-changed == 'true' || github.event_name == 'workflow_dispatch')
+    name: "Build Hadoop dependency"
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/dep_build_hadoop.yml
+    secrets: inherit
+
+  build-dep-hive:
+    needs: determine-changes
+    if: >-
+      always() &&
+      (needs.determine-changes.outputs.dep-hive-changed == 'true' || github.event_name == 'workflow_dispatch')
+    name: "Build Hive dependency"
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/dep_build_hive.yml
+    secrets: inherit
+
+  build-dep-spark:
+    needs: determine-changes
+    if: >-
+      always() &&
+      (needs.determine-changes.outputs.dep-spark-changed == 'true' || github.event_name == 'workflow_dispatch')
+    name: "Build Spark dependency"
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/dep_build_spark.yml
+    secrets: inherit
+
+  build-dep-storm:
+    needs: determine-changes
+    if: >-
+      always() &&
+      (needs.determine-changes.outputs.dep-storm-changed == 'true' || github.event_name == 'workflow_dispatch')
+    name: "Build Storm dependency"
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/dep_build_storm.yml
+    secrets: inherit
+
+  build-dep-zookeeper:
+    needs: determine-changes
+    if: >-
+      always() &&
+      (needs.determine-changes.outputs.dep-zookeeper-changed == 'true' || github.event_name == 'workflow_dispatch')
+    name: "Build Zookeeper dependency"
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/dep_build_zookeeper.yml
+    secrets: inherit
+
   build-base-root-config-bat:
     needs: determine-changes
     if: needs.determine-changes.outputs.base-root-config-bat == 'true'
@@ -186,7 +277,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/_build.yml
     with:
       path: containers/base/root/.config/bat
     secrets: inherit
@@ -198,7 +289,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/_build.yml
     with:
       path: containers/base/root/.config/glamour
     secrets: inherit
@@ -210,7 +301,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/_build.yml
     with:
       path: containers/base/root/.config/fresh
     secrets: inherit
@@ -222,7 +313,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/_build.yml
     with:
       path: containers/base/root/.config/micro
     secrets: inherit
@@ -234,7 +325,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/_build.yml
     with:
       path: containers/base/root/.config/emacs
     secrets: inherit
@@ -246,7 +337,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/_build.yml
     with:
       path: containers/base/root/.config/nvim
     secrets: inherit
@@ -299,7 +390,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/_build.yml
     with:
       path: containers/base/root/
     secrets: inherit
@@ -316,7 +407,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/_build.yml
     with:
       path: containers/base/
     secrets: inherit
@@ -333,7 +424,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/_build.yml
     with:
       path: containers/dind/
     secrets: inherit
@@ -348,7 +439,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/_build.yml
     with:
       path: containers/dind-minimal/
     secrets: inherit
@@ -357,15 +448,17 @@ jobs:
     needs:
       - determine-changes
       - build-base
+      - build-dep-hadoop
     if: >-
       always() &&
       needs.determine-changes.outputs.lab1-client-changed == 'true' &&
-      needs.build-base.result != 'failure'
+      needs.build-base.result != 'failure' &&
+      needs.build-dep-hadoop.result != 'failure'
     name: "Build lab1 client container"
     permissions:
       contents: read
       packages: write
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/_build.yml
     with:
       path: containers/lab1/client
     secrets: inherit
@@ -374,15 +467,17 @@ jobs:
     needs:
       - determine-changes
       - build-dind
+      - build-dep-hadoop
     if: >-
       always() &&
       needs.determine-changes.outputs.lab1-changed == 'true' &&
-      needs.build-dind.result != 'failure'
+      needs.build-dind.result != 'failure' &&
+      needs.build-dep-hadoop.result != 'failure'
     name: "Build lab1 container"
     permissions:
       contents: read
       packages: write
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/_build.yml
     with:
       path: containers/lab1/
     secrets: inherit
@@ -391,15 +486,17 @@ jobs:
     needs:
       - determine-changes
       - build-base
+      - build-dep-hadoop
     if: >-
       always() &&
       needs.determine-changes.outputs.lab2-client-changed == 'true' &&
-      needs.build-base.result != 'failure'
+      needs.build-base.result != 'failure' &&
+      needs.build-dep-hadoop.result != 'failure'
     name: "Build lab2 client container"
     permissions:
       contents: read
       packages: write
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/_build.yml
     with:
       path: containers/lab2/client
     secrets: inherit
@@ -408,15 +505,19 @@ jobs:
     needs:
       - determine-changes
       - build-dind
+      - build-dep-hadoop
+      - build-dep-hive
     if: >-
       always() &&
       needs.determine-changes.outputs.lab2-changed == 'true' &&
-      needs.build-dind.result != 'failure'
+      needs.build-dind.result != 'failure' &&
+      needs.build-dep-hadoop.result != 'failure' &&
+      needs.build-dep-hive.result != 'failure'
     name: "Build lab2 container"
     permissions:
       contents: read
       packages: write
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/_build.yml
     with:
       path: containers/lab2/
     secrets: inherit
@@ -425,15 +526,17 @@ jobs:
     needs:
       - determine-changes
       - build-base
+      - build-dep-hadoop
     if: >-
       always() &&
       needs.determine-changes.outputs.lab3-client-changed == 'true' &&
-      needs.build-base.result != 'failure'
+      needs.build-base.result != 'failure' &&
+      needs.build-dep-hadoop.result != 'failure'
     name: "Build lab3 client container"
     permissions:
       contents: read
       packages: write
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/_build.yml
     with:
       path: containers/lab3/client
     secrets: inherit
@@ -442,15 +545,17 @@ jobs:
     needs:
       - determine-changes
       - build-dind
+      - build-dep-hadoop
     if: >-
       always() &&
       needs.determine-changes.outputs.lab3-changed == 'true' &&
-      needs.build-dind.result != 'failure'
+      needs.build-dind.result != 'failure' &&
+      needs.build-dep-hadoop.result != 'failure'
     name: "Build lab3 container"
     permissions:
       contents: read
       packages: write
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/_build.yml
     with:
       path: containers/lab3/
     secrets: inherit
@@ -467,7 +572,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/_build.yml
     with:
       path: containers/lab4/client
     secrets: inherit
@@ -476,15 +581,19 @@ jobs:
     needs:
       - determine-changes
       - build-dind
+      - build-dep-storm
+      - build-dep-zookeeper
     if: >-
       always() &&
       needs.determine-changes.outputs.lab4-changed == 'true' &&
-      needs.build-dind.result != 'failure'
+      needs.build-dind.result != 'failure' &&
+      needs.build-dep-storm.result != 'failure' &&
+      needs.build-dep-zookeeper.result != 'failure'
     name: "Build lab4 container"
     permissions:
       contents: read
       packages: write
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/_build.yml
     with:
       path: containers/lab4/
     secrets: inherit
@@ -493,15 +602,19 @@ jobs:
     needs:
       - determine-changes
       - build-base
+      - build-dep-hadoop
+      - build-dep-spark
     if: >-
       always() &&
       needs.determine-changes.outputs.lab5-client-changed == 'true' &&
-      needs.build-base.result != 'failure'
+      needs.build-base.result != 'failure' &&
+      needs.build-dep-hadoop.result != 'failure' &&
+      needs.build-dep-spark.result != 'failure'
     name: "Build lab5 client container"
     permissions:
       contents: read
       packages: write
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/_build.yml
     with:
       path: containers/lab5/client
     secrets: inherit
@@ -510,15 +623,19 @@ jobs:
     needs:
       - determine-changes
       - build-dind
+      - build-dep-hadoop
+      - build-dep-spark
     if: >-
       always() &&
       needs.determine-changes.outputs.lab5-changed == 'true' &&
-      needs.build-dind.result != 'failure'
+      needs.build-dind.result != 'failure' &&
+      needs.build-dep-hadoop.result != 'failure' &&
+      needs.build-dep-spark.result != 'failure'
     name: "Build lab5 container"
     permissions:
       contents: read
       packages: write
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/_build.yml
     with:
       path: containers/lab5/
     secrets: inherit
@@ -535,7 +652,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/_build.yml
     with:
       path: containers/lab6/client
     secrets: inherit
@@ -552,7 +669,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/_build.yml
     with:
       path: containers/lab6/
     secrets: inherit
@@ -569,19 +686,24 @@ jobs:
     permissions:
       contents: read
       packages: write
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/_build.yml
     with:
       path: containers/bonus3
     secrets: inherit
 
   build-sandbox-client-noroot-apache:
-    needs: determine-changes
-    if: needs.determine-changes.outputs.sandbox-client-noroot-apache == 'true'
+    needs:
+      - determine-changes
+      - build-dep-hadoop
+    if: >-
+      always() &&
+      needs.determine-changes.outputs.sandbox-client-noroot-apache == 'true' &&
+      needs.build-dep-hadoop.result != 'failure'
     name: "Build sandbox-client-noroot-apache container"
     permissions:
       contents: read
       packages: write
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/_build.yml
     with:
       path: containers/sandbox/client/noroot/apache
     secrets: inherit
@@ -593,7 +715,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/_build.yml
     with:
       path: containers/sandbox/client/noroot/jupyter
     secrets: inherit
@@ -612,7 +734,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/_build.yml
     with:
       path: containers/sandbox/client/noroot
     secrets: inherit
@@ -631,7 +753,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/_build.yml
     with:
       path: containers/sandbox/client
     secrets: inherit
@@ -640,15 +762,21 @@ jobs:
     needs:
       - determine-changes
       - build-dind-minimal
+      - build-dep-hadoop
+      - build-dep-hive
+      - build-dep-spark
     if: >-
       always() &&
       needs.determine-changes.outputs.sandbox-changed == 'true' &&
-      needs.build-dind-minimal.result != 'failure'
+      needs.build-dind-minimal.result != 'failure' &&
+      needs.build-dep-hadoop.result != 'failure' &&
+      needs.build-dep-hive.result != 'failure' &&
+      needs.build-dep-spark.result != 'failure'
     name: "Build sandbox container"
     permissions:
       contents: read
       packages: write
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/_build.yml
     with:
       path: containers/sandbox
     secrets: inherit

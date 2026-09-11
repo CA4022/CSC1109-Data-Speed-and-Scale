@@ -1,0 +1,26 @@
+name: Build Storm Dependency
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  push:
+    paths:
+      - ".github/workflows/dep_build_storm.yml"
+      - "containers/deps/storm/Dockerfile"
+
+jobs:
+  call-template:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - version: "2.8.1-jre17"
+            is_latest: false
+          - version: "2.8.9-jre17"
+            is_latest: true
+
+    uses: ./.github/workflows/_dep_build.yml
+    with:
+      project: "storm"
+      version: ${{ matrix.version }}
+      is_latest: ${{ matrix.is_latest }}

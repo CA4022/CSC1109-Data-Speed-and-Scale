@@ -1,0 +1,28 @@
+name: Build Spark Dependency
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  push:
+    paths:
+      - ".github/workflows/dep_build_spark.yml"
+      - "containers/deps/spark/Dockerfile"
+
+jobs:
+  call-template:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - version: "4.0.0-scala2.13-java17-python3-ubuntu"
+            is_latest: false
+          - version: "4.0.1-scala2.13-java17-python3-ubuntu"
+            is_latest: false
+          - version: "4.1.3-scala2.13-java17-python3-ubuntu"
+            is_latest: true
+
+    uses: ./.github/workflows/_dep_build.yml
+    with:
+      project: "spark"
+      version: ${{ matrix.version }}
+      is_latest: ${{ matrix.is_latest }}

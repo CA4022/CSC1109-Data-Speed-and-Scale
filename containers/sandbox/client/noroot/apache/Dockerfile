@@ -1,11 +1,11 @@
-FROM ghcr.io/ca4022/hadoop:3.4.2-lean-jdk17
+FROM ghcr.io/ca4022/hadoop:3.5.0
 
 ENV PIG_HOME="/opt/pig/"
 ENV PATH="/opt/maven/bin/:$PATH"
 
 COPY test /test
 
-COPY --from=docker.io/apache/hive:4.0.1 /opt/hive/ /opt/hive/
+COPY --from=docker.io/apache/hive:4.2.1 /opt/hive/ /opt/hive/
 
 USER root
 

@@ -1,0 +1,26 @@
+name: Build Zookeeper Dependency
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  push:
+    paths:
+      - ".github/workflows/dep_build_zookeeper.yml"
+      - "containers/deps/zookeeper/Dockerfile"
+
+jobs:
+  call-template:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - version: "3.9.3-jre-17"
+            is_latest: false
+          - version: "3.9.5-jre-17"
+            is_latest: true
+
+    uses: ./.github/workflows/_dep_build.yml
+    with:
+      project: "zookeeper"
+      version: ${{ matrix.version }}
+      is_latest: ${{ matrix.is_latest }}

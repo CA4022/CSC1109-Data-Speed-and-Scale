@@ -1,0 +1,34 @@
+name: Build Hadoop Dependency
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  push:
+    paths:
+      - ".github/workflows/dep_build_hadoop.yml"
+      - "containers/deps/hadoop/Dockerfile"
+
+jobs:
+  call-template:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - version: "3.4.1"
+            is_latest: false
+          - version: "3.4.2"
+            is_latest: false
+          - version: "3.4.2-lean"
+            is_latest: false
+          - version: "3.4.2-lean-jdk17"
+            upstream_tag: "3.4.2-lean" # This is kept to manage the transition from openjdk to openj9
+            is_latest: false
+          - version: "3.5.0"
+            is_latest: true
+
+    uses: ./.github/workflows/_dep_build.yml
+    with:
+      project: "hadoop"
+      version: ${{ matrix.version }}
+      upstream_tag: ${{ matrix.upstream_tag }}
+      is_latest: ${{ matrix.is_latest }}
