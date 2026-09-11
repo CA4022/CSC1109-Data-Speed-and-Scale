@@ -5,6 +5,7 @@ on:
   push:
     paths:
       - ".github/workflows/hadoop_build.yml"
+      - "containers/dependencies/hadoop/Dockerfile"
 
 jobs:
   build-hadoop-external:
@@ -14,40 +15,24 @@ jobs:
       matrix:
         include:
           - version: "3.4.1"
-            branch: "docker-hadoop-3.4.1"
             is_latest: false
-
           - version: "3.4.2"
-            branch: "docker-hadoop-3.4.2"
             is_latest: false
-
           - version: "3.4.2-lean"
-            branch: "docker-hadoop-3.4.2-lean"
             is_latest: false
-
           - version: "3.4.2-lean-jdk17"
-            branch: "docker-hadoop-3.4.2-lean"
+            upstream_tag: "3.4.2-lean" # This is kept to manage the transition from openjdk to openj9
+            is_latest: false
+          - version: "3.5.0-lean"
             is_latest: true
-            preprocess: |
-              echo "Upgrading Dockerfile to OpenJ9 (IBM Semeru) JDK 17 with shared cache..."
-              sed -i 's/:jdk11/:jdk17/g' Dockerfile
-              sed -i '/FROM ghcr.io\/apache\/hadoop-runner:jdk17-u2204/a COPY --from=docker.io\/ibm-semeru-runtimes:open-17-jre \/opt\/java\/openjdk \/opt\/java\/openjdk\nENV JAVA_TOOL_OPTIONS="-Xshareclasses:name=csc1109_cache,cacheDir=\/var\/cache\/javasharedresources -Xscmx64M"\nUSER root\nRUN mkdir -p \/var\/cache\/javasharedresources \&\& chmod 1777 \/var\/cache\/javasharedresources\nUSER hadoop' Dockerfile
 
     permissions:
       contents: read
       packages: write
 
     steps:
-      - name: Checkout apache/hadoop
+      - name: Checkout current repository
         uses: actions/checkout@v4
-        with:
-          repository: apache/hadoop
-          ref: ${{ matrix.branch }}
-
-      - name: Run preprocessing script
-        if: ${{ matrix.preprocess != '' }}
-        run: |
-          ${{ matrix.preprocess }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -71,15 +56,17 @@ jobs:
           if [[ "${{ matrix.is_latest }}" == "true" ]]; then
             TAGS="$TAGS,$IMAGE_NAME:latest"
           fi
-
           echo "BUILD_TAGS=$TAGS" >> $GITHUB_ENV
 
       - name: Build and push multi-platform image
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: ./containers/dependencies/hadoop
+          file: ./containers/dependencies/hadoop/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ env.BUILD_TAGS }}
+          build-args: |
+            HADOOP_VERSION=${{ matrix.upstream_tag || matrix.version }}
           cache-from: type=gha,scope=${{ matrix.version }}
           cache-to: type=gha,mode=max,scope=${{ matrix.version }}
