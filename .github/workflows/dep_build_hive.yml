@@ -7,11 +7,18 @@ on:
     paths:
       - ".github/workflows/dep_build_hive.yml"
       - "containers/deps/hive/Dockerfile"
+permissions:
+  contents: read
+  packages: write
 
 jobs:
   call-template:
+    permissions:
+      contents: read
+      packages: write
     strategy:
       fail-fast: false
+      max-parallel: 1
       matrix:
         include:
           - version: "3.1.3"

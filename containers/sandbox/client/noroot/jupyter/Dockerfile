@@ -22,9 +22,7 @@ USER jovyan
 
 WORKDIR /home/jovyan/.local/share/csc1109-launcher/
 
-RUN mamba update -n base --all --yes && \
-    mamba clean --all --yes && \
-    mamba install -n base -y \
+RUN mamba install -n base -y \
         "nodejs>=22.12.0,<23" \
         fsspec \
         hatch \
