@@ -11,11 +11,10 @@ services:
   namenode:
     image: ${HADOOP_RUNNER_IMAGE}:${HADOOP_RUNNER_VERSION}
     hostname: namenode
-    command: /init/init
+    command: ["hdfs", "namenode"]
     volumes:
       - .:/lab/
       - ./config/:${HADOOP_HOME}/etc/hadoop
-      - ./hadoop-init/:/init/
       - jvm-shared-cache:/var/cache/javasharedresources
     ports:
       - 9870:9870
@@ -35,7 +34,6 @@ services:
     <<: *spark-common-config
     command: /opt/spark/bin/spark-class org.apache.spark.deploy.master.Master
     environment:
-      - HADOOP_HOME=${HADOOP_HOME}
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
       - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
     ports:
@@ -46,7 +44,6 @@ services:
     <<: *spark-common-config
     command: /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
     environment:
-      - HADOOP_HOME=${HADOOP_HOME}
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
       - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
     depends_on:

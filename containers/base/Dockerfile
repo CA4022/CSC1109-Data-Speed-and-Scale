@@ -41,7 +41,7 @@ RUN mv /test-base/ /test/base/ && chmod -R +x /test/
 # Set env variables
 ENV JAVA_HOME=/usr/lib64/jvm/java-17-openj9-17
 ENV PATH="${JAVA_HOME}/bin:/opt/hdfs/bin:/opt/hadoop/bin:/opt/hive/bin:/opt/pig/bin:/apache-storm/bin:/apache-zookeeper-3.9.3-bin/bin:/opt/spark/bin:${PATH}"
-ENV JAVA_TOOL_OPTIONS="-Xshareclasses:name=csc1109_cache,cacheDir=/var/cache/javasharedresources -Xscmx64M"
+ENV JAVA_TOOL_OPTIONS="-Xshareclasses:name=%u_csc1109_cache,cacheDir=/var/cache/javasharedresources,readonly,nonfatal -Xscmx64M"
 
 # Copy lab specific files and set entrypoint running
 COPY ./lab/ /lab/

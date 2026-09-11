@@ -10,5 +10,8 @@ ENV SPARK_VERSION=4.1.3-scala2.13-java17-python3-ubuntu
 ENV SPARK_HOME=/opt/spark/
 ENV SPARK_LOCAL_IP="127.0.0.1"
 
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 COPY ./lab/ /lab/
 RUN chmod -R 777 /lab/
