@@ -22,6 +22,8 @@ USER jovyan
 
 WORKDIR /home/jovyan/.local/share/csc1109-launcher/
 
+ENV SKIP_JUPYTER_BUILDER=1
+
 RUN mamba install -n base -y \
         "nodejs>=22.12.0,<23" \
         fsspec \
@@ -39,7 +41,7 @@ RUN mamba install -n base -y \
         python-build \
         pyright \
         twine && \
-    mamba run -n base python -m build && \
+    mamba run -n base python -m build --wheel --no-isolation && \
     mamba run -n base python -m pip install ./dist/*.whl && \
     mamba clean --all --yes && \
     wget -q https://raw.githubusercontent.com/coursier/coursier/gh-pages/coursier -O coursier-cli && \
