@@ -28,6 +28,8 @@ RUN mamba install -n base -y \
         "nodejs>=22.12.0,<23" \
         fsspec \
         hatch \
+        hatch-jupyter-builder \
+        hatch-nodejs-version \
         ipywidgets \
         jupyter-lsp \
         jupyterlab-day \
