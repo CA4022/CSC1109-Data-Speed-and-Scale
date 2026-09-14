@@ -1,7 +1,7 @@
 ARG JAVA_VERSION=21
-FROM docker.io/ibm-semeru-runtimes:open-${JAVA_VERSION}-jre AS jre
-
 ARG UPSTREAM_VERSION=4.2.1
+
+FROM docker.io/ibm-semeru-runtimes:open-${JAVA_VERSION}-jre AS jre
 FROM docker.io/apache/hive:${UPSTREAM_VERSION}
 
 USER root
