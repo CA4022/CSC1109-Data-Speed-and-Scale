@@ -7,6 +7,11 @@ on:
         description: "The path to the directory containing the Dockerfile and build context."
         required: true
         type: string
+      force_rebuild:
+        description: "Force rebuild even if remote tag already exists"
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   build-test-and-push:
@@ -60,7 +65,10 @@ jobs:
         id: check_tag
         continue-on-error: true
         run: |
-          if docker manifest inspect ${{ env.VERSION_TAG_REMOTE }} > /dev/null; then
+          if [[ "${{ inputs.force_rebuild }}" == "true" ]] || [[ "${{ github.event_name }}" == "push" ]]; then
+            echo "Force rebuild is enabled or event is push. Proceeding to build."
+            echo "exists=false" >> $GITHUB_OUTPUT
+          elif docker manifest inspect ${{ env.VERSION_TAG_REMOTE }} > /dev/null 2>&1; then
             echo "Tag ${{ env.VERSION_TAG_REMOTE }} already exists. Skipping build."
             echo "exists=true" >> $GITHUB_OUTPUT
           else

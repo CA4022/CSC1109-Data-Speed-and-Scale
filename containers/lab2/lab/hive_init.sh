@@ -65,6 +65,8 @@ hdfs dfs -chmod -R 1777 hdfs://namenode/user/$HIVE_USER_NAME/warehouse
 # --- Set ownership ---
 echo "Ensuring '$HIVE_USER_NAME' user owns hdfs://namenode/user/$HIVE_USER_NAME..."
 hdfs dfs -chown -R $HIVE_USER_NAME:$HIVE_USER_NAME hdfs://namenode/user/$HIVE_USER_NAME
+echo "Ensuring '$HIVE_USER_NAME' user owns hdfs://namenode/tmp/hive..."
+hdfs dfs -chown -R $HIVE_USER_NAME:$HIVE_USER_NAME hdfs://namenode/tmp/hive
 
 # --- Upload Tez to HDFS ---
 TEZ_HDFS_PATH="hdfs://namenode/apps/tez"

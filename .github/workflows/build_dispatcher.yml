@@ -2,6 +2,12 @@ name: Build Dispatcher
 
 on:
   workflow_dispatch:
+    inputs:
+      force_rebuild:
+        description: "Force rebuild containers even if remote tag already exists"
+        required: false
+        type: boolean
+        default: true
   push:
     branches:
       - main

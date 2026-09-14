@@ -128,7 +128,7 @@ services:
     hostname: metastore
     environment:
       - HADOOP_HOME=${HADOOP_HOME}
-      - HADOOP_USER_NAME=${HADOOP_USER_NAME}
+      - HADOOP_USER_NAME=${HIVE_USER_NAME}
       - HIVE_HOME=${HIVE_HOME}
       - METASTORE_PORT=9083
       - SERVICE_NAME=metastore
@@ -148,7 +148,7 @@ services:
     hostname: hiveserver
     environment:
       - HADOOP_HOME=${HADOOP_HOME}
-      - HADOOP_USER_NAME=${HADOOP_USER_NAME}
+      - HADOOP_USER_NAME=${HIVE_USER_NAME}
       - HIVE_HOME=${HIVE_HOME}
       - HIVESERVER2_PID_DIR=/tmp/hive
       - SERVICE_NAME=hiveserver2

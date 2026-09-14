@@ -26,4 +26,8 @@
         <name>tez.task.resource.memory.mb</name>
         <value>512</value>
     </property>
+    <property>
+        <name>tez.task.resource.calculator.process-tree.class</name>
+        <value>org.apache.hadoop.yarn.util.ProcfsBasedProcessTree</value>
+    </property>
 </configuration>
