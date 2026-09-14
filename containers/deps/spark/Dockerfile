@@ -1,4 +1,4 @@
-ARG UPSTREAM_VERSION=4.1.3-scala2.13-java17-python3-ubuntu
+ARG UPSTREAM_VERSION=4.2.0-scala2.13-java21-python3-ubuntu
 FROM docker.io/apache/spark:${UPSTREAM_VERSION}
 
 USER root
