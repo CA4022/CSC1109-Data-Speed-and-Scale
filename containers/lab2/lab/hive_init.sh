@@ -32,10 +32,11 @@ done
 ORIGINAL_HADOOP_USER_NAME="${HADOOP_USER_NAME:-$HIVE_USER_NAME}"
 export HADOOP_USER_NAME="$HADOOP_SUPERUSER_NAME"
 
-hdfs dfsadmin -safemode wait >/dev/null 2>&1 || true
+export HADOOP_CONF_DIR="${HIVE_HOME}/conf"
+hdfs dfsadmin -fs hdfs://namenode:8020 -safemode wait >/dev/null 2>&1 || true
 
 echo "Waiting for live datanodes..."
-until hdfs dfsadmin -report -live 2>/dev/null | grep -qE "^Live datanodes \([1-9]"; do
+until hdfs dfsadmin -fs hdfs://namenode:8020 -report -live 2>/dev/null | grep -qE "^Live datanodes \([1-9]"; do
   sleep 2
 done
 echo "Live datanode(s) available."
