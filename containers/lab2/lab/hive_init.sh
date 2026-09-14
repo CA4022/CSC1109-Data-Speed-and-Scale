@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+HIVE_USER_NAME="${HIVE_USER_NAME:-hive}"
+HADOOP_SUPERUSER_NAME="${HADOOP_SUPERUSER_NAME:-hadoop}"
+
 # Wait for PostgreSQL to become reachable
 echo "Waiting for postgres:5432..."
 until (echo > /dev/tcp/postgres/5432) >/dev/null 2>&1 || nc -z postgres 5432 >/dev/null 2>&1 || (exec 3<>/dev/tcp/postgres/5432) >/dev/null 2>&1; do
@@ -20,6 +23,16 @@ else
 fi
 
 echo "--- HDFS Initialization ---"
+
+echo "Waiting for namenode:9870..."
+until (echo > /dev/tcp/namenode/9870) >/dev/null 2>&1 || curl -s -f http://namenode:9870/ >/dev/null 2>&1; do
+  sleep 2
+done
+
+ORIGINAL_HADOOP_USER_NAME="${HADOOP_USER_NAME:-$HIVE_USER_NAME}"
+export HADOOP_USER_NAME="$HADOOP_SUPERUSER_NAME"
+
+hdfs dfsadmin -safemode wait >/dev/null 2>&1 || true
 
 # --- Create HDFS directories idempotently ---
 if ! hdfs dfs -test -d hdfs://namenode/tmp; then
@@ -89,4 +102,5 @@ else
   echo "WARNING: Tez tarball not found at $TEZ_TARBALL, skipping HDFS upload."
 fi
 
+export HADOOP_USER_NAME="$ORIGINAL_HADOOP_USER_NAME"
 echo "Initialization complete."
