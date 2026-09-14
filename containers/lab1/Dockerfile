@@ -13,4 +13,4 @@ COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 COPY ./lab/ /lab/
-RUN chown -R 1000 /lab/
+RUN chown -R 1000 /lab/ && chmod -R 777 /lab/
