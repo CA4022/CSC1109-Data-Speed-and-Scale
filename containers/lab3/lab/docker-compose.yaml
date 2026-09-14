@@ -18,7 +18,8 @@ services:
       - HADOOP_HOME=${HADOOP_HOME}
       - HADOOP_USER_NAME=${HADOOP_USER_NAME}
       - HADOOP_OPTS=--add-opens=java.base/java.lang=ALL-UNNAMED
-      - ENSURE_NAMENODE_DIR=/tmp/hadoop-root/dfs/name
+      - ENSURE_NAMENODE_DIR=/tmp/hadoop-hadoop/dfs/name
+      - ENSURE_NAMENODE_CLUSTERID=CID-csc1109-hadoop
     healthcheck:
       test: ["CMD", "curl", "-f", "http://namenode:9870"]
       interval: 10s

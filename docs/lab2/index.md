@@ -104,6 +104,10 @@ command:
 !connect jdbc:hive2://hiveserver:10000
 ```
 
+??? note "HiveServer Startup Notice"
+
+    When you first run `docker compose up -d`, HiveServer2 takes approximately 20–30 seconds to complete metastore database initialization and stage background services before opening port 10000. If `!connect` initially reports connection refused, wait a few seconds and try again.
+
 WARNING: In many resources on the usage of Hive, you will see references to "Hive CLI" vs
 `beeline`. These resources are out of date, and as of 2025 the "Hive CLI" is considered
 [deprecated](https://hive.apache.org/docs/latest/user/replacing-the-implementation-of-hive-cli-using-beeline/).

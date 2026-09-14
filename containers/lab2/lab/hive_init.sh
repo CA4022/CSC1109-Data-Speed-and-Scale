@@ -34,6 +34,12 @@ export HADOOP_USER_NAME="$HADOOP_SUPERUSER_NAME"
 
 hdfs dfsadmin -safemode wait >/dev/null 2>&1 || true
 
+echo "Waiting for live datanodes..."
+until hdfs dfsadmin -report -live 2>/dev/null | grep -qE "^Live datanodes \([1-9]"; do
+  sleep 2
+done
+echo "Live datanode(s) available."
+
 # --- Create HDFS directories idempotently ---
 if ! hdfs dfs -test -d hdfs://namenode/tmp; then
   echo "Directory hdfs://namenode/tmp not found, creating..."
@@ -92,7 +98,7 @@ if [ -f "$TEZ_TARBALL" ]; then
   fi
   if ! hdfs dfs -test -f "${TEZ_HDFS_PATH}/tez.tar.gz"; then
     echo "Uploading Tez tarball to HDFS at ${TEZ_HDFS_PATH}/tez.tar.gz..."
-    hdfs dfs -put "$TEZ_TARBALL" "${TEZ_HDFS_PATH}/tez.tar.gz"
+    hdfs dfs -put -f "$TEZ_TARBALL" "${TEZ_HDFS_PATH}/tez.tar.gz"
     echo "Tez tarball uploaded successfully."
   else
     echo "Tez tarball already present in HDFS. Skipping upload."
