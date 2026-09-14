@@ -2,7 +2,19 @@ name: Build Hive Dependency
 
 on:
   workflow_dispatch:
+    inputs:
+      force_rebuild:
+        description: "Force rebuild even if remote tag already exists"
+        required: false
+        type: boolean
+        default: true
   workflow_call:
+    inputs:
+      force_rebuild:
+        description: "Force rebuild even if remote tag already exists"
+        required: false
+        type: boolean
+        default: false
   push:
     paths:
       - ".github/workflows/dep_build_hive.yml"
@@ -33,3 +45,4 @@ jobs:
       project: "hive"
       version: ${{ matrix.version }}
       is_latest: ${{ matrix.is_latest }}
+      force_rebuild: ${{ inputs.force_rebuild || github.event_name == 'push' }}

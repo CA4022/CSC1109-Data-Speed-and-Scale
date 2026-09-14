@@ -20,6 +20,11 @@ on:
         description: "Whether to tag this build as latest"
         required: true
         type: boolean
+      force_rebuild:
+        description: "Force rebuild even if remote tag already exists"
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   build-and-push:
@@ -61,7 +66,10 @@ jobs:
         id: check_tag
         continue-on-error: true
         run: |
-          if docker manifest inspect ${{ env.TAG_PRIMARY }} > /dev/null 2>&1; then
+          if [[ "${{ inputs.force_rebuild }}" == "true" ]]; then
+            echo "Force rebuild is enabled. Proceeding to build."
+            echo "exists=false" >> $GITHUB_OUTPUT
+          elif docker manifest inspect ${{ env.TAG_PRIMARY }} > /dev/null 2>&1; then
             echo "Tag ${{ env.TAG_PRIMARY }} already exists. Skipping build."
             echo "exists=true" >> $GITHUB_OUTPUT
           else

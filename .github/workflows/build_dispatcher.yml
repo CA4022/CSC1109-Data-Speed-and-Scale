@@ -220,6 +220,8 @@ jobs:
       contents: read
       packages: write
     uses: ./.github/workflows/dep_build_hadoop.yml
+    with:
+      force_rebuild: ${{ needs.determine-changes.outputs.dep-hadoop-changed == 'true' || github.event_name == 'workflow_dispatch' }}
     secrets: inherit
 
   build-dep-hive:
@@ -232,6 +234,8 @@ jobs:
       contents: read
       packages: write
     uses: ./.github/workflows/dep_build_hive.yml
+    with:
+      force_rebuild: ${{ needs.determine-changes.outputs.dep-hive-changed == 'true' || github.event_name == 'workflow_dispatch' }}
     secrets: inherit
 
   build-dep-spark:
@@ -244,6 +248,8 @@ jobs:
       contents: read
       packages: write
     uses: ./.github/workflows/dep_build_spark.yml
+    with:
+      force_rebuild: ${{ needs.determine-changes.outputs.dep-spark-changed == 'true' || github.event_name == 'workflow_dispatch' }}
     secrets: inherit
 
   build-dep-storm:
@@ -256,6 +262,8 @@ jobs:
       contents: read
       packages: write
     uses: ./.github/workflows/dep_build_storm.yml
+    with:
+      force_rebuild: ${{ needs.determine-changes.outputs.dep-storm-changed == 'true' || github.event_name == 'workflow_dispatch' }}
     secrets: inherit
 
   build-dep-zookeeper:
@@ -268,6 +276,8 @@ jobs:
       contents: read
       packages: write
     uses: ./.github/workflows/dep_build_zookeeper.yml
+    with:
+      force_rebuild: ${{ needs.determine-changes.outputs.dep-zookeeper-changed == 'true' || github.event_name == 'workflow_dispatch' }}
     secrets: inherit
 
   build-base-root-config-bat:
