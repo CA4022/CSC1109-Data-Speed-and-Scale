@@ -12,7 +12,7 @@ RUN for i in 1 2 3 4 5; do zypper --non-interactive install --no-recommends syst
         wget \
         man \
         maven \
-        java-17-openj9-devel \
+        java-21-openj9-devel \
         curl && break || { [ $i -eq 5 ] && exit 1 || sleep 15; }; done && \
     rpm -qa 'python311*' | xargs -r zypper rm --clean-deps && \
     mkdir -p /var/cache/javasharedresources && chmod 1777 /var/cache/javasharedresources && \
@@ -39,7 +39,7 @@ COPY ./test/ /test/
 RUN mv /test-base/ /test/base/ && chmod -R +x /test/
 
 # Set env variables
-ENV JAVA_HOME=/usr/lib64/jvm/java-17-openj9-17
+ENV JAVA_HOME=/usr/lib64/jvm/java-21-openj9-21
 ENV PATH="${JAVA_HOME}/bin:/opt/hdfs/bin:/opt/hadoop/bin:/opt/hive/bin:/opt/pig/bin:/apache-storm/bin:/apache-zookeeper-3.9.3-bin/bin:/opt/spark/bin:${PATH}"
 ENV JAVA_TOOL_OPTIONS="-Xshareclasses:name=%u_csc1109_cache,cacheDir=/var/cache/javasharedresources,readonly,nonfatal -Xscmx64M"
 

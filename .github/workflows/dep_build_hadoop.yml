@@ -33,15 +33,20 @@ jobs:
       matrix:
         include:
           - version: "3.4.1"
+            java_version: "17"
             is_latest: false
           - version: "3.4.2"
+            java_version: "17"
             is_latest: false
           - version: "3.4.2-lean"
+            java_version: "17"
             is_latest: false
           - version: "3.4.2-lean-jdk17"
             upstream_tag: "3.4.2-lean" # This is kept to manage the transition from openjdk to openj9
+            java_version: "17"
             is_latest: false
           - version: "3.5.0"
+            java_version: "21"
             is_latest: true
 
     uses: ./.github/workflows/_dep_build.yml
@@ -50,4 +55,5 @@ jobs:
       version: ${{ matrix.version }}
       upstream_tag: ${{ matrix.upstream_tag }}
       is_latest: ${{ matrix.is_latest }}
+      java_version: ${{ matrix.java_version || '17' }}
       force_rebuild: ${{ inputs.force_rebuild || github.event_name == 'push' }}

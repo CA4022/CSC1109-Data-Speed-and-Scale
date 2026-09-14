@@ -34,10 +34,13 @@ jobs:
       matrix:
         include:
           - version: "3.1.3"
+            java_version: "17"
             is_latest: false
           - version: "4.1.0"
+            java_version: "17"
             is_latest: false
           - version: "4.2.1"
+            java_version: "21"
             is_latest: true
 
     uses: ./.github/workflows/_dep_build.yml
@@ -45,4 +48,5 @@ jobs:
       project: "hive"
       version: ${{ matrix.version }}
       is_latest: ${{ matrix.is_latest }}
+      java_version: ${{ matrix.java_version || '21' }}
       force_rebuild: ${{ inputs.force_rebuild || github.event_name == 'push' }}

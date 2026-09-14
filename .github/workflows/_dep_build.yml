@@ -25,6 +25,11 @@ on:
         required: false
         type: boolean
         default: false
+      java_version:
+        description: "Java version to overlay (e.g. 17 or 21)"
+        required: false
+        type: string
+        default: "17"
 
 jobs:
   build-and-push:
@@ -87,6 +92,7 @@ jobs:
           push: true
           tags: ${{ env.BUILD_TAGS }}
           build-args: |
+            JAVA_VERSION=${{ inputs.java_version || '17' }}
             UPSTREAM_VERSION=${{ inputs.upstream_tag || inputs.version }}
             HADOOP_VERSION=${{ inputs.upstream_tag || inputs.version }}
             HIVE_VERSION=${{ inputs.upstream_tag || inputs.version }}

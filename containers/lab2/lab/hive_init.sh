@@ -68,7 +68,7 @@ hdfs dfs -chown -R $HIVE_USER_NAME:$HIVE_USER_NAME hdfs://namenode/user/$HIVE_US
 
 # --- Upload Tez to HDFS ---
 TEZ_HDFS_PATH="hdfs://namenode/apps/tez"
-TEZ_TARBALL="/opt/tez.tar.gz"
+TEZ_TARBALL="/opt/tez/share/tez.tar.gz"
 
 if [ -f "$TEZ_TARBALL" ]; then
   if ! hdfs dfs -test -d "$TEZ_HDFS_PATH"; then
