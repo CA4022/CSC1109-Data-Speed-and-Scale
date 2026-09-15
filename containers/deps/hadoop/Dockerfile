@@ -10,6 +10,9 @@ ENV JAVA_HOME=/opt/java/openjdk
 ENV PATH="${JAVA_HOME}/bin:${PATH}"
 ENV JAVA_TOOL_OPTIONS="-Xshareclasses:name=%u_csc1109_cache,cacheDir=/var/cache/javasharedresources,nonfatal -Xscmx64M"
 RUN mkdir -p /var/cache/javasharedresources && chmod 1777 /var/cache/javasharedresources && \
-    apt-get update && apt-get install -y --no-install-recommends python3-setuptools && \
-    rm -rf /var/lib/apt/lists/*
+    if command -v apt-get >/dev/null 2>&1; then \
+        apt-get update && apt-get install -y --no-install-recommends python3-setuptools && \
+        rm -rf /var/lib/apt/lists/*; \
+    fi
 USER hadoop
+
