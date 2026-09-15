@@ -36,6 +36,8 @@ cat << 'EOF' > /etc/systemd/system/machine.slice.d/10-delegate.conf
 Delegate=yes
 EOF
 
+chmod -R 777 /lab 2>/dev/null || true
+
 printenv > /env
 exec /sbin/init
 

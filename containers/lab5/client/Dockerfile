@@ -11,5 +11,4 @@ RUN groupadd spark && \
 ENV SPARK_HOME=/opt/spark/
 ENV SPARK_LOCAL_IP="127.0.0.1"
 
-ENTRYPOINT default_shell
 USER spark
