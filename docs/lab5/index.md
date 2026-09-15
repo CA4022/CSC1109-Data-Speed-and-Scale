@@ -419,10 +419,7 @@ will do our distributed word count task. The following lines will perform a word
 Spark engine in python.
 
 WARNING: Here, we **need** to use `uv` to run the command, as this runs `pyspark` in an
-environment that is pinned to `python3.10`. Running without `uv run` will cause `spark-submit` to
-run using the container's system python interpreter, which is `python3.6`, raising a
-`ModuleNotFound` error as `python3.6` lacks the `importlib.resources` package which our `pyspark`
-version needs.
+environment that is pinned to `python3.13` matching the Spark cluster nodes.
 
 ```python
  >>> lines = sc.textFile("hdfs://namenode/data/Word_count.txt")

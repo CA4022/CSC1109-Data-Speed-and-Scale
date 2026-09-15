@@ -12,5 +12,8 @@ RUN groupadd spark && \
 
 ENV SPARK_HOME=/opt/spark/
 ENV SPARK_LOCAL_IP="127.0.0.1"
+ENV UV_PYTHON_PREFERENCE=only-system
+ENV UV_LINK_MODE=copy
+ENV UV_PYTHON=python3
 
 USER spark
