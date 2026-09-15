@@ -70,6 +70,7 @@ services:
     working_dir: /lab/
     volumes:
       - .:/lab/
+      - ./config/:${HADOOP_HOME}/etc/hadoop
       - jvm-shared-cache:/var/cache/javasharedresources
     stdin_open: true
     tty: true

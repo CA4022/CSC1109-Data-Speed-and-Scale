@@ -6,7 +6,9 @@ COPY ./spark-defaults.conf /opt/spark/conf/spark-defaults.conf
 
 RUN groupadd spark && \
     groupadd hadoop && \
-    useradd -g spark -g hadoop -k /root/ -m spark
+    useradd -g spark -g hadoop -k /root/ -m spark && \
+    mkdir -p /var/cache/javasharedresources && \
+    chmod 1777 /var/cache/javasharedresources
 
 ENV SPARK_HOME=/opt/spark/
 ENV SPARK_LOCAL_IP="127.0.0.1"
