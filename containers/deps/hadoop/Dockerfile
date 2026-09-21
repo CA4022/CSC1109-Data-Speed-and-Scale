@@ -2,7 +2,7 @@ ARG JAVA_VERSION=17
 ARG UPSTREAM_VERSION=3.5.0
 
 FROM docker.io/ibm-semeru-runtimes:open-${JAVA_VERSION}-jre AS jre
-FROM docker.io/apache/hadoop:${UPSTREAM_VERSION}
+FROM ghcr.io/apache/hadoop:${UPSTREAM_VERSION}
 
 USER root
 COPY --from=jre /opt/java/openjdk /opt/java/openjdk
