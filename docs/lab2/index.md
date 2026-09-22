@@ -114,7 +114,9 @@ WARNING: In many resources on the usage of Hive, you will see references to "Hiv
 Take care to ensure whatever resources you use as reference are for **`beeline`** specifically.
 
 This will prompt the user to enter a username and password to connect to the Hive. For the purposes
-of this demonstration, the username and password here have both been set to "hive".
+of this demonstration, the username and password here have both been set to "hive". We are now
+connected to our hive cluster and ready to begin running commands. To disconnect at any time, we
+simply need to run the `!quit` command.
 
 ## Sending Out Worker Bees 󰾢&nbsp; - Querying the Hive ###
 
