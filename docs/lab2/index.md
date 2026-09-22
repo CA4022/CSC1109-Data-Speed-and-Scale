@@ -137,6 +137,9 @@ hdfs dfs -put /lab/data/iris.csv /user/hive/data/iris.csv
 
 TIP: You can also run these commands without exiting `beeline` by prepending them with `!sh`.
 
+To confirm we have successfully uploaded this file to our datanodes, we can run
+`hdfs dfs -cat /user/hive/data/iris.csv` to read the file directly from our HDFS cluster.
+
 Then, we can simply reconnect to our hive server in `beeline`, create a table, and read in that
 file.
 
