@@ -14,6 +14,7 @@ ENV HIVE_USER_NAME=hive
 ENV PIG_CLASSPATH="$SPARK_HOME/jars/*"
 ENV IS_RESUME=false
 
+COPY containers.conf /etc/containers/containers.conf
 COPY deploy-stack.service /etc/systemd/system/deploy-stack.service
 COPY ./lab/ /lab/
 COPY ./stack/ /opt/stack/
