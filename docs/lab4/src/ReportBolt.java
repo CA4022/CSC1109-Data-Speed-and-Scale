@@ -47,11 +47,14 @@ public class ReportBolt extends BaseRichBolt {
     @Override
     public void execute(Tuple tuple) {
         if (isTickTuple(tuple)) {
+        try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(this.outputFile, false)))) {
             for (Map.Entry<String, Integer> entry : this.finalCounts.entrySet()) {
-                this.writer.println(entry.getKey() + ": " + entry.getValue());
+                pw.println(entry.getKey() + ": " + entry.getValue());
             }
-            this.writer.flush();
-        } else {
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    } else {
             String word = tuple.getStringByField("word");
             Integer partialCount = tuple.getIntegerByField("count");
             Integer totalCount = this.finalCounts.getOrDefault(word, 0) + partialCount;

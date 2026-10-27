@@ -321,6 +321,13 @@ You can also see the topology in action by opening your browser and navigating t
 At this point, you should be able to see the current word count for the file you provided by
 viewing the file `/lab/out.txt` (by running `cat /lab/out.txt`).
 
+Since they are intended to handle streamed data, storm topologies run forever. Once you're sure
+your analysis is finished, you can stop your topology by running:
+
+```sh { .test-block #ghcr.io/ca4022/csc1109-lab4:latest }
+storm kill word-count -w 0
+```
+
 QUESTION: You may notice in your results that this program does not filter out punctuation marks.
 As hinted at [previously](#splitlinebolt) this is exactly the kind of string handling operation
 that can be cumbersome in Java but easier in Python. Can you improve the word count topology to
