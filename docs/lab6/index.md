@@ -73,7 +73,7 @@ Once you have a session, you can work interactively as you would in any other Sp
 === "&nbsp; Scala"
 
     ```scala
-    import $ivy.`org.apache.spark::spark-sql:4.0.0` // (2)
+    import $ivy.`org.apache.spark::spark-sql:4.2.0` // (2)
 
     import org.apache.spark.sql.SparkSession
 
@@ -90,7 +90,7 @@ Once you have a session, you can work interactively as you would in any other Sp
 === "&nbsp; Java"
 
     ```java
-    %dependency /add org.apache.spark:spark-sql_2.13:4.0.0 // (5)
+    %dependency /add org.apache.spark:spark-sql_2.13:4.2.0 // (5)
     %dependency /resolve
 
     import org.apache.spark.sql.SparkSession;

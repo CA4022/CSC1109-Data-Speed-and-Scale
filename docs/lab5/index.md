@@ -272,12 +272,12 @@ abstraction for this task, however you can find some examples of Spark code usin
 API [below](#further-reading-examples).
 
 Note: The suggested version of Scala is 2.13.X, but there should be very few compatibility issues
-with Scala 3. The recommended version for Apache Hadoop 3 and later is Spark 4.0.0 (last release)
+with Scala 3. The recommended version for Apache Hadoop 3 and later is Spark 4.2.0 (last release)
 pre-built. For further information on compatibility between Spark and Scala versions, there are
 many
 [compatibility matrices](https://community.cloudera.com/t5/Community-Articles/Spark-Scala-Version-Compatibility-Matrix/ta-p/383713)
 available summarising working combinations of versions. In this lab, the lab environment container
-is using Spark 4.0.0, Scala 2.13.12, and Hadoop 3.4.1.
+is using Spark 4.2.0, Scala 2.13.12, and Hadoop 3.5.0.
 
 #### Using the REPL ####
 
